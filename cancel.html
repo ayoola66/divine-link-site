@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Cancelled - Divine Link</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 500px;
+            margin: 20px;
+            padding: 50px 40px;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+        .cancel-icon {
+            width: 80px;
+            height: 80px;
+            background: #f8f9fa;
+            border: 3px solid #dee2e6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+        }
+        .cancel-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: #6c757d;
+        }
+        h1 {
+            color: #495057;
+            margin-bottom: 15px;
+            font-size: 1.8em;
+        }
+        p {
+            color: #555;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        .reasons {
+            text-align: left;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+        .reasons h3 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        .reasons ul {
+            margin-left: 20px;
+        }
+        .reasons li {
+            margin-bottom: 10px;
+            color: #555;
+        }
+        .btn-primary {
+            display: inline-block;
+            padding: 14px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1.1em;
+            margin: 10px 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary {
+            display: inline-block;
+            padding: 14px 30px;
+            background: #f8f9fa;
+            color: #495057;
+            text-decoration: none;
+            border-radius: 10px;
+            font-weight: 600;
+            font-size: 1em;
+            margin: 10px 5px;
+            border: 2px solid #dee2e6;
+            transition: background 0.2s;
+        }
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+        .support {
+            margin-top: 25px;
+            font-size: 0.9em;
+            color: #888;
+        }
+        .support a {
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cancel-icon">
+            <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </div>
+        
+        <h1>Payment Cancelled</h1>
+        <p>No worries! Your payment was not processed and you haven't been charged.</p>
+        
+        <div class="reasons">
+            <h3>Why Go Premium?</h3>
+            <ul>
+                <li><strong>No Ads:</strong> Enjoy a clean, distraction-free experience</li>
+                <li><strong>Priority Support:</strong> Get help when you need it</li>
+                <li><strong>Early Features:</strong> Be the first to try new capabilities</li>
+                <li><strong>Multiple Devices:</strong> Use on up to 2 Macs</li>
+            </ul>
+        </div>
+        
+        <p>Changed your mind? You can upgrade anytime.</p>
+        
+        <div>
+            <a href="/#pricing" class="btn-primary">Try Again</a>
+            <a href="/" class="btn-secondary">Back to Home</a>
+        </div>
+        
+        <p class="support">
+            Questions? Contact <a href="mailto:support@orekunmedia.com">support@orekunmedia.com</a>
+        </p>
+    </div>
+</body>
+</html>
