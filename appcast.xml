@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:sparkle="http://www.andymatuschak.org/xml-namespaces/sparkle" xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <channel>
+        <title>Divine Link Updates</title>
+        <link>https://divinelink.orekunmedia.com</link>
+        <description>Most recent updates for Divine Link</description>
+        <language>en</language>
+        
+        <!-- Latest Version -->
+        <item>
+            <title>Version 1.0.2</title>
+            <sparkle:version>1.0.2</sparkle:version>
+            <sparkle:shortVersionString>1.0.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Fri, 31 Jan 2026 12:00:00 +0000</pubDate>
+            
+            <description><![CDATA[
+                <h2>What's New in Version 1.0.2</h2>
+                
+                <h3>New Features</h3>
+                <ul>
+                    <li><strong>Ad-Supported Free Version</strong> - App now free with optional Premium subscription</li>
+                    <li><strong>Premium Subscription</strong> - Remove ads with monthly subscription</li>
+                    <li><strong>Auto-Updates</strong> - App now updates automatically via Sparkle</li>
+                </ul>
+                
+                <h3>Improvements</h3>
+                <ul>
+                    <li>Default font size changed to Medium for better readability</li>
+                    <li>Improved scripture detection validation</li>
+                    <li>Larger, cleaner ad layout</li>
+                </ul>
+                
+                <h3>Bug Fixes</h3>
+                <ul>
+                    <li>Fixed verse number validation (rejects invalid references)</li>
+                    <li>Fixed verse range validation</li>
+                </ul>
+            ]]></description>
+            
+            <enclosure 
+                url="https://divinelink.netlify.app/releases/DivineLink-1.0.2.zip"
+                length="13873599"
+                type="application/octet-stream"
+                sparkle:edSignature="64+PhD/obbb0Qs8zuKtznXHeL6lXjyw9io/zAG9VjtAJD881mPXeRaA7laYvZwGlvImDtlSPUJOpSJVYT2plAQ=="
+            />
+        </item>
+        
+        <!-- Previous Version (keep for rollback) -->
+        <item>
+            <title>Version 1.0.1</title>
+            <sparkle:version>1.0.1</sparkle:version>
+            <sparkle:shortVersionString>1.0.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Mon, 27 Jan 2026 12:00:00 +0000</pubDate>
+            
+            <description><![CDATA[
+                <h2>Version 1.0.1</h2>
+                <ul>
+                    <li>Added accessibility settings with font size scaling</li>
+                    <li>Added ProPresenter Audience screen push</li>
+                    <li>Improved window resizability</li>
+                    <li>Fixed scripture detection issues</li>
+                </ul>
+            ]]></description>
+            
+            <enclosure 
+                url="https://divinelink.netlify.app/releases/DivineLink-1.0.1.zip"
+                length="14000000"
+                type="application/octet-stream"
+                sparkle:edSignature="SIGN_WITH_./sign_update"
+            />
+        </item>
+        
+    </channel>
+</rss>
