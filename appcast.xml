@@ -8,8 +8,50 @@
         
         <!-- Latest Version -->
         <item>
+            <title>Version 1.1.0</title>
+            <sparkle:version>2</sparkle:version>
+            <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Sat, 01 Feb 2026 22:00:00 +0000</pubDate>
+            
+            <description><![CDATA[
+                <h2>What's New in Version 1.1.0</h2>
+                
+                <h3>New Features</h3>
+                <ul>
+                    <li><strong>Video Ads</strong> - Ads now support YouTube videos (including Shorts) with auto-loop</li>
+                    <li><strong>GIF Ads</strong> - Animated GIF support with smooth looping</li>
+                    <li><strong>Direct Video Files</strong> - MP4 video file support for ads</li>
+                    <li><strong>Always-Visible Titles</strong> - Ad titles now displayed with transparent overlay</li>
+                </ul>
+                
+                <h3>Improvements</h3>
+                <ul>
+                    <li>Privacy-enhanced YouTube embedding (youtube-nocookie.com)</li>
+                    <li>Minimised YouTube branding where possible</li>
+                    <li>Improved admin dashboard with side-by-side form layout</li>
+                    <li>Video preview in admin dashboard</li>
+                </ul>
+                
+                <h3>Technical</h3>
+                <ul>
+                    <li>Added VideoPlayerView, YouTubeWebView, GIFWebView components</li>
+                    <li>Updated Supabase function to support video ads</li>
+                </ul>
+            ]]></description>
+            
+            <enclosure 
+                url="https://divinelink.netlify.app/releases/DivineLink-1.1.0.zip"
+                length="14164827"
+                type="application/octet-stream"
+                sparkle:edSignature="lvWd/kzBLqND9BBI/hasBwkof503wHWjmf7Qh4E21sxxDnJ02XiSKtI2GTUM7hAfQ0EoPAuj5QVAbW07GdCzDQ=="
+            />
+        </item>
+        
+        <!-- Previous Version (keep for rollback) -->
+        <item>
             <title>Version 1.0.2</title>
-            <sparkle:version>1.0.2</sparkle:version>
+            <sparkle:version>1</sparkle:version>
             <sparkle:shortVersionString>1.0.2</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
             <pubDate>Fri, 31 Jan 2026 12:00:00 +0000</pubDate>
@@ -46,7 +88,7 @@
             />
         </item>
         
-        <!-- Previous Version (keep for rollback) -->
+        <!-- Older Version -->
         <item>
             <title>Version 1.0.1</title>
             <sparkle:version>1.0.1</sparkle:version>
