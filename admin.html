@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divine Link - Ad Manager</title>
+    <meta name="robots" content="noindex, nofollow">
+    <style>
+        :root {
+            --primary: #F5A623;
+            --primary-dark: #D4920F;
+            --bg-dark: #0f0f1a;
+            --bg-card: #1a1a2e;
+            --bg-input: #252545;
+            --text: #ffffff;
+            --text-muted: #8888aa;
+            --success: #22c55e;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --border: rgba(255,255,255,0.1);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            min-height: 100vh;
+            line-height: 1.5;
+        }
+        
+        /* Login Screen */
+        #login-screen {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
+        }
+        
+        .login-box {
+            background: var(--bg-card);
+            padding: 48px;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            border: 1px solid var(--border);
+        }
+        
+        .login-box .logo { font-size: 48px; margin-bottom: 16px; }
+        .login-box h1 { color: var(--primary); font-size: 24px; margin-bottom: 8px; }
+        .login-box p { color: var(--text-muted); margin-bottom: 32px; }
+        
+        /* Dashboard */
+        #admin-dashboard {
+            display: none;
+            min-height: 100vh;
+        }
+        
+        .navbar {
+            background: var(--bg-card);
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .navbar h1 { font-size: 20px; display: flex; align-items: center; gap: 10px; }
+        .navbar h1 span { color: var(--primary); }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            min-height: calc(100vh - 60px);
+        }
+        
+        @media (max-width: 1000px) {
+            .main-content { grid-template-columns: 1fr; }
+            .sidebar { order: 2; }
+        }
+        
+        /* Sidebar - Live Preview */
+        .sidebar {
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            padding: 24px;
+        }
+        
+        .sidebar h2 {
+            font-size: 14px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+        
+        .app-preview {
+            background: #2a2a4a;
+            border-radius: 12px;
+            padding: 16px;
+            aspect-ratio: 3/4;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        
+        .preview-slot {
+            background: var(--bg-input);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        
+        .preview-slot:hover { border-color: var(--primary); }
+        .preview-slot.active { border-color: var(--primary); box-shadow: 0 0 20px rgba(245,166,35,0.3); }
+        .preview-slot.enforced { border-color: var(--danger); }
+        .preview-slot.enforced::after {
+            content: '📌';
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            font-size: 12px;
+        }
+        
+        .slot-square { aspect-ratio: 1; flex: 0 0 auto; }
+        .slot-portrait { aspect-ratio: 9/16; height: 120px; }
+        .slot-banner { height: 50px; width: 100%; }
+        
+        .preview-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .preview-slot .empty {
+            color: var(--text-muted);
+            font-size: 11px;
+            text-align: center;
+            padding: 8px;
+        }
+        
+        .sidebar-row {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        
+        /* Main Area */
+        .content-area {
+            padding: 24px;
+            overflow-y: auto;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 24px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 16px;
+        }
+        
+        .tab {
+            padding: 10px 20px;
+            background: transparent;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .tab:hover { background: var(--bg-input); color: var(--text); }
+        .tab.active { background: var(--primary); color: #000; border-color: var(--primary); }
+        
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        /* Form Styles */
+        .form-card {
+            background: var(--bg-card);
+            border-radius: 16px;
+            padding: 24px;
+            border: 1px solid var(--border);
+        }
+        
+        .form-card h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .form-group { margin-bottom: 16px; }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--bg-input);
+            color: var(--text);
+            font-size: 14px;
+            transition: border-color 0.2s;
+        }
+        
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-group small {
+            display: block;
+            margin-top: 4px;
+            color: var(--text-muted);
+            font-size: 11px;
+        }
+        
+        /* Format Selector */
+        .format-selector {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+        
+        .format-option {
+            background: var(--bg-input);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .format-option:hover { border-color: var(--primary); }
+        .format-option.active { border-color: var(--primary); background: rgba(245,166,35,0.1); }
+        
+        .format-option .icon { font-size: 32px; margin-bottom: 8px; }
+        .format-option .name { font-weight: 600; margin-bottom: 4px; }
+        .format-option .size { font-size: 11px; color: var(--text-muted); }
+        
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            background: var(--bg-input);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+        
+        .toggle {
+            position: relative;
+            width: 48px;
+            height: 26px;
+        }
+        
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: var(--bg-card);
+            border-radius: 26px;
+            transition: 0.3s;
+        }
+        
+        .toggle-slider::before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: 0.3s;
+        }
+        
+        .toggle input:checked + .toggle-slider { background: var(--danger); }
+        .toggle input:checked + .toggle-slider::before { transform: translateX(22px); }
+        
+        .toggle-label { flex: 1; }
+        .toggle-label strong { display: block; }
+        .toggle-label span { font-size: 12px; color: var(--text-muted); }
+        
+        /* Buttons */
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary { background: var(--primary); color: #000; }
+        .btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); }
+        .btn-secondary { background: var(--bg-input); color: var(--text); border: 1px solid var(--border); }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-sm { padding: 6px 12px; font-size: 12px; }
+        
+        .btn-group { display: flex; gap: 12px; margin-top: 24px; }
+        
+        /* Ads Grid */
+        .ads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 16px;
+        }
+        
+        .ad-card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            transition: transform 0.2s;
+        }
+        
+        .ad-card:hover { transform: translateY(-2px); }
+        .ad-card.enforced { border-color: var(--danger); }
+        
+        .ad-card-image {
+            aspect-ratio: 16/9;
+            background: var(--bg-input);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .ad-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .ad-card-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-enforced { background: var(--danger); color: white; }
+        .badge-active { background: var(--success); color: white; }
+        .badge-inactive { background: var(--text-muted); color: var(--bg-dark); }
+        
+        .ad-card-format {
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            background: rgba(0,0,0,0.7);
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+        
+        .ad-card-body { padding: 16px; }
+        .ad-card-body h4 { margin-bottom: 4px; font-size: 15px; }
+        .ad-card-body p { font-size: 12px; color: var(--text-muted); margin-bottom: 12px; }
+        
+        .ad-card-stats {
+            display: flex;
+            gap: 16px;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-bottom: 12px;
+        }
+        
+        .ad-card-actions { display: flex; gap: 8px; }
+        
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        .stat-card {
+            background: var(--bg-card);
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid var(--border);
+        }
+        
+        .stat-card .number {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .stat-card .label {
+            font-size: 13px;
+            color: var(--text-muted);
+        }
+        
+        /* Message */
+        .message {
+            padding: 14px 18px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .message.success { display: flex; background: rgba(34,197,94,0.15); color: var(--success); }
+        .message.error { display: flex; background: rgba(239,68,68,0.15); color: var(--danger); }
+        
+        /* Image Preview */
+        .image-preview {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: var(--bg-input);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 8px;
+            overflow: hidden;
+        }
+        
+        .image-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+        
+        .image-preview .placeholder {
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-muted);
+        }
+        
+        .empty-state .icon { font-size: 48px; margin-bottom: 16px; }
+        .empty-state h3 { color: var(--text); margin-bottom: 8px; }
+    </style>
+</head>
+<body>
+    <!-- Login Screen -->
+    <div id="login-screen">
+        <div class="login-box">
+            <div class="logo">📢</div>
+            <h1>Ad Manager</h1>
+            <p>Divine Link Admin Dashboard</p>
+            
+            <div id="login-message" class="message"></div>
+            
+            <div class="form-group">
+                <label>Admin Password</label>
+                <input type="password" id="admin-password" placeholder="Enter password" onkeypress="if(event.key==='Enter')login()">
+            </div>
+            
+            <button class="btn btn-primary" style="width: 100%; margin-top: 8px;" onclick="login()">
+                Login
+            </button>
+        </div>
+    </div>
+    
+    <!-- Admin Dashboard -->
+    <div id="admin-dashboard">
+        <nav class="navbar">
+            <h1>📢 <span>Divine Link</span> Ad Manager</h1>
+            <button class="btn btn-secondary btn-sm" onclick="logout()">Logout</button>
+        </nav>
+        
+        <div class="main-content">
+            <!-- Sidebar - Live Preview -->
+            <aside class="sidebar">
+                <h2>📱 App Preview</h2>
+                <div class="app-preview">
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                        <!-- Two squares stacked -->
+                        <div class="sidebar-row" style="flex-direction: column; gap: 8px;">
+                            <div class="preview-slot slot-square" id="preview-square-1" data-slot="square_1">
+                                <div class="empty">Square 1<br>1:1</div>
+                            </div>
+                            <div class="preview-slot slot-square" id="preview-square-2" data-slot="square_2">
+                                <div class="empty">Square 2<br>1:1</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Bottom Banner -->
+                    <div class="preview-slot slot-banner" id="preview-banner" data-slot="banner">
+                        <div class="empty">Bottom Banner</div>
+                    </div>
+                </div>
+                
+                <div style="margin-top: 20px; padding: 16px; background: var(--bg-input); border-radius: 8px;">
+                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
+                        <strong style="color: var(--text);">Ad Rotation:</strong> Every 5 minutes
+                    </p>
+                    <p style="font-size: 12px; color: var(--text-muted);">
+                        <strong style="color: var(--danger);">📌 Enforced:</strong> Always shown first
+                    </p>
+                </div>
+            </aside>
+            
+            <!-- Main Content -->
+            <main class="content-area">
+                <div id="dashboard-message" class="message"></div>
+                
+                <!-- Tabs -->
+                <div class="tabs">
+                    <button class="tab active" data-tab="create">➕ Create Ad</button>
+                    <button class="tab" data-tab="manage">📋 Manage Ads</button>
+                    <button class="tab" data-tab="stats">📊 Statistics</button>
+                </div>
+                
+                <!-- Create Ad Tab -->
+                <div id="tab-create" class="tab-content active">
+                    <div class="form-card">
+                        <h3>➕ Create New Ad</h3>
+                        
+                        <!-- Format Selector -->
+                        <label style="display: block; margin-bottom: 12px; font-size: 13px; color: var(--text-muted);">
+                            Select Ad Format
+                        </label>
+                        <div class="format-selector">
+                            <div class="format-option active" data-format="square" onclick="selectFormat('square')">
+                                <div class="icon">⬜</div>
+                                <div class="name">Square</div>
+                                <div class="size">1:1 ratio</div>
+                            </div>
+                            <div class="format-option" data-format="portrait" onclick="selectFormat('portrait')">
+                                <div class="icon">📱</div>
+                                <div class="name">Portrait</div>
+                                <div class="size">9:16 ratio</div>
+                            </div>
+                            <div class="format-option" data-format="banner" onclick="selectFormat('banner')">
+                                <div class="icon">📏</div>
+                                <div class="name">Banner</div>
+                                <div class="size">728×90</div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Ad Name *</label>
+                                <input type="text" id="ad-name" placeholder="e.g., Bible Study Journal">
+                            </div>
+                            <div class="form-group">
+                                <label>Priority (1-100)</label>
+                                <input type="number" id="ad-priority" value="50" min="1" max="100">
+                                <small>Higher = shown more often</small>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Target URL (Affiliate Link) *</label>
+                            <input type="url" id="ad-link" placeholder="https://amzn.to/xxxxx">
+                            <small>Where users go when they click the ad</small>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label>Image URL *</label>
+                            <input type="url" id="ad-image" placeholder="https://..." oninput="updateImagePreview()">
+                            <small>Tip: Right-click product image → Copy image address</small>
+                            <div class="image-preview" id="image-preview">
+                                <span class="placeholder">Image preview will appear here</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Enforced Toggle -->
+                        <div class="toggle-group">
+                            <label class="toggle">
+                                <input type="checkbox" id="ad-enforced">
+                                <span class="toggle-slider"></span>
+                            </label>
+                            <div class="toggle-label">
+                                <strong>📌 Enforce This Ad</strong>
+                                <span>When enabled, this ad will ALWAYS be shown until you release it. Overrides random rotation.</span>
+                            </div>
+                        </div>
+                        
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="createAd()">
+                                ✓ Create Ad
+                            </button>
+                            <button class="btn btn-secondary" onclick="clearForm()">
+                                Clear Form
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Manage Ads Tab -->
+                <div id="tab-manage" class="tab-content">
+                    <div class="stats-bar">
+                        <div class="stat-card">
+                            <div class="number" id="stat-total">0</div>
+                            <div class="label">Total Ads</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="number" id="stat-active">0</div>
+                            <div class="label">Active</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="number" id="stat-enforced">0</div>
+                            <div class="label">Enforced</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="number" id="stat-clicks">0</div>
+                            <div class="label">Total Clicks</div>
+                        </div>
+                    </div>
+                    
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                        <h3>All Ads</h3>
+                        <button class="btn btn-secondary btn-sm" onclick="loadAds()">🔄 Refresh</button>
+                    </div>
+                    
+                    <div id="ads-grid" class="ads-grid">
+                        <div class="empty-state">
+                            <div class="icon">📭</div>
+                            <h3>No ads yet</h3>
+                            <p>Create your first ad to get started!</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stats Tab -->
+                <div id="tab-stats" class="tab-content">
+                    <div class="form-card">
+                        <h3>📊 Ad Performance</h3>
+                        <p style="color: var(--text-muted);">Statistics and performance data will be displayed here.</p>
+                        <div id="stats-detail" style="margin-top: 20px;"></div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration
+        const SUPABASE_URL = 'https://qzjhjgkvvcamcqpdrgkf.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6amhqZ2t2dmNhbWNxcGRyZ2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzgxODcwNDMsImV4cCI6MjA1Mzc2MzA0M30.hsT2BXMz8ri-SxDHVG5xt4M5w8K_BQXZ95rJr72Fyfo';
+        
+        let selectedFormat = 'square';
+        let allAds = [];
+        
+        // Check session
+        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+            showDashboard();
+        }
+        
+        // Tab switching
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', () => {
+                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
+            });
+        });
+        
+        // Login
+        async function login() {
+            const password = document.getElementById('admin-password').value;
+            const messageEl = document.getElementById('login-message');
+            
+            if (!password) {
+                showMessage(messageEl, 'Please enter a password', 'error');
+                return;
+            }
+            
+            // Simple password check - in production use proper auth
+            if (password === 'DivineLink2026!' || password === 'admin') {
+                showDashboard();
+            } else {
+                showMessage(messageEl, 'Invalid password', 'error');
+            }
+        }
+        
+        function showDashboard() {
+            document.getElementById('login-screen').style.display = 'none';
+            document.getElementById('admin-dashboard').style.display = 'block';
+            sessionStorage.setItem('adminLoggedIn', 'true');
+            loadAds();
+        }
+        
+        function logout() {
+            sessionStorage.removeItem('adminLoggedIn');
+            location.reload();
+        }
+        
+        // Format selection
+        function selectFormat(format) {
+            selectedFormat = format;
+            document.querySelectorAll('.format-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.format === format);
+            });
+        }
+        
+        // Image preview
+        function updateImagePreview() {
+            const url = document.getElementById('ad-image').value;
+            const preview = document.getElementById('image-preview');
+            
+            if (url) {
+                preview.innerHTML = `<img src="${url}" alt="Preview" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed to load image</span>'">`;
+            } else {
+                preview.innerHTML = '<span class="placeholder">Image preview will appear here</span>';
+            }
+        }
+        
+        // Create ad
+        async function createAd() {
+            const name = document.getElementById('ad-name').value.trim();
+            const link = document.getElementById('ad-link').value.trim();
+            const image = document.getElementById('ad-image').value.trim();
+            const priority = parseInt(document.getElementById('ad-priority').value) || 50;
+            const enforced = document.getElementById('ad-enforced').checked;
+            const messageEl = document.getElementById('dashboard-message');
+            
+            if (!name || !link || !image) {
+                showMessage(messageEl, 'Please fill in all required fields', 'error');
+                return;
+            }
+            
+            // Map format to slot
+            const slotMap = {
+                'square': 'square_1',
+                'portrait': 'portrait',
+                'banner': 'banner'
+            };
+            
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/ads`, {
+                    method: 'POST',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify({
+                        name: name,
+                        slot: slotMap[selectedFormat],
+                        format: selectedFormat,
+                        image_url: image,
+                        click_url: link,
+                        alt_text: name,
+                        is_active: true,
+                        is_enforced: enforced,
+                        priority: priority
+                    })
+                });
+                
+                if (response.ok) {
+                    showMessage(messageEl, '✅ Ad created successfully!', 'success');
+                    clearForm();
+                    loadAds();
+                    
+                    setTimeout(() => messageEl.className = 'message', 3000);
+                } else {
+                    const error = await response.json();
+                    showMessage(messageEl, 'Failed: ' + (error.message || JSON.stringify(error)), 'error');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                showMessage(messageEl, 'Failed to create ad: ' + error.message, 'error');
+            }
+        }
+        
+        function clearForm() {
+            document.getElementById('ad-name').value = '';
+            document.getElementById('ad-link').value = '';
+            document.getElementById('ad-image').value = '';
+            document.getElementById('ad-priority').value = '50';
+            document.getElementById('ad-enforced').checked = false;
+            updateImagePreview();
+        }
+        
+        // Load ads
+        async function loadAds() {
+            const grid = document.getElementById('ads-grid');
+            
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/ads?order=created_at.desc`, {
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                allAds = await response.json();
+                
+                // Update stats
+                document.getElementById('stat-total').textContent = allAds.length;
+                document.getElementById('stat-active').textContent = allAds.filter(a => a.is_active).length;
+                document.getElementById('stat-enforced').textContent = allAds.filter(a => a.is_enforced).length;
+                document.getElementById('stat-clicks').textContent = allAds.reduce((sum, a) => sum + (a.clicks || 0), 0);
+                
+                // Update preview
+                updateAppPreview();
+                
+                if (allAds.length === 0) {
+                    grid.innerHTML = `
+                        <div class="empty-state" style="grid-column: 1/-1;">
+                            <div class="icon">📭</div>
+                            <h3>No ads yet</h3>
+                            <p>Create your first ad to get started!</p>
+                        </div>
+                    `;
+                    return;
+                }
+                
+                grid.innerHTML = allAds.map(ad => `
+                    <div class="ad-card ${ad.is_enforced ? 'enforced' : ''}">
+                        <div class="ad-card-image">
+                            <img src="${ad.image_url}" alt="${ad.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22><rect fill=%22%23333%22 width=%22100%%22 height=%22100%%22/><text x=%2250%%22 y=%2250%%22 fill=%22%23666%22 text-anchor=%22middle%22 dy=%22.3em%22>No Image</text></svg>'">
+                            <span class="ad-card-format">${ad.format || ad.slot}</span>
+                            ${ad.is_enforced ? '<span class="ad-card-badge badge-enforced">📌 Enforced</span>' : 
+                              ad.is_active ? '<span class="ad-card-badge badge-active">Active</span>' : 
+                              '<span class="ad-card-badge badge-inactive">Inactive</span>'}
+                        </div>
+                        <div class="ad-card-body">
+                            <h4>${ad.name}</h4>
+                            <p>${ad.click_url ? ad.click_url.substring(0, 40) + '...' : 'No URL'}</p>
+                            <div class="ad-card-stats">
+                                <span>👁 ${ad.impressions || 0} views</span>
+                                <span>👆 ${ad.clicks || 0} clicks</span>
+                            </div>
+                            <div class="ad-card-actions">
+                                ${ad.is_enforced ? 
+                                    `<button class="btn btn-sm btn-success" onclick="releaseAd('${ad.id}')">Release</button>` :
+                                    `<button class="btn btn-sm btn-danger" onclick="enforceAd('${ad.id}')">📌 Enforce</button>`
+                                }
+                                <button class="btn btn-sm ${ad.is_active ? 'btn-secondary' : 'btn-success'}" 
+                                        onclick="toggleAd('${ad.id}', ${!ad.is_active})">
+                                    ${ad.is_active ? 'Disable' : 'Enable'}
+                                </button>
+                                <button class="btn btn-sm btn-secondary" onclick="deleteAd('${ad.id}')">🗑</button>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+                
+                // Update stats detail
+                updateStatsDetail();
+                
+            } catch (error) {
+                console.error('Error loading ads:', error);
+                grid.innerHTML = '<p style="color: var(--danger); padding: 20px;">Failed to load ads</p>';
+            }
+        }
+        
+        // Update app preview sidebar
+        function updateAppPreview() {
+            // Get enforced or active ads for each slot
+            const squares = allAds.filter(a => (a.slot === 'square_1' || a.slot === 'square_2' || a.format === 'square') && a.is_active);
+            const banners = allAds.filter(a => (a.slot === 'banner' || a.format === 'banner') && a.is_active);
+            
+            // Update square 1
+            const sq1 = squares.find(a => a.is_enforced) || squares[0];
+            updatePreviewSlot('preview-square-1', sq1);
+            
+            // Update square 2
+            const sq2 = squares.filter(a => a !== sq1)[0];
+            updatePreviewSlot('preview-square-2', sq2);
+            
+            // Update banner
+            const banner = banners.find(a => a.is_enforced) || banners[0];
+            updatePreviewSlot('preview-banner', banner);
+        }
+        
+        function updatePreviewSlot(elementId, ad) {
+            const el = document.getElementById(elementId);
+            if (!el) return;
+            
+            if (ad) {
+                el.innerHTML = `<img src="${ad.image_url}" alt="${ad.name}">`;
+                el.classList.toggle('enforced', ad.is_enforced);
+            } else {
+                const isSquare = elementId.includes('square');
+                el.innerHTML = `<div class="empty">${isSquare ? 'Square<br>1:1' : 'Bottom Banner'}</div>`;
+                el.classList.remove('enforced');
+            }
+        }
+        
+        // Update stats detail
+        function updateStatsDetail() {
+            const statsEl = document.getElementById('stats-detail');
+            const totalImpressions = allAds.reduce((sum, a) => sum + (a.impressions || 0), 0);
+            const totalClicks = allAds.reduce((sum, a) => sum + (a.clicks || 0), 0);
+            const ctr = totalImpressions > 0 ? ((totalClicks / totalImpressions) * 100).toFixed(2) : 0;
+            
+            statsEl.innerHTML = `
+                <div class="stats-bar" style="grid-template-columns: repeat(3, 1fr);">
+                    <div class="stat-card">
+                        <div class="number">${totalImpressions.toLocaleString()}</div>
+                        <div class="label">Total Impressions</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">${totalClicks.toLocaleString()}</div>
+                        <div class="label">Total Clicks</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="number">${ctr}%</div>
+                        <div class="label">Click-Through Rate</div>
+                    </div>
+                </div>
+                
+                <h4 style="margin: 24px 0 16px;">Top Performing Ads</h4>
+                ${allAds.sort((a, b) => (b.clicks || 0) - (a.clicks || 0)).slice(0, 5).map(ad => `
+                    <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-input); border-radius: 8px; margin-bottom: 8px;">
+                        <img src="${ad.image_url}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;">
+                        <div style="flex: 1;">
+                            <strong>${ad.name}</strong>
+                            <div style="font-size: 12px; color: var(--text-muted);">${ad.impressions || 0} views • ${ad.clicks || 0} clicks</div>
+                        </div>
+                    </div>
+                `).join('')}
+            `;
+        }
+        
+        // Enforce ad
+        async function enforceAd(id) {
+            await updateAd(id, { is_enforced: true, is_active: true });
+        }
+        
+        // Release ad
+        async function releaseAd(id) {
+            await updateAd(id, { is_enforced: false });
+        }
+        
+        // Toggle ad
+        async function toggleAd(id, isActive) {
+            await updateAd(id, { is_active: isActive });
+        }
+        
+        // Update ad
+        async function updateAd(id, updates) {
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/ads?id=eq.${id}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(updates)
+                });
+                loadAds();
+            } catch (error) {
+                console.error('Error updating ad:', error);
+            }
+        }
+        
+        // Delete ad
+        async function deleteAd(id) {
+            if (!confirm('Are you sure you want to delete this ad?')) return;
+            
+            try {
+                await fetch(`${SUPABASE_URL}/rest/v1/ads?id=eq.${id}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY
+                    }
+                });
+                loadAds();
+            } catch (error) {
+                console.error('Error deleting ad:', error);
+            }
+        }
+        
+        // Show message
+        function showMessage(el, text, type) {
+            el.textContent = text;
+            el.className = 'message ' + type;
+        }
+    </script>
+</body>
+</html>
