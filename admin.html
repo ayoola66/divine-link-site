@@ -471,6 +471,13 @@
             overflow: hidden;
         }
         
+        /* Compact preview for smaller display */
+        .image-preview.compact {
+            aspect-ratio: 16/9;
+            max-height: 200px;
+            min-height: 120px;
+        }
+        
         .image-preview img {
             max-width: 100%;
             max-height: 100%;
@@ -479,7 +486,8 @@
         
         .image-preview .placeholder {
             color: var(--text-muted);
-            font-size: 13px;
+            font-size: 12px;
+            padding: 8px;
         }
         
         /* Empty State */
@@ -642,17 +650,17 @@
                             <small>Choose the type of media for this ad</small>
                         </div>
                         
-                        <div class="form-group">
-                            <label>Image URL *</label>
+                        <div class="form-group" id="image-url-group">
+                            <label>Image URL <span id="image-required-indicator">*</span></label>
                             <input type="url" id="ad-image" placeholder="https://..." oninput="updateImagePreview()">
-                            <small>Required: Static image (used as fallback for video/GIF)</small>
-                            <div class="image-preview" id="image-preview">
+                            <small id="image-help-text">Required: Static image (used as fallback for video/GIF)</small>
+                            <div class="image-preview compact" id="image-preview">
                                 <span class="placeholder">Image preview will appear here</span>
                             </div>
                         </div>
                         
                         <div class="form-group" id="video-url-group" style="display: none;">
-                            <label>Video/GIF/YouTube URL (Optional)</label>
+                            <label>Video/GIF/YouTube URL <span style="color: var(--primary);">*</span></label>
                             <input type="url" id="ad-video" placeholder="https://... (MP4, GIF, or YouTube link)" oninput="updateVideoPreview()">
                             <small>
                                 <strong>Supported formats:</strong><br>
@@ -663,7 +671,7 @@
                                 &nbsp;&nbsp;&nbsp;→ Regular videos will play completely and loop<br>
                                 &nbsp;&nbsp;&nbsp;→ Use YouTube's time parameter (?t=10s) to start at specific time
                             </small>
-                            <div class="image-preview" id="video-preview" style="display: none;">
+                            <div class="image-preview compact" id="video-preview" style="display: none;">
                                 <span class="placeholder">Video preview will appear here</span>
                             </div>
                         </div>
@@ -803,13 +811,29 @@
         function updateMediaType() {
             const mediaType = document.getElementById('ad-media-type').value;
             const videoGroup = document.getElementById('video-url-group');
+            const imageGroup = document.getElementById('image-url-group');
+            const videoInput = document.getElementById('ad-video');
             const videoPreview = document.getElementById('video-preview');
+            const imageRequiredIndicator = document.getElementById('image-required-indicator');
+            const imageHelpText = document.getElementById('image-help-text');
             
             if (mediaType === 'video' || mediaType === 'gif') {
                 videoGroup.style.display = 'block';
+                // Hide image URL if video URL is provided, otherwise show as optional fallback
+                const hasVideoURL = videoInput && videoInput.value.trim().length > 0;
+                if (hasVideoURL) {
+                    imageGroup.style.display = 'none';
+                } else {
+                    imageGroup.style.display = 'block';
+                    imageRequiredIndicator.style.display = 'none';
+                    imageHelpText.textContent = 'Optional: Static image (used as fallback if video fails to load)';
+                }
             } else {
                 videoGroup.style.display = 'none';
                 videoPreview.style.display = 'none';
+                imageGroup.style.display = 'block';
+                imageRequiredIndicator.style.display = 'inline';
+                imageHelpText.textContent = 'Required: Static image';
             }
         }
         
@@ -827,37 +851,59 @@
         
         // Video/GIF/YouTube preview
         function updateVideoPreview() {
-            const url = document.getElementById('ad-video').value;
+            const url = document.getElementById('ad-video').value.trim();
             const preview = document.getElementById('video-preview');
             const mediaType = document.getElementById('ad-media-type').value;
+            const imageGroup = document.getElementById('image-url-group');
+            const imageRequiredIndicator = document.getElementById('image-required-indicator');
+            const imageHelpText = document.getElementById('image-help-text');
+            
+            // Show/hide image URL field based on video URL presence
+            if (url && (mediaType === 'video' || mediaType === 'gif')) {
+                imageGroup.style.display = 'none';
+            } else if (mediaType === 'video' || mediaType === 'gif') {
+                imageGroup.style.display = 'block';
+                imageRequiredIndicator.style.display = 'none';
+                imageHelpText.textContent = 'Optional: Static image (used as fallback if video fails to load)';
+            }
             
             if (url) {
                 preview.style.display = 'block';
                 
-                // Check if it's a YouTube URL
+                // Check if it's a YouTube URL (including Shorts)
                 const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
                 
                 if (isYouTube) {
-                    // Extract video ID for YouTube embed
+                    // Extract video ID for YouTube embed (including Shorts)
                     let videoID = '';
-                    if (url.includes('youtu.be/')) {
+                    
+                    // Handle YouTube Shorts: youtube.com/shorts/VIDEO_ID
+                    if (url.includes('/shorts/')) {
+                        videoID = url.split('/shorts/')[1].split('?')[0].split('&')[0].split('#')[0];
+                    }
+                    // Handle youtu.be short links
+                    else if (url.includes('youtu.be/')) {
                         videoID = url.split('youtu.be/')[1].split('?')[0].split('&')[0];
-                    } else if (url.includes('watch?v=')) {
+                    }
+                    // Handle youtube.com/watch?v= links
+                    else if (url.includes('watch?v=')) {
                         videoID = url.split('watch?v=')[1].split('&')[0].split('#')[0];
-                    } else if (url.includes('embed/')) {
+                    }
+                    // Handle youtube.com/embed/ links
+                    else if (url.includes('embed/')) {
                         videoID = url.split('embed/')[1].split('?')[0].split('&')[0];
                     }
                     
                     if (videoID) {
                         const embedURL = `https://www.youtube.com/embed/${videoID}?autoplay=0&loop=1&mute=1&controls=0&modestbranding=1`;
-                        preview.innerHTML = `<iframe src="${embedURL}" style="width: 100%; height: 200px; border-radius: 8px; border: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                        preview.innerHTML = `<iframe src="${embedURL}" style="width: 100%; height: 180px; border-radius: 8px; border: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                     } else {
-                        preview.innerHTML = '<span class="placeholder">Invalid YouTube URL</span>';
+                        preview.innerHTML = '<span class="placeholder" style="color: var(--danger);">Invalid YouTube URL format</span>';
                     }
                 } else if (mediaType === 'gif') {
-                    preview.innerHTML = `<img src="${url}" alt="GIF Preview" style="max-width: 100%; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed to load GIF</span>'">`;
+                    preview.innerHTML = `<img src="${url}" alt="GIF Preview" style="max-width: 100%; max-height: 180px; border-radius: 8px; object-fit: contain;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed to load GIF</span>'">`;
                 } else {
-                    preview.innerHTML = `<video src="${url}" autoplay loop muted style="max-width: 100%; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed to load video</span>'"></video>`;
+                    preview.innerHTML = `<video src="${url}" autoplay loop muted style="max-width: 100%; max-height: 180px; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed to load video</span>'"></video>`;
                 }
             } else {
                 preview.style.display = 'none';
@@ -875,8 +921,22 @@
             const enforced = document.getElementById('ad-enforced').checked;
             const messageEl = document.getElementById('dashboard-message');
             
-            if (!name || !link || !image) {
-                showMessage(messageEl, 'Please fill in all required fields', 'error');
+            // Validation: Image required unless video/GIF URL is provided
+            const hasVideoURL = video && video.length > 0;
+            const needsImage = !hasVideoURL || mediaType === 'image';
+            
+            if (!name || !link) {
+                showMessage(messageEl, 'Please fill in Ad Name and Target URL', 'error');
+                return;
+            }
+            
+            if (needsImage && !image) {
+                showMessage(messageEl, 'Please provide either an Image URL or Video/GIF URL', 'error');
+                return;
+            }
+            
+            if ((mediaType === 'video' || mediaType === 'gif') && !hasVideoURL) {
+                showMessage(messageEl, 'Please provide a Video/GIF URL for video/GIF ads', 'error');
                 return;
             }
             
@@ -892,7 +952,7 @@
                 name: name,
                 slot: slotMap[selectedFormat],
                 format: selectedFormat,
-                image_url: image,
+                image_url: image || '', // Always include, even if empty (fallback)
                 click_url: link,
                 alt_text: name,
                 is_active: true,
