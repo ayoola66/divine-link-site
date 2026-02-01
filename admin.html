@@ -473,9 +473,48 @@
         
         /* Compact preview for smaller display */
         .image-preview.compact {
-            aspect-ratio: 16/9;
-            max-height: 200px;
-            min-height: 120px;
+            aspect-ratio: 1/1;
+            width: 150px;
+            height: 150px;
+            min-height: auto;
+            flex-shrink: 0;
+        }
+        
+        /* Side-by-side media layout */
+        .media-row {
+            display: flex;
+            gap: 16px;
+            align-items: flex-start;
+        }
+        
+        .media-fields {
+            flex: 1;
+            min-width: 0;
+        }
+        
+        .media-preview-side {
+            width: 150px;
+            flex-shrink: 0;
+        }
+        
+        .media-preview-side .image-preview {
+            width: 150px;
+            height: 150px;
+            aspect-ratio: 1/1;
+            margin-top: 0;
+        }
+        
+        @media (max-width: 600px) {
+            .media-row {
+                flex-direction: column;
+            }
+            .media-preview-side {
+                width: 100%;
+            }
+            .media-preview-side .image-preview {
+                width: 100%;
+                max-width: 200px;
+            }
         }
         
         .image-preview img {
@@ -639,40 +678,45 @@
                             <small>Where users go when they click the ad</small>
                         </div>
                         
-                        <!-- Media Type Selector -->
-                        <div class="form-group">
-                            <label>Media Type</label>
-                            <select id="ad-media-type" onchange="updateMediaType()" style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text);">
-                                <option value="image">Image (Static)</option>
-                                <option value="video">Video (10-15 seconds, looping)</option>
-                                <option value="gif">Animated GIF (looping)</option>
-                            </select>
-                            <small>Choose the type of media for this ad</small>
-                        </div>
-                        
-                        <div class="form-group" id="image-url-group">
-                            <label>Image URL <span id="image-required-indicator">*</span></label>
-                            <input type="url" id="ad-image" placeholder="https://..." oninput="updateImagePreview()">
-                            <small id="image-help-text">Required: Static image (used as fallback for video/GIF)</small>
-                            <div class="image-preview compact" id="image-preview">
-                                <span class="placeholder">Image preview will appear here</span>
+                        <!-- Media Section - Side by Side Layout -->
+                        <div class="media-row">
+                            <!-- Left: Form Fields -->
+                            <div class="media-fields">
+                                <div class="form-group">
+                                    <label>Media Type</label>
+                                    <select id="ad-media-type" onchange="updateMediaType()" style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text);">
+                                        <option value="image">Image (Static)</option>
+                                        <option value="video">Video (10-15 seconds, looping)</option>
+                                        <option value="gif">Animated GIF (looping)</option>
+                                    </select>
+                                    <small>Choose the type of media for this ad</small>
+                                </div>
+                                
+                                <div class="form-group" id="image-url-group">
+                                    <label>Image URL <span id="image-required-indicator">*</span></label>
+                                    <input type="url" id="ad-image" placeholder="https://..." oninput="updateImagePreview()">
+                                    <small id="image-help-text">Required: Static image</small>
+                                </div>
+                                
+                                <div class="form-group" id="video-url-group" style="display: none;">
+                                    <label>Video/GIF/YouTube URL <span style="color: var(--primary);">*</span></label>
+                                    <input type="url" id="ad-video" placeholder="https://... (MP4, GIF, or YouTube)" oninput="updateVideoPreview()">
+                                    <small>
+                                        <strong>Formats:</strong> MP4, GIF, or YouTube URL<br>
+                                        YouTube Shorts work great!
+                                    </small>
+                                </div>
                             </div>
-                        </div>
-                        
-                        <div class="form-group" id="video-url-group" style="display: none;">
-                            <label>Video/GIF/YouTube URL <span style="color: var(--primary);">*</span></label>
-                            <input type="url" id="ad-video" placeholder="https://... (MP4, GIF, or YouTube link)" oninput="updateVideoPreview()">
-                            <small>
-                                <strong>Supported formats:</strong><br>
-                                • <strong>Direct video files:</strong> MP4 URLs (10-15 seconds recommended, will loop)<br>
-                                • <strong>Animated GIFs:</strong> GIF URLs (will loop automatically)<br>
-                                • <strong>YouTube videos:</strong> Full YouTube URLs (will play FULL video and loop)<br>
-                                &nbsp;&nbsp;&nbsp;→ YouTube Shorts work great (already short videos)<br>
-                                &nbsp;&nbsp;&nbsp;→ Regular videos will play completely and loop<br>
-                                &nbsp;&nbsp;&nbsp;→ Use YouTube's time parameter (?t=10s) to start at specific time
-                            </small>
-                            <div class="image-preview compact" id="video-preview" style="display: none;">
-                                <span class="placeholder">Video preview will appear here</span>
+                            
+                            <!-- Right: Preview -->
+                            <div class="media-preview-side">
+                                <label style="display: block; margin-bottom: 6px; font-size: 13px; color: var(--text-muted);">Preview</label>
+                                <div class="image-preview" id="image-preview">
+                                    <span class="placeholder">Preview</span>
+                                </div>
+                                <div class="image-preview" id="video-preview" style="display: none;">
+                                    <span class="placeholder">Video</span>
+                                </div>
                             </div>
                         </div>
                         
@@ -813,6 +857,7 @@
             const videoGroup = document.getElementById('video-url-group');
             const imageGroup = document.getElementById('image-url-group');
             const videoInput = document.getElementById('ad-video');
+            const imagePreview = document.getElementById('image-preview');
             const videoPreview = document.getElementById('video-preview');
             const imageRequiredIndicator = document.getElementById('image-required-indicator');
             const imageHelpText = document.getElementById('image-help-text');
@@ -823,36 +868,53 @@
                 const hasVideoURL = videoInput && videoInput.value.trim().length > 0;
                 if (hasVideoURL) {
                     imageGroup.style.display = 'none';
+                    imagePreview.style.display = 'none';
+                    videoPreview.style.display = 'flex';
                 } else {
                     imageGroup.style.display = 'block';
                     imageRequiredIndicator.style.display = 'none';
-                    imageHelpText.textContent = 'Optional: Static image (used as fallback if video fails to load)';
+                    imageHelpText.textContent = 'Optional fallback';
+                    imagePreview.style.display = 'flex';
+                    videoPreview.style.display = 'none';
+                    imagePreview.innerHTML = '<span class="placeholder">Video</span>';
                 }
             } else {
+                // Image type
                 videoGroup.style.display = 'none';
                 videoPreview.style.display = 'none';
                 imageGroup.style.display = 'block';
+                imagePreview.style.display = 'flex';
                 imageRequiredIndicator.style.display = 'inline';
                 imageHelpText.textContent = 'Required: Static image';
+                updateImagePreview();
             }
         }
         
         // Image preview
         function updateImagePreview() {
             const url = document.getElementById('ad-image').value;
-            const preview = document.getElementById('image-preview');
+            const imagePreview = document.getElementById('image-preview');
+            const videoPreview = document.getElementById('video-preview');
+            const mediaType = document.getElementById('ad-media-type').value;
             
-            if (url) {
-                preview.innerHTML = `<img src="${url}" alt="Preview" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed to load image</span>'">`;
-            } else {
-                preview.innerHTML = '<span class="placeholder">Image preview will appear here</span>';
+            // For image type, show image preview
+            if (mediaType === 'image') {
+                imagePreview.style.display = 'flex';
+                videoPreview.style.display = 'none';
+                
+                if (url) {
+                    imagePreview.innerHTML = `<img src="${url}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
+                } else {
+                    imagePreview.innerHTML = '<span class="placeholder">Preview</span>';
+                }
             }
         }
         
         // Video/GIF/YouTube preview
         function updateVideoPreview() {
             const url = document.getElementById('ad-video').value.trim();
-            const preview = document.getElementById('video-preview');
+            const imagePreview = document.getElementById('image-preview');
+            const videoPreview = document.getElementById('video-preview');
             const mediaType = document.getElementById('ad-media-type').value;
             const imageGroup = document.getElementById('image-url-group');
             const imageRequiredIndicator = document.getElementById('image-required-indicator');
@@ -864,11 +926,13 @@
             } else if (mediaType === 'video' || mediaType === 'gif') {
                 imageGroup.style.display = 'block';
                 imageRequiredIndicator.style.display = 'none';
-                imageHelpText.textContent = 'Optional: Static image (used as fallback if video fails to load)';
+                imageHelpText.textContent = 'Optional fallback';
             }
             
             if (url) {
-                preview.style.display = 'block';
+                // Show video preview, hide image preview
+                videoPreview.style.display = 'flex';
+                imagePreview.style.display = 'none';
                 
                 // Check if it's a YouTube URL (including Shorts)
                 const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
@@ -895,18 +959,23 @@
                     }
                     
                     if (videoID) {
-                        const embedURL = `https://www.youtube.com/embed/${videoID}?autoplay=0&loop=1&mute=1&controls=0&modestbranding=1`;
-                        preview.innerHTML = `<iframe src="${embedURL}" style="width: 100%; height: 180px; border-radius: 8px; border: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                        const embedURL = `https://www.youtube.com/embed/${videoID}?autoplay=0&loop=1&playlist=${videoID}&mute=1&controls=0&modestbranding=1`;
+                        videoPreview.innerHTML = `<iframe src="${embedURL}" style="width: 100%; height: 100%; border-radius: 8px; border: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                     } else {
-                        preview.innerHTML = '<span class="placeholder" style="color: var(--danger);">Invalid YouTube URL format</span>';
+                        videoPreview.innerHTML = '<span class="placeholder" style="color: var(--danger);">Invalid URL</span>';
                     }
                 } else if (mediaType === 'gif') {
-                    preview.innerHTML = `<img src="${url}" alt="GIF Preview" style="max-width: 100%; max-height: 180px; border-radius: 8px; object-fit: contain;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed to load GIF</span>'">`;
+                    videoPreview.innerHTML = `<img src="${url}" alt="GIF" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
                 } else {
-                    preview.innerHTML = `<video src="${url}" autoplay loop muted style="max-width: 100%; max-height: 180px; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed to load video</span>'"></video>`;
+                    videoPreview.innerHTML = `<video src="${url}" autoplay loop muted style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'"></video>`;
                 }
             } else {
-                preview.style.display = 'none';
+                // No video URL, show image preview if we have image type or URL
+                videoPreview.style.display = 'none';
+                if (mediaType === 'video' || mediaType === 'gif') {
+                    imagePreview.style.display = 'flex';
+                    imagePreview.innerHTML = '<span class="placeholder">Video</span>';
+                }
             }
         }
         
