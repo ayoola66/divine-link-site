@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/png" href="favicon.png">
     <title>Divine Link - Ad Manager</title>
     <meta name="robots" content="noindex, nofollow">
     <style>
@@ -523,63 +522,56 @@
         </nav>
         
         <div class="main-content">
-            <!-- Sidebar - Live Preview (mirrors the app exactly) -->
+            <!-- Sidebar - Live Preview -->
             <aside class="sidebar">
                 <h2>📱 App Preview</h2>
-                <div class="app-preview" style="background: #f5f5f7; padding: 12px;">
-                    <!-- Main content area simulation -->
-                    <div style="flex: 1; background: #e8e8eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888; font-size: 11px;">
-                        App Content
+                <div class="app-preview">
+                    <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
+                        <!-- Sidebar ads: Can show 2 squares + 1 portrait when space allows -->
+                        <div class="sidebar-row" style="flex-direction: column; gap: 8px;">
+                            <div class="preview-slot slot-square" id="preview-square-1" data-slot="square_1">
+                                <div class="empty">Square 1<br>1:1</div>
+                            </div>
+                            <div class="preview-slot slot-square" id="preview-square-2" data-slot="square_2">
+                                <div class="empty">Square 2<br>1:1</div>
+                            </div>
+                            <div class="preview-slot slot-portrait" id="preview-portrait" data-slot="portrait">
+                                <div class="empty">Portrait<br>9:16</div>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <!-- Right sidebar with ads -->
-                    <div style="width: 100px; display: flex; flex-direction: column; gap: 6px; margin-left: 8px;">
-                        <!-- Square ad slot -->
-                        <div class="preview-slot slot-square" id="preview-square-1" data-slot="square" data-format="square" style="width: 100%; aspect-ratio: 1;">
-                            <div class="empty">Square<br>1:1</div>
-                        </div>
-                        
-                        <!-- Portrait ad slot -->
-                        <div class="preview-slot" id="preview-portrait" data-slot="portrait" data-format="portrait" style="width: 100%; aspect-ratio: 9/16; max-height: 100px;">
-                            <div class="empty">Portrait<br>9:16</div>
-                        </div>
-                        
-                        <!-- Remove Ads button (mirrors app) -->
-                        <div style="background: #007AFF; color: white; padding: 6px 8px; border-radius: 6px; font-size: 9px; text-align: center; font-weight: 600;">
-                            ⭐ Remove Ads
-                        </div>
+                    <!-- Bottom Banner - Always shows if ad available -->
+                    <div class="preview-slot slot-banner" id="preview-banner" data-slot="banner">
+                        <div class="empty">Bottom Banner</div>
                     </div>
                 </div>
                 
-                <!-- Bottom Banner -->
-                <div class="preview-slot slot-banner" id="preview-banner" data-slot="banner" data-format="banner" style="margin-top: 8px; height: 40px; width: 100%;">
-                    <div class="empty">Bottom Banner</div>
-                </div>
-                
-                <div style="margin-top: 16px; padding: 12px; background: var(--bg-input); border-radius: 8px;">
-                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">
-                        <strong style="color: var(--text);">Layout Rules:</strong>
-                    </p>
-                    <p style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">
-                        • Default: 1 Square + 1 Portrait
-                    </p>
-                    <p style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">
-                        • 3+ Squares → No portrait slot
-                    </p>
-                    <p style="font-size: 10px; color: var(--text-muted); margin-bottom: 8px;">
-                        • <span style="color: var(--danger);">📌 Enforced</span> → Always shown
-                    </p>
-                    <p style="font-size: 10px; color: var(--text-muted);">
-                        ↻ Rotation: Every 5 minutes
-                    </p>
-                </div>
-                
-                <!-- Current Ads Summary -->
-                <div id="ads-summary" style="margin-top: 12px; padding: 12px; background: var(--bg-input); border-radius: 8px;">
-                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">
-                        <strong style="color: var(--text);">Active Ads:</strong>
-                    </p>
-                    <div id="ads-count" style="font-size: 10px; color: var(--text-muted);">Loading...</div>
+                <div style="margin-top: 20px; padding: 16px; background: var(--bg-input); border-radius: 8px;">
+                    <h3 style="font-size: 13px; color: var(--text); margin-bottom: 12px; font-weight: 600;">📐 Layout Rules</h3>
+                    <div style="font-size: 11px; color: var(--text-muted); line-height: 1.6;">
+                        <p style="margin-bottom: 8px;">
+                            <strong style="color: var(--text);">Sidebar (Default):</strong><br>
+                            • 3 squares OR<br>
+                            • 1 square + 1 portrait
+                        </p>
+                        <p style="margin-bottom: 8px;">
+                            <strong style="color: var(--text);">Sidebar (Stretched):</strong><br>
+                            • 2 squares + 1 portrait<br>
+                            <span style="font-size: 10px; color: var(--text-muted);">(when window height allows)</span>
+                        </p>
+                        <p style="margin-bottom: 8px;">
+                            <strong style="color: var(--text);">Bottom Banner:</strong><br>
+                            • Always shows if ad available<br>
+                            <span style="font-size: 10px; color: var(--text-muted);">(regardless of subscription)</span>
+                        </p>
+                        <hr style="border: none; border-top: 1px solid var(--border); margin: 12px 0;">
+                        <p style="margin-bottom: 4px;">
+                            <strong style="color: var(--text);">Ad Rotation:</strong> Every 5 minutes
+                        </p>
+                        <p>
+                            <strong style="color: var(--danger);">📌 Enforced:</strong> Always shown first
+                        </p>
+                    </div>
                 </div>
             </aside>
             
@@ -639,12 +631,40 @@
                             <small>Where users go when they click the ad</small>
                         </div>
                         
+                        <!-- Media Type Selector -->
+                        <div class="form-group">
+                            <label>Media Type</label>
+                            <select id="ad-media-type" onchange="updateMediaType()" style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text);">
+                                <option value="image">Image (Static)</option>
+                                <option value="video">Video (10-15 seconds, looping)</option>
+                                <option value="gif">Animated GIF (looping)</option>
+                            </select>
+                            <small>Choose the type of media for this ad</small>
+                        </div>
+                        
                         <div class="form-group">
                             <label>Image URL *</label>
                             <input type="url" id="ad-image" placeholder="https://..." oninput="updateImagePreview()">
-                            <small>Tip: Right-click product image → Copy image address</small>
+                            <small>Required: Static image (used as fallback for video/GIF)</small>
                             <div class="image-preview" id="image-preview">
                                 <span class="placeholder">Image preview will appear here</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group" id="video-url-group" style="display: none;">
+                            <label>Video/GIF/YouTube URL (Optional)</label>
+                            <input type="url" id="ad-video" placeholder="https://... (MP4, GIF, or YouTube link)" oninput="updateVideoPreview()">
+                            <small>
+                                <strong>Supported formats:</strong><br>
+                                • <strong>Direct video files:</strong> MP4 URLs (10-15 seconds recommended, will loop)<br>
+                                • <strong>Animated GIFs:</strong> GIF URLs (will loop automatically)<br>
+                                • <strong>YouTube videos:</strong> Full YouTube URLs (will play FULL video and loop)<br>
+                                &nbsp;&nbsp;&nbsp;→ YouTube Shorts work great (already short videos)<br>
+                                &nbsp;&nbsp;&nbsp;→ Regular videos will play completely and loop<br>
+                                &nbsp;&nbsp;&nbsp;→ Use YouTube's time parameter (?t=10s) to start at specific time
+                            </small>
+                            <div class="image-preview" id="video-preview" style="display: none;">
+                                <span class="placeholder">Video preview will appear here</span>
                             </div>
                         </div>
                         
@@ -779,6 +799,20 @@
             });
         }
         
+        // Media type change handler
+        function updateMediaType() {
+            const mediaType = document.getElementById('ad-media-type').value;
+            const videoGroup = document.getElementById('video-url-group');
+            const videoPreview = document.getElementById('video-preview');
+            
+            if (mediaType === 'video' || mediaType === 'gif') {
+                videoGroup.style.display = 'block';
+            } else {
+                videoGroup.style.display = 'none';
+                videoPreview.style.display = 'none';
+            }
+        }
+        
         // Image preview
         function updateImagePreview() {
             const url = document.getElementById('ad-image').value;
@@ -791,11 +825,52 @@
             }
         }
         
+        // Video/GIF/YouTube preview
+        function updateVideoPreview() {
+            const url = document.getElementById('ad-video').value;
+            const preview = document.getElementById('video-preview');
+            const mediaType = document.getElementById('ad-media-type').value;
+            
+            if (url) {
+                preview.style.display = 'block';
+                
+                // Check if it's a YouTube URL
+                const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
+                
+                if (isYouTube) {
+                    // Extract video ID for YouTube embed
+                    let videoID = '';
+                    if (url.includes('youtu.be/')) {
+                        videoID = url.split('youtu.be/')[1].split('?')[0].split('&')[0];
+                    } else if (url.includes('watch?v=')) {
+                        videoID = url.split('watch?v=')[1].split('&')[0].split('#')[0];
+                    } else if (url.includes('embed/')) {
+                        videoID = url.split('embed/')[1].split('?')[0].split('&')[0];
+                    }
+                    
+                    if (videoID) {
+                        const embedURL = `https://www.youtube.com/embed/${videoID}?autoplay=0&loop=1&mute=1&controls=0&modestbranding=1`;
+                        preview.innerHTML = `<iframe src="${embedURL}" style="width: 100%; height: 200px; border-radius: 8px; border: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                    } else {
+                        preview.innerHTML = '<span class="placeholder">Invalid YouTube URL</span>';
+                    }
+                } else if (mediaType === 'gif') {
+                    preview.innerHTML = `<img src="${url}" alt="GIF Preview" style="max-width: 100%; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed to load GIF</span>'">`;
+                } else {
+                    preview.innerHTML = `<video src="${url}" autoplay loop muted style="max-width: 100%; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed to load video</span>'"></video>`;
+                }
+            } else {
+                preview.style.display = 'none';
+            }
+        }
+        
         // Create ad
         async function createAd() {
             const name = document.getElementById('ad-name').value.trim();
             const link = document.getElementById('ad-link').value.trim();
             const image = document.getElementById('ad-image').value.trim();
+            const video = document.getElementById('ad-video').value.trim();
+            const mediaType = document.getElementById('ad-media-type').value;
             const priority = parseInt(document.getElementById('ad-priority').value) || 50;
             const enforced = document.getElementById('ad-enforced').checked;
             const messageEl = document.getElementById('dashboard-message');
@@ -805,12 +880,31 @@
                 return;
             }
             
-            // Slot is same as format for simplicity
+            // Map format to slot
             const slotMap = {
-                'square': 'square',
+                'square': 'square_1',
                 'portrait': 'portrait',
                 'banner': 'banner'
             };
+            
+            // Build request body
+            const adData = {
+                name: name,
+                slot: slotMap[selectedFormat],
+                format: selectedFormat,
+                image_url: image,
+                click_url: link,
+                alt_text: name,
+                is_active: true,
+                is_enforced: enforced,
+                priority: priority,
+                media_type: mediaType
+            };
+            
+            // Add video_url if provided (for video/GIF ads)
+            if (video && (mediaType === 'video' || mediaType === 'gif')) {
+                adData.video_url = video;
+            }
             
             try {
                 const response = await fetch(`${SUPABASE_URL}/rest/v1/ads`, {
@@ -820,17 +914,7 @@
                         'Content-Type': 'application/json',
                         'Prefer': 'return=representation'
                     },
-                    body: JSON.stringify({
-                        name: name,
-                        slot: slotMap[selectedFormat],
-                        format: selectedFormat,
-                        image_url: image,
-                        click_url: link,
-                        alt_text: name,
-                        is_active: true,
-                        is_enforced: enforced,
-                        priority: priority
-                    })
+                    body: JSON.stringify(adData)
                 });
                 
                 if (response.ok) {
@@ -853,9 +937,13 @@
             document.getElementById('ad-name').value = '';
             document.getElementById('ad-link').value = '';
             document.getElementById('ad-image').value = '';
+            document.getElementById('ad-video').value = '';
+            document.getElementById('ad-media-type').value = 'image';
             document.getElementById('ad-priority').value = '50';
             document.getElementById('ad-enforced').checked = false;
             updateImagePreview();
+            updateMediaType();
+            updateVideoPreview();
         }
         
         // Load ads
@@ -897,6 +985,7 @@
                         <div class="ad-card-image">
                             <img src="${ad.image_url}" alt="${ad.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22><rect fill=%22%23333%22 width=%22100%%22 height=%22100%%22/><text x=%2250%%22 y=%2250%%22 fill=%22%23666%22 text-anchor=%22middle%22 dy=%22.3em%22>No Image</text></svg>'">
                             <span class="ad-card-format">${ad.format || ad.slot}</span>
+                            ${ad.video_url ? `<span class="ad-card-badge" style="background: var(--primary);">${ad.media_type === 'gif' ? '🎬 GIF' : '🎥 Video'}</span>` : ''}
                             ${ad.is_enforced ? '<span class="ad-card-badge badge-enforced">📌 Enforced</span>' : 
                               ad.is_active ? '<span class="ad-card-badge badge-active">Active</span>' : 
                               '<span class="ad-card-badge badge-inactive">Inactive</span>'}
@@ -932,62 +1021,51 @@
             }
         }
         
-        // Update app preview sidebar (mirrors app layout exactly)
+        // Update app preview sidebar
         function updateAppPreview() {
-            // Get active ads by format
-            const squares = allAds.filter(a => (a.format === 'square' || a.slot?.includes('square')) && a.is_active);
-            const portraits = allAds.filter(a => (a.format === 'portrait' || a.slot === 'portrait') && a.is_active);
-            const banners = allAds.filter(a => (a.format === 'banner' || a.slot === 'banner') && a.is_active);
+            // Get enforced or active ads for each format
+            const squares = allAds.filter(a => (a.slot === 'square_1' || a.slot === 'square_2' || a.format === 'square') && a.is_active);
+            const portraits = allAds.filter(a => (a.slot === 'portrait' || a.format === 'portrait') && a.is_active);
+            const banners = allAds.filter(a => (a.slot === 'banner' || a.format === 'banner') && a.is_active);
             
-            // Find enforced ads first, then fallback to first active
-            const enforcedSquare = squares.find(a => a.is_enforced);
-            const enforcedPortrait = portraits.find(a => a.is_enforced);
-            const enforcedBanner = banners.find(a => a.is_enforced);
+            // Update square 1 (enforced first, then first available)
+            const sq1 = squares.find(a => a.is_enforced) || squares[0];
+            updatePreviewSlot('preview-square-1', sq1);
             
-            // Update square slot
-            const sq1 = enforcedSquare || squares[0];
-            updatePreviewSlot('preview-square-1', sq1, 'Square<br>1:1');
+            // Update square 2 (skip sq1, get next)
+            const sq2 = squares.filter(a => a !== sq1)[0];
+            updatePreviewSlot('preview-square-2', sq2);
             
-            // Update portrait slot
-            const portrait = enforcedPortrait || portraits[0];
-            updatePreviewSlot('preview-portrait', portrait, 'Portrait<br>9:16');
+            // Update portrait ad (enforced first, then first available)
+            const portrait = portraits.find(a => a.is_enforced) || portraits[0];
+            updatePreviewSlot('preview-portrait', portrait);
             
-            // Update banner slot
-            const banner = enforcedBanner || banners[0];
-            updatePreviewSlot('preview-banner', banner, 'Bottom Banner');
-            
-            // Update ads summary
-            updateAdsSummary(squares.length, portraits.length, banners.length);
+            // Update banner (enforced first, then first available)
+            // Banner always shows if ad is available
+            const banner = banners.find(a => a.is_enforced) || banners[0];
+            updatePreviewSlot('preview-banner', banner);
         }
         
-        function updatePreviewSlot(elementId, ad, emptyText) {
+        function updatePreviewSlot(elementId, ad) {
             const el = document.getElementById(elementId);
             if (!el) return;
             
             if (ad) {
-                el.innerHTML = `<img src="${ad.image_url}" alt="${ad.name}" style="width:100%;height:100%;object-fit:cover;">`;
+                el.innerHTML = `<img src="${ad.image_url}" alt="${ad.name}">`;
                 el.classList.toggle('enforced', ad.is_enforced);
             } else {
-                el.innerHTML = `<div class="empty">${emptyText}</div>`;
+                // Determine placeholder text based on slot type
+                let placeholderText = 'Ad Space';
+                if (elementId.includes('square')) {
+                    placeholderText = 'Square<br>1:1';
+                } else if (elementId.includes('portrait')) {
+                    placeholderText = 'Portrait<br>9:16';
+                } else if (elementId.includes('banner')) {
+                    placeholderText = 'Bottom Banner';
+                }
+                el.innerHTML = `<div class="empty">${placeholderText}</div>`;
                 el.classList.remove('enforced');
             }
-        }
-        
-        function updateAdsSummary(squareCount, portraitCount, bannerCount) {
-            const el = document.getElementById('ads-count');
-            if (!el) return;
-            
-            const enforcedSquares = allAds.filter(a => (a.format === 'square' || a.slot?.includes('square')) && a.is_active && a.is_enforced).length;
-            const enforcedPortraits = allAds.filter(a => (a.format === 'portrait' || a.slot === 'portrait') && a.is_active && a.is_enforced).length;
-            const enforcedBanners = allAds.filter(a => (a.format === 'banner' || a.slot === 'banner') && a.is_active && a.is_enforced).length;
-            
-            el.innerHTML = `
-                <div style="display: flex; flex-direction: column; gap: 4px;">
-                    <span>⬜ Squares: ${squareCount} ${enforcedSquares > 0 ? `<span style="color:var(--danger)">(${enforcedSquares} 📌)</span>` : ''}</span>
-                    <span>📱 Portraits: ${portraitCount} ${enforcedPortraits > 0 ? `<span style="color:var(--danger)">(${enforcedPortraits} 📌)</span>` : ''}</span>
-                    <span>📏 Banners: ${bannerCount} ${enforcedBanners > 0 ? `<span style="color:var(--danger)">(${enforcedBanners} 📌)</span>` : ''}</span>
-                </div>
-            `;
         }
         
         // Update stats detail
