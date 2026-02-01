@@ -474,46 +474,83 @@
         /* Compact preview for smaller display */
         .image-preview.compact {
             aspect-ratio: 1/1;
-            width: 150px;
-            height: 150px;
             min-height: auto;
             flex-shrink: 0;
         }
         
-        /* Side-by-side media layout */
-        .media-row {
+        /* Side-by-side form layout */
+        .form-side-by-side {
             display: flex;
-            gap: 16px;
-            align-items: flex-start;
+            gap: 20px;
+            align-items: stretch;
         }
         
-        .media-fields {
+        .form-fields-column {
             flex: 1;
             min-width: 0;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
         
-        .media-preview-side {
-            width: 150px;
+        .form-preview-column {
+            width: 220px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .form-preview-column .image-preview {
+            width: 220px;
+            height: 220px;
+            aspect-ratio: 1/1;
+            margin-top: 0;
             flex-shrink: 0;
         }
         
-        .media-preview-side .image-preview {
-            width: 150px;
-            height: 150px;
-            aspect-ratio: 1/1;
-            margin-top: 0;
+        .form-preview-column label {
+            display: block;
+            margin-bottom: 6px;
+            font-size: 13px;
+            color: var(--text-muted);
         }
         
-        @media (max-width: 600px) {
-            .media-row {
+        /* Compact toggle for enforce */
+        .toggle-compact {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
+            background: var(--bg-input);
+            border-radius: 6px;
+            margin-top: auto;
+        }
+        
+        .toggle-compact .toggle-label {
+            font-size: 12px;
+        }
+        
+        .toggle-compact .toggle-label strong {
+            font-size: 13px;
+        }
+        
+        .toggle-compact .toggle-label span {
+            display: block;
+            font-size: 10px;
+            color: var(--text-muted);
+            margin-top: 2px;
+        }
+        
+        @media (max-width: 700px) {
+            .form-side-by-side {
                 flex-direction: column;
             }
-            .media-preview-side {
+            .form-preview-column {
                 width: 100%;
             }
-            .media-preview-side .image-preview {
+            .form-preview-column .image-preview {
                 width: 100%;
-                max-width: 200px;
+                max-width: 220px;
             }
         }
         
@@ -678,57 +715,53 @@
                             <small>Where users go when they click the ad</small>
                         </div>
                         
-                        <!-- Media Section - Side by Side Layout -->
-                        <div class="media-row">
+                        <!-- Side by Side: Form Fields + Preview -->
+                        <div class="form-side-by-side">
                             <!-- Left: Form Fields -->
-                            <div class="media-fields">
-                                <div class="form-group">
+                            <div class="form-fields-column">
+                                <div class="form-group" style="margin-bottom: 8px;">
                                     <label>Media Type</label>
-                                    <select id="ad-media-type" onchange="updateMediaType()" style="width: 100%; padding: 10px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 8px; color: var(--text);">
+                                    <select id="ad-media-type" onchange="updateMediaType()" style="width: 100%; padding: 8px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 13px;">
                                         <option value="image">Image (Static)</option>
-                                        <option value="video">Video (10-15 seconds, looping)</option>
-                                        <option value="gif">Animated GIF (looping)</option>
+                                        <option value="video">Video (looping)</option>
+                                        <option value="gif">GIF (looping)</option>
                                     </select>
-                                    <small>Choose the type of media for this ad</small>
                                 </div>
                                 
-                                <div class="form-group" id="image-url-group">
+                                <div class="form-group" id="image-url-group" style="margin-bottom: 8px;">
                                     <label>Image URL <span id="image-required-indicator">*</span></label>
-                                    <input type="url" id="ad-image" placeholder="https://..." oninput="updateImagePreview()">
-                                    <small id="image-help-text">Required: Static image</small>
+                                    <input type="url" id="ad-image" placeholder="https://..." oninput="updateImagePreview()" style="padding: 8px; font-size: 13px;">
+                                    <small id="image-help-text">Static image</small>
                                 </div>
                                 
-                                <div class="form-group" id="video-url-group" style="display: none;">
-                                    <label>Video/GIF/YouTube URL <span style="color: var(--primary);">*</span></label>
-                                    <input type="url" id="ad-video" placeholder="https://... (MP4, GIF, or YouTube)" oninput="updateVideoPreview()">
-                                    <small>
-                                        <strong>Formats:</strong> MP4, GIF, or YouTube URL<br>
-                                        YouTube Shorts work great!
-                                    </small>
+                                <div class="form-group" id="video-url-group" style="display: none; margin-bottom: 8px;">
+                                    <label>Video/YouTube URL <span style="color: var(--primary);">*</span></label>
+                                    <input type="url" id="ad-video" placeholder="https://..." oninput="updateVideoPreview()" style="padding: 8px; font-size: 13px;">
+                                    <small>MP4, GIF, or YouTube Shorts</small>
+                                </div>
+                                
+                                <!-- Compact Enforce Toggle -->
+                                <div class="toggle-compact">
+                                    <label class="toggle" style="transform: scale(0.8);">
+                                        <input type="checkbox" id="ad-enforced">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                    <div class="toggle-label">
+                                        <strong>📌 Enforce</strong>
+                                        <span>Always show this ad</span>
+                                    </div>
                                 </div>
                             </div>
                             
-                            <!-- Right: Preview -->
-                            <div class="media-preview-side">
-                                <label style="display: block; margin-bottom: 6px; font-size: 13px; color: var(--text-muted);">Preview</label>
+                            <!-- Right: Large Preview -->
+                            <div class="form-preview-column">
+                                <label>Preview</label>
                                 <div class="image-preview" id="image-preview">
                                     <span class="placeholder">Preview</span>
                                 </div>
                                 <div class="image-preview" id="video-preview" style="display: none;">
                                     <span class="placeholder">Video</span>
                                 </div>
-                            </div>
-                        </div>
-                        
-                        <!-- Enforced Toggle -->
-                        <div class="toggle-group">
-                            <label class="toggle">
-                                <input type="checkbox" id="ad-enforced">
-                                <span class="toggle-slider"></span>
-                            </label>
-                            <div class="toggle-label">
-                                <strong>📌 Enforce This Ad</strong>
-                                <span>When enabled, this ad will ALWAYS be shown until you release it. Overrides random rotation.</span>
                             </div>
                         </div>
                         
