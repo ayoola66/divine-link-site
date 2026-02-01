@@ -523,34 +523,63 @@
         </nav>
         
         <div class="main-content">
-            <!-- Sidebar - Live Preview -->
+            <!-- Sidebar - Live Preview (mirrors the app exactly) -->
             <aside class="sidebar">
                 <h2>📱 App Preview</h2>
-                <div class="app-preview">
-                    <div style="flex: 1; display: flex; flex-direction: column; gap: 8px;">
-                        <!-- Two squares stacked -->
-                        <div class="sidebar-row" style="flex-direction: column; gap: 8px;">
-                            <div class="preview-slot slot-square" id="preview-square-1" data-slot="square_1">
-                                <div class="empty">Square 1<br>1:1</div>
-                            </div>
-                            <div class="preview-slot slot-square" id="preview-square-2" data-slot="square_2">
-                                <div class="empty">Square 2<br>1:1</div>
-                            </div>
-                        </div>
+                <div class="app-preview" style="background: #f5f5f7; padding: 12px;">
+                    <!-- Main content area simulation -->
+                    <div style="flex: 1; background: #e8e8eb; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #888; font-size: 11px;">
+                        App Content
                     </div>
-                    <!-- Bottom Banner -->
-                    <div class="preview-slot slot-banner" id="preview-banner" data-slot="banner">
-                        <div class="empty">Bottom Banner</div>
+                    
+                    <!-- Right sidebar with ads -->
+                    <div style="width: 100px; display: flex; flex-direction: column; gap: 6px; margin-left: 8px;">
+                        <!-- Square ad slot -->
+                        <div class="preview-slot slot-square" id="preview-square-1" data-slot="square" data-format="square" style="width: 100%; aspect-ratio: 1;">
+                            <div class="empty">Square<br>1:1</div>
+                        </div>
+                        
+                        <!-- Portrait ad slot -->
+                        <div class="preview-slot" id="preview-portrait" data-slot="portrait" data-format="portrait" style="width: 100%; aspect-ratio: 9/16; max-height: 100px;">
+                            <div class="empty">Portrait<br>9:16</div>
+                        </div>
+                        
+                        <!-- Remove Ads button (mirrors app) -->
+                        <div style="background: #007AFF; color: white; padding: 6px 8px; border-radius: 6px; font-size: 9px; text-align: center; font-weight: 600;">
+                            ⭐ Remove Ads
+                        </div>
                     </div>
                 </div>
                 
-                <div style="margin-top: 20px; padding: 16px; background: var(--bg-input); border-radius: 8px;">
-                    <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">
-                        <strong style="color: var(--text);">Ad Rotation:</strong> Every 5 minutes
+                <!-- Bottom Banner -->
+                <div class="preview-slot slot-banner" id="preview-banner" data-slot="banner" data-format="banner" style="margin-top: 8px; height: 40px; width: 100%;">
+                    <div class="empty">Bottom Banner</div>
+                </div>
+                
+                <div style="margin-top: 16px; padding: 12px; background: var(--bg-input); border-radius: 8px;">
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 6px;">
+                        <strong style="color: var(--text);">Layout Rules:</strong>
                     </p>
-                    <p style="font-size: 12px; color: var(--text-muted);">
-                        <strong style="color: var(--danger);">📌 Enforced:</strong> Always shown first
+                    <p style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">
+                        • Default: 1 Square + 1 Portrait
                     </p>
+                    <p style="font-size: 10px; color: var(--text-muted); margin-bottom: 4px;">
+                        • 3+ Squares → No portrait slot
+                    </p>
+                    <p style="font-size: 10px; color: var(--text-muted); margin-bottom: 8px;">
+                        • <span style="color: var(--danger);">📌 Enforced</span> → Always shown
+                    </p>
+                    <p style="font-size: 10px; color: var(--text-muted);">
+                        ↻ Rotation: Every 5 minutes
+                    </p>
+                </div>
+                
+                <!-- Current Ads Summary -->
+                <div id="ads-summary" style="margin-top: 12px; padding: 12px; background: var(--bg-input); border-radius: 8px;">
+                    <p style="font-size: 11px; color: var(--text-muted); margin-bottom: 8px;">
+                        <strong style="color: var(--text);">Active Ads:</strong>
+                    </p>
+                    <div id="ads-count" style="font-size: 10px; color: var(--text-muted);">Loading...</div>
                 </div>
             </aside>
             
@@ -776,9 +805,9 @@
                 return;
             }
             
-            // Map format to slot
+            // Slot is same as format for simplicity
             const slotMap = {
-                'square': 'square_1',
+                'square': 'square',
                 'portrait': 'portrait',
                 'banner': 'banner'
             };
@@ -903,37 +932,62 @@
             }
         }
         
-        // Update app preview sidebar
+        // Update app preview sidebar (mirrors app layout exactly)
         function updateAppPreview() {
-            // Get enforced or active ads for each slot
-            const squares = allAds.filter(a => (a.slot === 'square_1' || a.slot === 'square_2' || a.format === 'square') && a.is_active);
-            const banners = allAds.filter(a => (a.slot === 'banner' || a.format === 'banner') && a.is_active);
+            // Get active ads by format
+            const squares = allAds.filter(a => (a.format === 'square' || a.slot?.includes('square')) && a.is_active);
+            const portraits = allAds.filter(a => (a.format === 'portrait' || a.slot === 'portrait') && a.is_active);
+            const banners = allAds.filter(a => (a.format === 'banner' || a.slot === 'banner') && a.is_active);
             
-            // Update square 1
-            const sq1 = squares.find(a => a.is_enforced) || squares[0];
-            updatePreviewSlot('preview-square-1', sq1);
+            // Find enforced ads first, then fallback to first active
+            const enforcedSquare = squares.find(a => a.is_enforced);
+            const enforcedPortrait = portraits.find(a => a.is_enforced);
+            const enforcedBanner = banners.find(a => a.is_enforced);
             
-            // Update square 2
-            const sq2 = squares.filter(a => a !== sq1)[0];
-            updatePreviewSlot('preview-square-2', sq2);
+            // Update square slot
+            const sq1 = enforcedSquare || squares[0];
+            updatePreviewSlot('preview-square-1', sq1, 'Square<br>1:1');
             
-            // Update banner
-            const banner = banners.find(a => a.is_enforced) || banners[0];
-            updatePreviewSlot('preview-banner', banner);
+            // Update portrait slot
+            const portrait = enforcedPortrait || portraits[0];
+            updatePreviewSlot('preview-portrait', portrait, 'Portrait<br>9:16');
+            
+            // Update banner slot
+            const banner = enforcedBanner || banners[0];
+            updatePreviewSlot('preview-banner', banner, 'Bottom Banner');
+            
+            // Update ads summary
+            updateAdsSummary(squares.length, portraits.length, banners.length);
         }
         
-        function updatePreviewSlot(elementId, ad) {
+        function updatePreviewSlot(elementId, ad, emptyText) {
             const el = document.getElementById(elementId);
             if (!el) return;
             
             if (ad) {
-                el.innerHTML = `<img src="${ad.image_url}" alt="${ad.name}">`;
+                el.innerHTML = `<img src="${ad.image_url}" alt="${ad.name}" style="width:100%;height:100%;object-fit:cover;">`;
                 el.classList.toggle('enforced', ad.is_enforced);
             } else {
-                const isSquare = elementId.includes('square');
-                el.innerHTML = `<div class="empty">${isSquare ? 'Square<br>1:1' : 'Bottom Banner'}</div>`;
+                el.innerHTML = `<div class="empty">${emptyText}</div>`;
                 el.classList.remove('enforced');
             }
+        }
+        
+        function updateAdsSummary(squareCount, portraitCount, bannerCount) {
+            const el = document.getElementById('ads-count');
+            if (!el) return;
+            
+            const enforcedSquares = allAds.filter(a => (a.format === 'square' || a.slot?.includes('square')) && a.is_active && a.is_enforced).length;
+            const enforcedPortraits = allAds.filter(a => (a.format === 'portrait' || a.slot === 'portrait') && a.is_active && a.is_enforced).length;
+            const enforcedBanners = allAds.filter(a => (a.format === 'banner' || a.slot === 'banner') && a.is_active && a.is_enforced).length;
+            
+            el.innerHTML = `
+                <div style="display: flex; flex-direction: column; gap: 4px;">
+                    <span>⬜ Squares: ${squareCount} ${enforcedSquares > 0 ? `<span style="color:var(--danger)">(${enforcedSquares} 📌)</span>` : ''}</span>
+                    <span>📱 Portraits: ${portraitCount} ${enforcedPortraits > 0 ? `<span style="color:var(--danger)">(${enforcedPortraits} 📌)</span>` : ''}</span>
+                    <span>📏 Banners: ${bannerCount} ${enforcedBanners > 0 ? `<span style="color:var(--danger)">(${enforcedBanners} 📌)</span>` : ''}</span>
+                </div>
+            `;
         }
         
         // Update stats detail
