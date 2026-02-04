@@ -10,12 +10,18 @@
     Content-Type = "application/xml"
     Cache-Control = "public, max-age=3600"
 
-# Headers for zip downloads
+# Headers for zip downloads (only .zip files in releases folder)
 [[headers]]
-  for = "/releases/*"
+  for = "/releases/*.zip"
   [headers.values]
-    Content-Type = "application/octet-stream"
+    Content-Type = "application/zip"
     Content-Disposition = "attachment"
+
+# Ensure HTML files are served correctly
+[[headers]]
+  for = "/*.html"
+  [headers.values]
+    Content-Type = "text/html; charset=utf-8"
 
 # Redirects
 [[redirects]]
