@@ -8,10 +8,16 @@
         :root {
             --primary: #E07A2B;
             --primary-dark: #C66A20;
+            --accent-blue: #4A90D9;
+            --accent-purple: #8B5CF6;
             --bg: #1a1a2e;
             --bg-light: #16213e;
+            --bg-card: #1e2a4a;
             --text: #eee;
             --text-muted: #aaa;
+            --mercy: #10B981;
+            --grace: #E07A2B;
+            --love: #8B5CF6;
         }
         
         * {
@@ -28,7 +34,7 @@
         }
         
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 0 20px;
         }
@@ -39,9 +45,26 @@
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
+            color: var(--primary);
+        }
+        
+        .nav-links a {
+            color: var(--text-muted);
+            text-decoration: none;
+            margin-left: 30px;
+            transition: color 0.3s;
+        }
+        
+        .nav-links a:hover {
             color: var(--primary);
         }
         
@@ -57,13 +80,21 @@
             background: linear-gradient(135deg, var(--primary), #f0a060);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
         
         .hero p {
             font-size: 1.25rem;
             color: var(--text-muted);
-            max-width: 600px;
+            max-width: 700px;
             margin: 0 auto 40px;
+        }
+        
+        .hero-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
         }
         
         .btn {
@@ -74,6 +105,8 @@
             font-weight: 600;
             text-decoration: none;
             transition: all 0.3s;
+            border: none;
+            cursor: pointer;
         }
         
         .btn-primary {
@@ -90,7 +123,6 @@
             background: transparent;
             color: var(--primary);
             border: 2px solid var(--primary);
-            margin-left: 15px;
         }
         
         .btn-secondary:hover {
@@ -98,16 +130,29 @@
             color: white;
         }
         
+        .btn-mercy { background: var(--mercy); color: white; }
+        .btn-grace { background: var(--grace); color: white; }
+        .btn-love { background: var(--love); color: white; }
+        
         /* Features */
         .features {
             padding: 80px 0;
             background: var(--bg-light);
         }
         
-        .features h2 {
+        .section-title {
             text-align: center;
             font-size: 2rem;
+            margin-bottom: 20px;
+        }
+        
+        .section-subtitle {
+            text-align: center;
+            color: var(--text-muted);
             margin-bottom: 50px;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
         }
         
         .feature-grid {
@@ -121,6 +166,11 @@
             padding: 30px;
             border-radius: 12px;
             text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .feature:hover {
+            transform: translateY(-5px);
         }
         
         .feature-icon {
@@ -133,43 +183,117 @@
             color: var(--primary);
         }
         
+        /* How It Works */
+        .how-it-works {
+            padding: 80px 0;
+        }
+        
+        .steps {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .step {
+            flex: 1;
+            min-width: 200px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .step-number {
+            width: 60px;
+            height: 60px;
+            background: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 0 auto 20px;
+        }
+        
+        .step h4 {
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
         /* Pricing */
         .pricing {
             padding: 80px 0;
-            text-align: center;
-        }
-        
-        .pricing h2 {
-            font-size: 2rem;
-            margin-bottom: 50px;
+            background: var(--bg-light);
         }
         
         .price-cards {
-            display: flex;
-            justify-content: center;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
             gap: 30px;
-            flex-wrap: wrap;
+            max-width: 1100px;
+            margin: 0 auto;
         }
         
         .price-card {
-            background: var(--bg-light);
+            background: var(--bg-card);
             padding: 40px;
             border-radius: 16px;
-            width: 300px;
+            position: relative;
+            transition: transform 0.3s;
+        }
+        
+        .price-card:hover {
+            transform: translateY(-5px);
         }
         
         .price-card.featured {
-            border: 2px solid var(--primary);
-            transform: scale(1.05);
+            border: 2px solid var(--grace);
+        }
+        
+        .price-card.love-tier {
+            border: 2px solid var(--love);
+        }
+        
+        .tier-badge {
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--grace);
+            color: white;
+            padding: 5px 20px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .tier-badge.love {
+            background: var(--love);
+        }
+        
+        .price-card .tier-name {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
         }
         
         .price-card h3 {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             margin-bottom: 10px;
         }
         
+        .price-card .tier-verse {
+            font-style: italic;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+        }
+        
         .price {
-            font-size: 2.5rem;
+            font-size: 3rem;
             font-weight: 700;
             color: var(--primary);
         }
@@ -186,13 +310,83 @@
         }
         
         .price-card li {
-            padding: 8px 0;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+        }
+        
+        .price-card li .check {
+            color: var(--mercy);
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        
+        .price-card li .cross {
+            color: #666;
+            margin-right: 10px;
+        }
+        
+        .price-card li.disabled {
+            color: #666;
+        }
+        
+        .price-card .btn {
+            width: 100%;
+            text-align: center;
+        }
+        
+        /* Comparison Table */
+        .comparison {
+            padding: 80px 0;
+        }
+        
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 50px;
+        }
+        
+        .comparison-table th,
+        .comparison-table td {
+            padding: 15px 20px;
+            text-align: center;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
         
-        .price-card li::before {
-            content: "✓ ";
+        .comparison-table th {
+            background: var(--bg-light);
             color: var(--primary);
+        }
+        
+        .comparison-table th:first-child,
+        .comparison-table td:first-child {
+            text-align: left;
+        }
+        
+        .comparison-table .check { color: var(--mercy); }
+        .comparison-table .cross { color: #666; }
+        
+        .comparison-table tr:hover {
+            background: rgba(255,255,255,0.02);
+        }
+        
+        /* Testimonials placeholder */
+        .cta {
+            padding: 80px 0;
+            text-align: center;
+            background: linear-gradient(135deg, var(--bg-light), var(--bg));
+        }
+        
+        .cta h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .cta p {
+            color: var(--text-muted);
+            margin-bottom: 30px;
+            font-size: 1.2rem;
         }
         
         /* Footer */
@@ -203,53 +397,110 @@
             color: var(--text-muted);
         }
         
+        footer a {
+            color: var(--text-muted);
+            text-decoration: none;
+        }
+        
+        footer a:hover {
+            color: var(--primary);
+        }
+        
         @media (max-width: 768px) {
             .hero h1 { font-size: 2rem; }
-            .btn { display: block; margin: 10px 0; }
-            .btn-secondary { margin-left: 0; }
+            .header-inner { flex-direction: column; gap: 15px; }
+            .nav-links a { margin: 0 15px; }
             .price-card.featured { transform: none; }
+            .comparison-table { font-size: 0.9rem; }
+            .comparison-table th, .comparison-table td { padding: 10px; }
         }
     </style>
 </head>
 <body>
     <header>
         <div class="container">
-            <div class="logo">📖 Divine Link</div>
+            <div class="header-inner">
+                <div class="logo">📖 Divine Link</div>
+                <nav class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="#comparison">Compare</a>
+                </nav>
+            </div>
         </div>
     </header>
     
     <section class="hero">
         <div class="container">
             <h1>Real-time Scripture Detection</h1>
-            <p>Automatically display Bible verses during live sermons. Perfect for churches using ProPresenter.</p>
-            <a href="releases/DivineLink-latest.zip" class="btn btn-primary">Download Free</a>
-            <a href="#pricing" class="btn btn-secondary">Go Premium</a>
+            <p>Automatically detect and display Bible verses during live sermons. 
+               Divine Link listens to your pastor and pushes scriptures directly to ProPresenter.</p>
+            <div class="hero-buttons">
+                <a href="releases/DivineLink-latest.zip" class="btn btn-primary">Download Free</a>
+                <a href="#pricing" class="btn btn-secondary">View Plans</a>
+            </div>
         </div>
     </section>
     
-    <section class="features">
+    <section class="features" id="features">
         <div class="container">
-            <h2>Features</h2>
+            <h2 class="section-title">Powerful Features</h2>
+            <p class="section-subtitle">Everything you need to seamlessly display scripture during live services</p>
             <div class="feature-grid">
                 <div class="feature">
                     <div class="feature-icon">🎤</div>
                     <h3>Live Speech Detection</h3>
-                    <p>Automatically detects Bible references as they're spoken during sermons.</p>
+                    <p>Automatically detects Bible references as they're spoken. Supports multiple formats: "John 3:16", "John chapter 3 verse 16", and more.</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">📺</div>
                     <h3>ProPresenter Integration</h3>
-                    <p>Seamlessly push scripture to ProPresenter's Audience screen.</p>
+                    <p>Push scripture directly to ProPresenter's Stage or Audience screen with one click. Uses PP's native Bible feature for beautiful formatting.</p>
                 </div>
                 <div class="feature">
-                    <div class="feature-icon">📱</div>
+                    <div class="feature-icon">📖</div>
+                    <h3>Multiple Translations</h3>
+                    <p>Access KJV, ESV, NIV, NASB, and more. Quickly switch translations to match your church's preference.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">👥</div>
                     <h3>Pastor Profiles</h3>
-                    <p>Save preferred Bible translations for each speaker.</p>
+                    <p>Save preferred translations and speech corrections for each speaker. Perfect for churches with multiple pastors.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📑</div>
+                    <h3>Multi-Verse Support</h3>
+                    <p>Detect verse ranges like "John 3:16-18" and display them individually. Navigate and push one verse at a time.</p>
                 </div>
                 <div class="feature">
                     <div class="feature-icon">⚡</div>
                     <h3>Instant Updates</h3>
-                    <p>App updates automatically in the background.</p>
+                    <p>App updates automatically in the background. Always have the latest features and bug fixes.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Three simple steps to transform your scripture display</p>
+            <div class="steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Listen</h4>
+                    <p>Divine Link captures audio and transcribes speech in real-time using advanced speech recognition.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Detect</h4>
+                    <p>Scripture references are automatically identified and matched against the Bible database.</p>
+                </div>
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Display</h4>
+                    <p>With one click, push the verse to ProPresenter for instant display on your screens.</p>
                 </div>
             </div>
         </div>
@@ -257,31 +508,211 @@
     
     <section class="pricing" id="pricing">
         <div class="container">
-            <h2>Simple Pricing</h2>
+            <h2 class="section-title">Choose Your Plan</h2>
+            <p class="section-subtitle">Start free and upgrade when you need more power</p>
             <div class="price-cards">
+                <!-- Mercy (Free) -->
                 <div class="price-card">
+                    <div class="tier-name">Mercy</div>
                     <h3>Free</h3>
-                    <div class="price">£0<span>/month</span></div>
+                    <div class="tier-verse">"His mercies are new every morning"</div>
+                    <div class="price">£0<span>/forever</span></div>
                     <ul>
-                        <li>Full scripture detection</li>
-                        <li>ProPresenter integration</li>
-                        <li>All Bible translations</li>
-                        <li>Includes sidebar ads</li>
+                        <li><span class="check">✓</span> Live speech detection</li>
+                        <li><span class="check">✓</span> Basic detection patterns</li>
+                        <li><span class="check">✓</span> KJV translation</li>
+                        <li><span class="check">✓</span> Push to Stage Screen</li>
+                        <li><span class="check">✓</span> Multi-verse display</li>
+                        <li><span class="check">✓</span> 10 detections per session</li>
+                        <li><span class="check">✓</span> 2 sessions per week</li>
+                        <li class="disabled"><span class="cross">✗</span> Push to Audience Screen</li>
+                        <li class="disabled"><span class="cross">✗</span> Additional translations</li>
+                        <li class="disabled"><span class="cross">✗</span> Pastor profiles</li>
                     </ul>
-                    <a href="releases/DivineLink-latest.zip" class="btn btn-secondary">Download</a>
+                    <a href="releases/DivineLink-latest.zip" class="btn btn-mercy">Download Free</a>
                 </div>
+                
+                <!-- Grace (Premium) -->
                 <div class="price-card featured">
+                    <div class="tier-badge">Most Popular</div>
+                    <div class="tier-name">Grace</div>
                     <h3>Premium</h3>
-                    <div class="price">£9.97<span>/month</span></div>
+                    <div class="tier-verse">"By grace you have been saved"</div>
+                    <div class="price">£9.99<span>/month</span></div>
                     <ul>
-                        <li>Everything in Free</li>
-                        <li>No advertisements</li>
-                        <li>Priority support</li>
-                        <li>Use on 2 devices</li>
+                        <li><span class="check">✓</span> Everything in Mercy</li>
+                        <li><span class="check">✓</span> <strong>Push to Audience Screen</strong></li>
+                        <li><span class="check">✓</span> All Bible translations</li>
+                        <li><span class="check">✓</span> Unlimited detections</li>
+                        <li><span class="check">✓</span> Unlimited sessions</li>
+                        <li><span class="check">✓</span> Verse-by-verse push</li>
+                        <li><span class="check">✓</span> Verse navigation controls</li>
+                        <li><span class="check">✓</span> Advanced detection patterns</li>
+                        <li class="disabled"><span class="cross">✗</span> Pastor profiles</li>
+                        <li class="disabled"><span class="cross">✗</span> Session history</li>
                     </ul>
-                    <a href="https://buy.stripe.com/8x228raJOceGbI50hn5AQ00" class="btn btn-primary">Subscribe</a>
+                    <a href="https://buy.stripe.com/grace_monthly" class="btn btn-grace">Subscribe</a>
+                    <p style="text-align: center; margin-top: 10px; color: var(--text-muted); font-size: 0.85rem;">or £79.99/year (save 33%)</p>
+                </div>
+                
+                <!-- Love (Pro) -->
+                <div class="price-card love-tier">
+                    <div class="tier-badge love">Best Value</div>
+                    <div class="tier-name">Love</div>
+                    <h3>Pro</h3>
+                    <div class="tier-verse">"The greatest of these is love"</div>
+                    <div class="price">£19.99<span>/month</span></div>
+                    <ul>
+                        <li><span class="check">✓</span> Everything in Grace</li>
+                        <li><span class="check">✓</span> <strong>Pastor profiles</strong></li>
+                        <li><span class="check">✓</span> <strong>Session history & export</strong></li>
+                        <li><span class="check">✓</span> Speech corrections per pastor</li>
+                        <li><span class="check">✓</span> Implicit verse detection</li>
+                        <li><span class="check">✓</span> Auto-advance slideshow</li>
+                        <li><span class="check">✓</span> Multi-device support (3)</li>
+                        <li><span class="check">✓</span> Priority email support</li>
+                        <li><span class="check">✓</span> Early access to features</li>
+                        <li><span class="check">✓</span> Church site licence option</li>
+                    </ul>
+                    <a href="https://buy.stripe.com/love_monthly" class="btn btn-love">Subscribe</a>
+                    <p style="text-align: center; margin-top: 10px; color: var(--text-muted); font-size: 0.85rem;">or £149.99/year (save 37%)</p>
                 </div>
             </div>
+        </div>
+    </section>
+    
+    <section class="comparison" id="comparison">
+        <div class="container">
+            <h2 class="section-title">Feature Comparison</h2>
+            <p class="section-subtitle">See exactly what's included in each plan</p>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>Feature</th>
+                        <th>Mercy (Free)</th>
+                        <th>Grace (Premium)</th>
+                        <th>Love (Pro)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Live speech detection</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Real-time transcription</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Push to Stage Screen</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Multi-verse display</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Push to Audience Screen</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Bible translations</td>
+                        <td>KJV only</td>
+                        <td class="check">All (10+)</td>
+                        <td class="check">All (10+)</td>
+                    </tr>
+                    <tr>
+                        <td>Detections per session</td>
+                        <td>10</td>
+                        <td class="check">Unlimited</td>
+                        <td class="check">Unlimited</td>
+                    </tr>
+                    <tr>
+                        <td>Sessions per week</td>
+                        <td>2</td>
+                        <td class="check">Unlimited</td>
+                        <td class="check">Unlimited</td>
+                    </tr>
+                    <tr>
+                        <td>Verse-by-verse push</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Verse navigation (◀ ▶)</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Advanced detection patterns</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Pastor profiles</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Session history & export</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Speech corrections</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Implicit verse detection</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Auto-advance slideshow</td>
+                        <td class="cross">✗</td>
+                        <td class="cross">✗</td>
+                        <td class="check">✓</td>
+                    </tr>
+                    <tr>
+                        <td>Devices included</td>
+                        <td>1</td>
+                        <td>2</td>
+                        <td>3</td>
+                    </tr>
+                    <tr>
+                        <td>Support</td>
+                        <td>Community</td>
+                        <td>Email</td>
+                        <td>Priority email</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </section>
+    
+    <section class="cta">
+        <div class="container">
+            <h2>Ready to Transform Your Services?</h2>
+            <p>Join churches worldwide using Divine Link to seamlessly display scripture</p>
+            <a href="releases/DivineLink-latest.zip" class="btn btn-primary">Download Free Today</a>
         </div>
     </section>
     
@@ -289,11 +720,12 @@
         <div class="container">
             <p>© 2026 Divine Link by O'Rekun Media. All rights reserved.</p>
             <p style="margin-top: 15px;">
-                <a href="/terms.html" style="color: var(--text-muted); margin: 0 10px;">Terms of Service</a> | 
-                <a href="/privacy.html" style="color: var(--text-muted); margin: 0 10px;">Privacy Policy</a>
+                <a href="/terms.html">Terms of Service</a> | 
+                <a href="/privacy.html">Privacy Policy</a> |
+                <a href="mailto:support@divinelink.app">Contact Support</a>
             </p>
             <p style="margin-top: 10px; font-size: 0.9rem;">
-                macOS 14.0+ required
+                macOS 13.0+ required • ProPresenter 7 compatible
             </p>
         </div>
     </footer>
