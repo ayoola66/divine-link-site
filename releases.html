@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Release Notes - Divine Link</title>
+    <meta name="description" content="Divine Link version history and release notes. See what's new in each version.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E07A2B;
+            --primary-dark: #C66A20;
+            --primary-light: #F59E4C;
+            --accent-blue: #3B82F6;
+            --accent-purple: #8B5CF6;
+            --bg-dark: #0f0f1a;
+            --bg: #141428;
+            --bg-light: #1a1a35;
+            --bg-card: #1e1e3a;
+            --text: #f0f0f5;
+            --text-muted: #9ca3af;
+            --mercy: #10B981;
+            --grace: #E07A2B;
+            --love: #8B5CF6;
+            --gradient-1: linear-gradient(135deg, #E07A2B 0%, #F59E4C 100%);
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.7;
+        }
+        
+        .container { max-width: 900px; margin: 0 auto; padding: 0 24px; }
+        
+        /* Header */
+        header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 16px 0;
+            background: rgba(15, 15, 26, 0.95);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .header-inner { display: flex; justify-content: space-between; align-items: center; }
+        
+        .logo {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 1.4rem; font-weight: 700;
+            color: var(--text); text-decoration: none;
+        }
+        
+        .logo-icon {
+            width: 36px; height: 36px;
+            background: var(--gradient-1); border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.2rem;
+        }
+        
+        .logo span {
+            background: var(--gradient-1);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-links { display: flex; align-items: center; gap: 32px; }
+        
+        .nav-links a {
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.95rem; font-weight: 500; transition: color 0.3s;
+        }
+        
+        .nav-links a:hover, .nav-links a.active { color: var(--primary); }
+        
+        .nav-cta {
+            background: var(--gradient-1) !important; color: white !important;
+            padding: 10px 24px; border-radius: 8px; font-weight: 600;
+        }
+        
+        /* Hero */
+        .page-hero {
+            padding: 140px 0 60px; text-align: center;
+            background: var(--bg);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .page-hero h1 {
+            font-size: 2.8rem; font-weight: 800; margin-bottom: 16px;
+        }
+        
+        .page-hero h1 .highlight {
+            background: var(--gradient-1);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        .page-hero p { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
+        
+        .current-version {
+            display: inline-flex; align-items: center; gap: 10px;
+            background: rgba(224, 122, 43, 0.15);
+            border: 1px solid rgba(224, 122, 43, 0.3);
+            padding: 12px 24px; border-radius: 50px;
+            margin-top: 24px; font-size: 1rem;
+        }
+        
+        .current-version .version-number {
+            font-weight: 700; color: var(--primary-light);
+        }
+        
+        .current-version a {
+            color: var(--mercy); text-decoration: none;
+            font-weight: 600;
+        }
+        
+        .current-version a:hover { text-decoration: underline; }
+        
+        /* Release Notes */
+        .releases { padding: 60px 0 120px; }
+        
+        .release-item {
+            background: var(--bg-card);
+            border: 1px solid rgba(255,255,255,0.05);
+            border-radius: 16px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            transition: border-color 0.3s;
+        }
+        
+        .release-item:hover { border-color: rgba(224, 122, 43, 0.3); }
+        
+        .release-item.latest { border: 2px solid var(--primary); }
+        
+        .release-header {
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 24px 28px;
+            cursor: pointer;
+            user-select: none;
+            transition: background 0.3s;
+        }
+        
+        .release-header:hover { background: rgba(255,255,255,0.02); }
+        
+        .release-info { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+        
+        .release-version {
+            font-size: 1.4rem; font-weight: 700;
+            background: var(--gradient-1);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        
+        .release-date { color: var(--text-muted); font-size: 0.9rem; }
+        
+        .release-badge {
+            background: var(--mercy);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .release-toggle {
+            width: 32px; height: 32px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 8px;
+            background: rgba(255,255,255,0.05);
+            transition: transform 0.3s, background 0.3s;
+            font-size: 1.2rem;
+            color: var(--text-muted);
+        }
+        
+        .release-item.open .release-toggle { transform: rotate(180deg); }
+        
+        .release-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+        
+        .release-item.open .release-content { max-height: 2000px; }
+        
+        .release-body {
+            padding: 0 28px 28px;
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .release-section { margin-top: 24px; }
+        
+        .release-section h4 {
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        
+        .release-section h4.added { color: var(--mercy); }
+        .release-section h4.changed { color: var(--accent-blue); }
+        .release-section h4.fixed { color: #F59E0B; }
+        .release-section h4.technical { color: var(--accent-purple); }
+        .release-section h4.improved { color: #06B6D4; }
+        
+        .release-section ul {
+            list-style: none;
+        }
+        
+        .release-section li {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+        
+        .release-section li::before {
+            content: '•';
+            position: absolute;
+            left: 8px;
+            color: var(--primary);
+        }
+        
+        .release-section li strong { color: var(--text); font-weight: 600; }
+        
+        .release-download {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(224, 122, 43, 0.1);
+            border: 1px solid rgba(224, 122, 43, 0.3);
+            padding: 10px 20px;
+            border-radius: 8px;
+            color: var(--primary-light);
+            text-decoration: none;
+            font-weight: 500;
+            font-size: 0.9rem;
+            margin-top: 20px;
+            transition: all 0.3s;
+        }
+        
+        .release-download:hover {
+            background: rgba(224, 122, 43, 0.2);
+            border-color: var(--primary);
+        }
+        
+        /* Footer */
+        footer {
+            padding: 40px 0;
+            background: var(--bg);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .footer-inner {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 20px;
+        }
+        
+        .footer-links { display: flex; gap: 30px; }
+        
+        .footer-links a {
+            color: var(--text-muted); text-decoration: none;
+            font-size: 0.95rem; transition: color 0.3s;
+        }
+        
+        .footer-links a:hover { color: var(--primary); }
+        
+        .footer-copy { color: var(--text-muted); font-size: 0.9rem; }
+        
+        .footer-version {
+            background: rgba(224, 122, 43, 0.15);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: var(--primary-light);
+            font-weight: 600;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .page-hero h1 { font-size: 2rem; }
+            .release-header { padding: 20px; flex-direction: column; align-items: flex-start; gap: 12px; }
+            .release-toggle { position: absolute; right: 20px; top: 20px; }
+            .release-item { position: relative; }
+            .footer-inner { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container" style="max-width: 1280px;">
+            <div class="header-inner">
+                <a href="/" class="logo">
+                    <div class="logo-icon">📖</div>
+                    <span>Divine Link</span>
+                </a>
+                <nav class="nav-links">
+                    <a href="/#features">Features</a>
+                    <a href="/#how-it-works">How It Works</a>
+                    <a href="/#pricing">Pricing</a>
+                    <a href="/releases.html" class="active">Release Notes</a>
+                    <a href="releases/DivineLink-latest.zip" class="nav-cta">Download</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <section class="page-hero">
+        <div class="container">
+            <h1>Release <span class="highlight">Notes</span></h1>
+            <p>Stay up to date with the latest features, improvements, and fixes in Divine Link.</p>
+            <div class="current-version">
+                <span>Latest:</span>
+                <span class="version-number">v1.1.0</span>
+                <span>•</span>
+                <a href="releases/DivineLink-latest.zip">Download</a>
+            </div>
+        </div>
+    </section>
+    
+    <section class="releases">
+        <div class="container">
+            
+            <!-- v1.1.0 -->
+            <div class="release-item latest open">
+                <div class="release-header" onclick="toggleRelease(this)">
+                    <div class="release-info">
+                        <span class="release-version">v1.1.0</span>
+                        <span class="release-date">1 February 2026</span>
+                        <span class="release-badge">Latest</span>
+                    </div>
+                    <div class="release-toggle">▼</div>
+                </div>
+                <div class="release-content">
+                    <div class="release-body">
+                        <div class="release-section">
+                            <h4 class="added">✨ Added</h4>
+                            <ul>
+                                <li><strong>Video & GIF Ad Support</strong> — Ads now support animated content including YouTube videos (with Shorts), animated GIFs, and direct MP4 files with automatic looping</li>
+                                <li><strong>Dynamic Ad System</strong> — Complete backend-served advertisement system with admin dashboard, real-time updates, and automatic rotation</li>
+                                <li><strong>Admin Dashboard</strong> — Password-protected web interface at <code>/admin.html</code> for managing ads with live preview</li>
+                                <li><strong>Smart Ad Layout</strong> — Dynamic sidebar layout that automatically adjusts based on available ad formats</li>
+                                <li><strong>User Authentication</strong> — Email OTP (one-time password) login system with secure Keychain storage</li>
+                                <li><strong>Device Management</strong> — Track and manage up to 2 registered devices per account</li>
+                                <li><strong>Subscription Backend</strong> — Supabase integration with Stripe payment ready</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="changed">🔄 Changed</h4>
+                            <ul>
+                                <li><strong>Ad Display Logic</strong> — Replaced placeholder system with dynamic Supabase-served ads</li>
+                                <li><strong>Sidebar Layout</strong> — Intelligent layout based on available ad formats with portrait placeholder support</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="technical">⚙️ Technical</h4>
+                            <ul>
+                                <li>Added <code>VideoPlayerView</code> component with URL type detection (YouTube/GIF/MP4)</li>
+                                <li>Added <code>YouTubeWebView</code> for embedding YouTube via WKWebView with HTML injection</li>
+                                <li>Privacy-enhanced YouTube embedding using <code>youtube-nocookie.com</code></li>
+                                <li>Updated <code>get_all_active_ads()</code> RPC function for video support</li>
+                                <li>Added <code>DynamicAdService</code> singleton for ad management</li>
+                                <li>Created Supabase <code>ads</code> table with RLS policies</li>
+                            </ul>
+                        </div>
+                        
+                        <a href="releases/DivineLink-1.1.0.zip" class="release-download">
+                            ⬇️ Download v1.1.0
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- v1.0.2 -->
+            <div class="release-item">
+                <div class="release-header" onclick="toggleRelease(this)">
+                    <div class="release-info">
+                        <span class="release-version">v1.0.2</span>
+                        <span class="release-date">31 January 2026</span>
+                    </div>
+                    <div class="release-toggle">▼</div>
+                </div>
+                <div class="release-content">
+                    <div class="release-body">
+                        <div class="release-section">
+                            <h4 class="added">✨ Added</h4>
+                            <ul>
+                                <li><strong>Sparkle Auto-Updates</strong> — Automatic update checking and installation with Check for Updates menu (⌘U)</li>
+                                <li><strong>Ad-Supported Free Version</strong> — Right sidebar with ad slots and bottom banner for free users</li>
+                                <li><strong>Premium Subscription</strong> — Upgrade option to remove advertisements with trial support</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="changed">🔄 Changed</h4>
+                            <ul>
+                                <li><strong>Default Font Size</strong> — Changed from Small to Medium for better readability</li>
+                                <li><strong>Window Size</strong> — Adjusted to accommodate ad layout</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="improved">🚀 Improved</h4>
+                            <ul>
+                                <li><strong>Scripture Detection Validation</strong> — Stricter validation for verse numbers (max 176), verse ranges, and suspicious patterns</li>
+                            </ul>
+                        </div>
+                        
+                        <a href="releases/DivineLink-1.0.2.zip" class="release-download">
+                            ⬇️ Download v1.0.2
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- v1.0.1 -->
+            <div class="release-item">
+                <div class="release-header" onclick="toggleRelease(this)">
+                    <div class="release-info">
+                        <span class="release-version">v1.0.1</span>
+                        <span class="release-date">27 January 2026</span>
+                    </div>
+                    <div class="release-toggle">▼</div>
+                </div>
+                <div class="release-content">
+                    <div class="release-body">
+                        <div class="release-section">
+                            <h4 class="added">✨ Added</h4>
+                            <ul>
+                                <li><strong>Accessibility Settings</strong> — New Display settings with font size scaling (5 levels)</li>
+                                <li><strong>ProPresenter Audience Push</strong> — Push verses to Audience screen via native Bible feature</li>
+                                <li><strong>Window Resizability</strong> — Main window can now be freely resized</li>
+                                <li><strong>Dynamic Version Display</strong> — About tab reads version from app bundle</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="improved">🚀 Improved</h4>
+                            <ul>
+                                <li><strong>Scripture Detection</strong> — Better handling of numbered book prefixes (e.g., "1 Timothy")</li>
+                                <li><strong>ProPresenter Integration</strong> — More robust keyboard automation with fallback mechanisms</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="fixed">🐛 Fixed</h4>
+                            <ul>
+                                <li>Fixed AXValue and AXUIElement type casting issues in macOS Accessibility APIs</li>
+                                <li>Fixed <code>kAXSearchFieldRole</code> reference using string literal</li>
+                                <li>Improved scripture parser to reject excluded words with number prefixes</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- v1.0.0 -->
+            <div class="release-item">
+                <div class="release-header" onclick="toggleRelease(this)">
+                    <div class="release-info">
+                        <span class="release-version">v1.0.0</span>
+                        <span class="release-date">17 January 2026</span>
+                    </div>
+                    <div class="release-toggle">▼</div>
+                </div>
+                <div class="release-content">
+                    <div class="release-body">
+                        <div class="release-section">
+                            <h4 class="added">✨ Initial Release</h4>
+                            <ul>
+                                <li><strong>Live Speech-to-Text</strong> — Real-time transcription of spoken words</li>
+                                <li><strong>Scripture Detection</strong> — Automatic detection of Bible verse references with fuzzy matching</li>
+                                <li><strong>Multi-Verse Support</strong> — Detects and displays verse ranges (e.g., John 3:16-18)</li>
+                                <li><strong>Bible Database</strong> — Built-in KJV, ASV, and WEB translations</li>
+                                <li><strong>ProPresenter Stage Integration</strong> — Push verses to Stage screen via Network API</li>
+                                <li><strong>Pastor Profiles</strong> — Save pastor-specific speech corrections</li>
+                                <li><strong>Service Sessions</strong> — Track scriptures by service with auto-archival</li>
+                                <li><strong>Audio Level Monitoring</strong> — Visual audio level indicator with peak detection</li>
+                                <li><strong>BlackHole Support</strong> — System audio capture for stream monitoring</li>
+                                <li><strong>Menu Bar Quick Access</strong> — Quick access icon in macOS menu bar</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container" style="max-width: 1280px;">
+            <div class="footer-inner">
+                <a href="/" class="logo">
+                    <div class="logo-icon">📖</div>
+                    <span>Divine Link</span>
+                </a>
+                <div class="footer-links">
+                    <a href="/terms.html">Terms of Service</a>
+                    <a href="/privacy.html">Privacy Policy</a>
+                    <a href="/releases.html">Release Notes</a>
+                    <a href="mailto:support@divinelink.app">Contact Support</a>
+                </div>
+                <div class="footer-copy">
+                    © 2026 Divine Link by O'Rekun Media • <span class="footer-version">v1.1.0</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        function toggleRelease(header) {
+            const item = header.parentElement;
+            item.classList.toggle('open');
+        }
+        
+        // Open the latest release by default (already done via class)
+        // Keep scroll position smooth
+        document.querySelectorAll('.release-header').forEach(header => {
+            header.addEventListener('click', function(e) {
+                // Smooth scroll if needed
+            });
+        });
+    </script>
+</body>
+</html>
