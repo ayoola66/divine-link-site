@@ -326,13 +326,63 @@
     <section class="releases">
         <div class="container">
             
-            <!-- v1.1.0 -->
+            <!-- v1.2.0 - Epic 6: Operator Safety & Detection Confidence -->
             <div class="release-item latest open">
+                <div class="release-header" onclick="toggleRelease(this)">
+                    <div class="release-info">
+                        <span class="release-version">v1.2.0</span>
+                        <span class="release-date">5 February 2026</span>
+                        <span class="release-badge">Latest</span>
+                    </div>
+                    <div class="release-toggle">▼</div>
+                </div>
+                <div class="release-content">
+                    <div class="release-body">
+                        <div class="release-section">
+                            <h4 class="added">✨ Added</h4>
+                            <ul>
+                                <li><strong>Panic Button (Clear Screen)</strong> — Instantly clear all displayed scripture from ProPresenter with a single keypress (⌘⇧C)</li>
+                                <li><strong>Detection Confidence Indicator</strong> — Visual colour-coded feedback showing recognition confidence (green/amber/red)</li>
+                                <li><strong>WebSocket Messages API</strong> — New, faster ProPresenter integration via direct WebSocket connection</li>
+                                <li><strong>Hybrid Integration Manager</strong> — Intelligent multi-path communication with automatic fallback</li>
+                                <li><strong>Connection Dashboard</strong> — Real-time visual status for all ProPresenter output paths with test buttons</li>
+                                <li><strong>Output Path Settings</strong> — Granular control to enable/disable individual integration methods</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="changed">🔄 Changed</h4>
+                            <ul>
+                                <li><strong>ProPresenter Settings</strong> — Redesigned panel with new output path controls and connection dashboard</li>
+                                <li><strong>Clear Button Behaviour</strong> — Now clears only ProPresenter displays, preserving Divine Link's local scripture history</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="technical">⚙️ Technical</h4>
+                            <ul>
+                                <li>Added <code>ProPresenterOutputProtocol.swift</code> — Factory pattern for output abstraction</li>
+                                <li>Added <code>HybridIntegrationManager.swift</code> — Central coordinator for all output paths</li>
+                                <li>Added <code>AudienceWebSocketOutput.swift</code> — WebSocket Messages API implementation</li>
+                                <li>Added <code>StageDisplayOutput.swift</code> — HTTP REST output for Stage Display</li>
+                                <li>Added <code>AudienceKeyboardOutput.swift</code> — Keyboard automation fallback</li>
+                                <li>Premium feature gating: Multiple outputs require Grace or Love subscription</li>
+                            </ul>
+                        </div>
+                        
+                        <a href="releases/DivineLink-1.2.0.zip" class="release-download">
+                            ⬇️ Download v1.2.0
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- v1.1.0 -->
+            <div class="release-item">
                 <div class="release-header" onclick="toggleRelease(this)">
                     <div class="release-info">
                         <span class="release-version">v1.1.0</span>
                         <span class="release-date">1 February 2026</span>
-                        <span class="release-badge">Latest</span>
                     </div>
                     <div class="release-toggle">▼</div>
                 </div>
