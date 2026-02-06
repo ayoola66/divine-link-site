@@ -8,6 +8,49 @@
         
         <!-- Latest Version -->
         <item>
+            <title>Version 1.3.2</title>
+            <sparkle:version>4</sparkle:version>
+            <sparkle:shortVersionString>1.3.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Thu, 06 Feb 2026 14:00:00 +0000</pubDate>
+            
+            <description><![CDATA[
+                <h2>What's New in Version 1.3.2</h2>
+                
+                <h3>New Features</h3>
+                <ul>
+                    <li><strong>Contact Us Form</strong> - Paid customers can now reach support directly from the app</li>
+                    <li><strong>Subscription Grace Period</strong> - 14-day grace period with countdown banner if payment lapses</li>
+                    <li><strong>Subscription Warning Banner</strong> - Clear visual notification when subscription needs attention</li>
+                </ul>
+                
+                <h3>Improvements</h3>
+                <ul>
+                    <li>Premium Paywall UX with tier and billing period comparison</li>
+                    <li>Pastor profile limits enforced per tier (Grace: 2, Love: 5)</li>
+                    <li>Device limits now tier-aware (Mercy: 1, Grace: 2, Love: 5)</li>
+                    <li>Detection Settings gated behind premium subscription</li>
+                    <li>Monthly and yearly billing period selection</li>
+                </ul>
+                
+                <h3>Bug Fixes</h3>
+                <ul>
+                    <li>Fixed login verification code not accepting 6-digit OTP</li>
+                    <li>Fixed Stripe webhook to correctly differentiate Grace and Love tiers</li>
+                    <li>Fixed subscription status not recognising new tier statuses</li>
+                </ul>
+            ]]></description>
+            
+            <enclosure 
+                url="https://divinelink.netlify.app/releases/DivineLink-1.3.2.zip"
+                length="14713753"
+                type="application/octet-stream"
+                sparkle:edSignature="OS4u7iudh/LhCn/nNrRcExrTY62V5/yVDW2SMbw5R0GmFGXmkXNWVw04pqWkK92Sdw7Q+0lQqvYA1+7oqrpXAA=="
+            />
+        </item>
+        
+        <!-- Previous Version -->
+        <item>
             <title>Version 1.1.0</title>
             <sparkle:version>2</sparkle:version>
             <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
