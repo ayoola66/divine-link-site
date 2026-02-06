@@ -729,26 +729,39 @@
         .billing-selector {
             display: flex;
             justify-content: center;
-            align-items: center;
-            gap: 16px;
+            align-items: stretch;
+            gap: 0;
             margin-bottom: 40px;
-            padding: 8px;
+            padding: 6px;
             background: var(--bg-card);
-            border-radius: 12px;
-            max-width: 300px;
+            border-radius: 14px;
+            max-width: 380px;
             margin-left: auto;
             margin-right: auto;
-            border: 1px solid rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.08);
         }
         
         .billing-selector label {
-            font-size: 0.95rem;
+            flex: 1;
+            font-size: 1rem;
             color: var(--text-muted);
             cursor: pointer;
-            padding: 8px 16px;
-            border-radius: 8px;
+            padding: 12px 20px;
+            border-radius: 10px;
             transition: all 0.3s;
             user-select: none;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 2px;
+        }
+        
+        .billing-selector label .billing-save {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--mercy);
+            opacity: 0.85;
         }
         
         .billing-selector input[type="radio"] {
@@ -759,6 +772,11 @@
             background: var(--gradient-1);
             color: white;
             font-weight: 600;
+        }
+        
+        .billing-selector input[type="radio"]:checked + label .billing-save {
+            color: white;
+            opacity: 0.9;
         }
         
         .billing-selector input[type="radio"]:not(:checked) + label:hover {
@@ -1159,7 +1177,7 @@
                 <input type="radio" id="billing-monthly" name="billing" value="monthly" checked>
                 <label for="billing-monthly">Monthly</label>
                 <input type="radio" id="billing-yearly" name="billing" value="yearly">
-                <label for="billing-yearly">Yearly <span style="color: var(--mercy); font-size: 0.85em;">(Save up to 37%)</span></label>
+                <label for="billing-yearly">Yearly<span class="billing-save">Save up to 37%</span></label>
             </div>
             
             <div class="price-cards">
