@@ -725,6 +725,65 @@
             color: var(--mercy);
         }
         
+        /* Billing Period Selector */
+        .billing-selector {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 16px;
+            margin-bottom: 40px;
+            padding: 8px;
+            background: var(--bg-card);
+            border-radius: 12px;
+            max-width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+        
+        .billing-selector label {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 8px;
+            transition: all 0.3s;
+            user-select: none;
+        }
+        
+        .billing-selector input[type="radio"] {
+            display: none;
+        }
+        
+        .billing-selector input[type="radio"]:checked + label {
+            background: var(--gradient-1);
+            color: white;
+            font-weight: 600;
+        }
+        
+        .billing-selector input[type="radio"]:not(:checked) + label:hover {
+            background: rgba(255,255,255,0.05);
+            color: var(--text);
+        }
+        
+        .price-card .price-display {
+            transition: all 0.3s;
+        }
+        
+        .price-display .monthly-price,
+        .price-display .yearly-price {
+            display: none;
+        }
+        
+        .price-card[data-billing="yearly"] .price-display .yearly-price {
+            display: block;
+        }
+        
+        .price-card[data-billing="monthly"] .price-display .monthly-price {
+            display: block;
+        }
+        
+        
         /* Comparison Table */
         .comparison {
             padding: 120px 0;
@@ -1013,7 +1072,7 @@
                 <div class="feature-card">
                     <div class="feature-icon">👤</div>
                     <h3>Pastor Profiles</h3>
-                    <p>Save preferred translations and speech corrections for each speaker. Perfect for churches with multiple ministers.</p>
+                    <p>Save preferred translations and speech corrections for each speaker. Perfect for churches with multiple ministers. <strong>Grace: 2 profiles, Love: 5 profiles</strong></p>
                 </div>
             </div>
         </div>
@@ -1094,6 +1153,15 @@
                 <h2 class="section-title">Choose Your Plan</h2>
                 <p class="section-subtitle">Start free and upgrade as your church grows</p>
             </div>
+            
+            <!-- Billing Period Selector -->
+            <div class="billing-selector">
+                <input type="radio" id="billing-monthly" name="billing" value="monthly" checked>
+                <label for="billing-monthly">Monthly</label>
+                <input type="radio" id="billing-yearly" name="billing" value="yearly">
+                <label for="billing-yearly">Yearly <span style="color: var(--mercy); font-size: 0.85em;">(Save up to 37%)</span></label>
+            </div>
+            
             <div class="price-cards">
                 <!-- Mercy (Free) -->
                 <div class="price-card">
@@ -1123,7 +1191,10 @@
                     <div class="tier-name">Grace</div>
                     <h3>Premium</h3>
                     <div class="tier-verse">"By grace you have been saved"</div>
-                    <div class="price">£9.99<span>/month</span></div>
+                    <div class="price-display">
+                        <div class="price monthly-price">£9.99<span>/month</span></div>
+                        <div class="price yearly-price">£79.99<span>/year</span></div>
+                    </div>
                     <ul>
                         <li><span class="check">✓</span> Everything in Mercy</li>
                         <li><span class="check">✓</span> <strong>No advertisements</strong></li>
@@ -1135,10 +1206,10 @@
                         <li><span class="check">✓</span> Verse navigation controls</li>
                         <li><span class="check">✓</span> Use on 2 devices</li>
                         <li><span class="check">✓</span> Email support</li>
-                        <li class="disabled"><span class="cross">✗</span> Pastor profiles</li>
+                        <li><span class="check">✓</span> <strong>2 Pastor profiles</strong></li>
                     </ul>
-                    <a href="#" id="grace-btn" class="btn btn-grace">Subscribe</a>
-                    <p class="annual-price">or £79.99/year — <strong>save 33%</strong></p>
+                    <a href="https://buy.stripe.com/8x228raJOceGbI50hn5AQ00" id="grace-btn" class="btn btn-grace" data-grace-monthly="https://buy.stripe.com/8x228raJOceGbI50hn5AQ00" data-grace-yearly="https://buy.stripe.com/bJe00jf04emO7rPfch5AQ03">Subscribe</a>
+                    <p class="annual-price" style="display: none;"><strong>Save 33%</strong> with yearly billing</p>
                 </div>
                 
                 <!-- Love (Pro) -->
@@ -1147,22 +1218,25 @@
                     <div class="tier-name">Love</div>
                     <h3>Pro</h3>
                     <div class="tier-verse">"The greatest of these is love"</div>
-                    <div class="price">£19.99<span>/month</span></div>
+                    <div class="price-display">
+                        <div class="price monthly-price">£19.99<span>/month</span></div>
+                        <div class="price yearly-price">£149.99<span>/year</span></div>
+                    </div>
                     <ul>
                         <li><span class="check">✓</span> Everything in Grace</li>
                         <li><span class="check">✓</span> <strong>No advertisements</strong></li>
                         <li><span class="check">✓</span> <strong>Messages API integration</strong></li>
-                        <li><span class="check">✓</span> <strong>Pastor profiles</strong></li>
+                        <li><span class="check">✓</span> <strong>5 Pastor profiles</strong></li>
                         <li><span class="check">✓</span> <strong>Session history & export</strong></li>
                         <li><span class="check">✓</span> Speech corrections per pastor</li>
                         <li><span class="check">✓</span> Implicit verse detection</li>
                         <li><span class="check">✓</span> Auto-advance slideshow</li>
-                        <li><span class="check">✓</span> Use on 3 devices</li>
+                        <li><span class="check">✓</span> Use on 5 devices</li>
                         <li><span class="check">✓</span> Priority support</li>
                         <li><span class="check">✓</span> Church site licence</li>
                     </ul>
-                    <a href="#" id="love-btn" class="btn btn-love">Subscribe</a>
-                    <p class="annual-price">or £149.99/year — <strong>save 37%</strong></p>
+                    <a href="https://buy.stripe.com/7sYbJ14lqemO6nL7JP5AQ01" id="love-btn" class="btn btn-love" data-love-monthly="https://buy.stripe.com/7sYbJ14lqemO6nL7JP5AQ01" data-love-yearly="https://buy.stripe.com/dRmdR98BG2E6eUh4xD5AQ02">Subscribe</a>
+                    <p class="annual-price" style="display: none;"><strong>Save 37%</strong> with yearly billing</p>
                 </div>
             </div>
         </div>
@@ -1260,9 +1334,9 @@
                         </tr>
                         <tr>
                             <td>Pastor profiles</td>
-                            <td class="cross">✗</td>
-                            <td class="cross">✗</td>
-                            <td class="check">✓</td>
+                            <td>0</td>
+                            <td>2</td>
+                            <td>5</td>
                         </tr>
                         <tr>
                             <td>Session history & export</td>
@@ -1292,7 +1366,7 @@
                             <td>Devices included</td>
                             <td>1</td>
                             <td>2</td>
-                            <td>3</td>
+                            <td>5</td>
                         </tr>
                         <tr>
                             <td>Support</td>
@@ -1346,6 +1420,58 @@
             </div>
         </div>
     </footer>
+    
+    <script>
+        // Billing period selector functionality
+        const billingRadios = document.querySelectorAll('input[name="billing"]');
+        const priceCards = document.querySelectorAll('.price-card');
+        const graceBtn = document.getElementById('grace-btn');
+        const loveBtn = document.getElementById('love-btn');
+        
+        // Stripe checkout URLs
+        const stripeUrls = {
+            grace: {
+                monthly: 'https://buy.stripe.com/8x228raJOceGbI50hn5AQ00',
+                yearly: 'https://buy.stripe.com/bJe00jf04emO7rPfch5AQ03'
+            },
+            love: {
+                monthly: 'https://buy.stripe.com/7sYbJ14lqemO6nL7JP5AQ01',
+                yearly: 'https://buy.stripe.com/dRmdR98BG2E6eUh4xD5AQ02'
+            }
+        };
+        
+        function updateBillingPeriod() {
+            const selectedBilling = document.querySelector('input[name="billing"]:checked').value;
+            
+            // Update price cards
+            priceCards.forEach(card => {
+                card.setAttribute('data-billing', selectedBilling);
+            });
+            
+            // Update subscribe button URLs
+            if (selectedBilling === 'monthly') {
+                graceBtn.href = stripeUrls.grace.monthly;
+                loveBtn.href = stripeUrls.love.monthly;
+            } else {
+                graceBtn.href = stripeUrls.grace.yearly;
+                loveBtn.href = stripeUrls.love.yearly;
+            }
+            
+            // Show/hide annual price notes
+            const annualPriceNotes = document.querySelectorAll('.annual-price');
+            annualPriceNotes.forEach(note => {
+                note.style.display = selectedBilling === 'yearly' ? 'block' : 'none';
+            });
+        }
+        
+        // Add event listeners
+        billingRadios.forEach(radio => {
+            radio.addEventListener('change', updateBillingPeriod);
+        });
+        
+        // Initialize on page load
+        updateBillingPeriod();
+    </script>
     
 </body>
 </html>
