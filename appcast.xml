@@ -8,6 +8,41 @@
         
         <!-- Latest Version -->
         <item>
+            <title>Version 1.3.3</title>
+            <sparkle:version>6</sparkle:version>
+            <sparkle:shortVersionString>1.3.3</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Sat, 07 Feb 2026 23:30:00 +0000</pubDate>
+            
+            <description><![CDATA[
+                <h2>What's New in Version 1.3.3</h2>
+                
+                <h3>Security &amp; State Fixes</h3>
+                <ul>
+                    <li><strong>Admin Tab Security</strong> - Admin tab now only visible when signed in AND user is an administrator. Completely hidden for unauthenticated users.</li>
+                    <li><strong>Premium State Enforcement</strong> - Premium features, settings, and UI elements are now strictly gated behind authentication. Cached subscription data from previous sessions can no longer leak through.</li>
+                    <li><strong>Reactive Auth Synchronisation</strong> - SubscriptionService and AdManager now reactively observe authentication state. When a session expires or user signs out, all premium/admin state resets instantly.</li>
+                    <li><strong>Cache Hygiene</strong> - Stale subscription data is now fully cleared from UserDefaults on sign-out or session expiry, preventing privileged state from persisting across launches.</li>
+                </ul>
+                
+                <h3>Improvements</h3>
+                <ul>
+                    <li>Airtight authentication guards across all premium-gated views and services</li>
+                    <li>Improved settings window resize behaviour</li>
+                    <li>Admin debug: simulate free mode for testing ads and tint as admin</li>
+                </ul>
+            ]]></description>
+            
+            <enclosure 
+                url="https://divinelink.netlify.app/releases/DivineLink-1.3.3.zip"
+                length="12910994"
+                type="application/octet-stream"
+                sparkle:edSignature="fthX2HrvyId7QgRDZDvdPedTKPK/d8UorPacvslEDC8DpdKYeTT0II40QkB+OYU7368BW2NvnNKnN7GoRJOMAA=="
+            />
+        </item>
+        
+        <!-- Previous Version -->
+        <item>
             <title>Version 1.3.2</title>
             <sparkle:version>4</sparkle:version>
             <sparkle:shortVersionString>1.3.2</sparkle:shortVersionString>
