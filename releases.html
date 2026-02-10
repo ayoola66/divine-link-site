@@ -316,7 +316,7 @@
             <p>Stay up to date with the latest features, improvements, and fixes in Divine Link.</p>
             <div class="current-version">
                 <span>Latest:</span>
-                <span class="version-number">v1.1.0</span>
+                <span class="version-number">v1.3.3</span>
                 <span>•</span>
                 <a href="releases/DivineLink-latest.zip">Download</a>
             </div>
@@ -326,13 +326,177 @@
     <section class="releases">
         <div class="container">
             
-            <!-- v1.2.0 - Epic 6: Operator Safety & Detection Confidence -->
+            <!-- v1.3.3 - Security & State Fixes -->
             <div class="release-item latest open">
+                <div class="release-header" onclick="toggleRelease(this)">
+                    <div class="release-info">
+                        <span class="release-version">v1.3.3</span>
+                        <span class="release-date">7 February 2026</span>
+                        <span class="release-badge">Latest</span>
+                    </div>
+                    <div class="release-toggle">▼</div>
+                </div>
+                <div class="release-content">
+                    <div class="release-body">
+                        <div class="release-section">
+                            <h4 class="fixed">🔒 Security & State Fixes</h4>
+                            <ul>
+                                <li><strong>Admin Tab Security</strong> — Admin tab now only visible when signed in AND user is an administrator. Completely hidden for unauthenticated users.</li>
+                                <li><strong>Premium State Enforcement</strong> — Premium features, settings, and UI elements are now strictly gated behind authentication. Cached subscription data from previous sessions can no longer leak through.</li>
+                                <li><strong>Reactive Auth Synchronisation</strong> — SubscriptionService and AdManager now reactively observe authentication state. When a session expires or user signs out, all premium/admin state resets instantly.</li>
+                                <li><strong>Cache Hygiene</strong> — Stale subscription data is now fully cleared from UserDefaults on sign-out or session expiry, preventing privileged state from persisting across launches.</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="improved">🚀 Improvements</h4>
+                            <ul>
+                                <li>Airtight authentication guards across all premium-gated views and services</li>
+                                <li>Improved settings window resize behaviour</li>
+                                <li>Admin debug: simulate free mode for testing ads and tint as admin</li>
+                            </ul>
+                        </div>
+                        
+                        <a href="releases/DivineLink-1.3.3.zip" class="release-download">
+                            ⬇️ Download v1.3.3
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- v1.3.2 - Contact Us & Subscription Grace Period -->
+            <div class="release-item">
+                <div class="release-header" onclick="toggleRelease(this)">
+                    <div class="release-info">
+                        <span class="release-version">v1.3.2</span>
+                        <span class="release-date">6 February 2026</span>
+                    </div>
+                    <div class="release-toggle">▼</div>
+                </div>
+                <div class="release-content">
+                    <div class="release-body">
+                        <div class="release-section">
+                            <h4 class="added">✨ Added</h4>
+                            <ul>
+                                <li><strong>Contact Us Form</strong> — Paid customers can now reach support directly from the app</li>
+                                <li><strong>Subscription Grace Period</strong> — 14-day grace period with countdown banner if payment lapses</li>
+                                <li><strong>Subscription Warning Banner</strong> — Clear visual notification when subscription needs attention</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="improved">🚀 Improvements</h4>
+                            <ul>
+                                <li>Premium Paywall UX with tier and billing period comparison</li>
+                                <li>Pastor profile limits enforced per tier (Grace: 2, Love: 5)</li>
+                                <li>Device limits now tier-aware (Mercy: 1, Grace: 2, Love: 5)</li>
+                                <li>Detection Settings gated behind premium subscription</li>
+                                <li>Monthly and yearly billing period selection</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="fixed">🐛 Bug Fixes</h4>
+                            <ul>
+                                <li>Fixed login verification code not accepting 6-digit OTP</li>
+                                <li>Fixed Stripe webhook to correctly differentiate Grace and Love tiers</li>
+                                <li>Fixed subscription status not recognising new tier statuses</li>
+                            </ul>
+                        </div>
+                        
+                        <a href="releases/DivineLink-1.3.2.zip" class="release-download">
+                            ⬇️ Download v1.3.2
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- v1.3.1 - Admin Debug & Settings Refinements -->
+            <div class="release-item">
+                <div class="release-header" onclick="toggleRelease(this)">
+                    <div class="release-info">
+                        <span class="release-version">v1.3.1</span>
+                        <span class="release-date">7 February 2026</span>
+                    </div>
+                    <div class="release-toggle">▼</div>
+                </div>
+                <div class="release-content">
+                    <div class="release-body">
+                        <div class="release-section">
+                            <h4 class="added">✨ Added</h4>
+                            <ul>
+                                <li><strong>Admin Debug: Simulate Free</strong> — When testing as an admin, "Debug: Reset to Free" now correctly shows the free-tier experience (grey tint and ads sidebar)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="changed">🔄 Changed</h4>
+                            <ul>
+                                <li><strong>Settings Window</strong> — Now resizable; single collapse/expand control toggles between expanded (icons + labels) and icon-only sidebar</li>
+                                <li><strong>Subscription Tint</strong> — Main window tint is always grey when not signed in. Cached tier from previous session no longer applied when unauthenticated</li>
+                            </ul>
+                        </div>
+                        
+                        <a href="releases/DivineLink-1.3.1.zip" class="release-download">
+                            ⬇️ Download v1.3.1
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- v1.3.0 - Epic 7: Market-Dominating Product -->
+            <div class="release-item">
+                <div class="release-header" onclick="toggleRelease(this)">
+                    <div class="release-info">
+                        <span class="release-version">v1.3.0</span>
+                        <span class="release-date">6 February 2026</span>
+                    </div>
+                    <div class="release-toggle">▼</div>
+                </div>
+                <div class="release-content">
+                    <div class="release-body">
+                        <div class="release-section">
+                            <h4 class="added">✨ Added</h4>
+                            <ul>
+                                <li><strong>Reference Buffer (Stateful Detection)</strong> — Context-aware scripture detection that remembers previous book/chapter during sermon. "Verse 18" after "John 3:16" correctly resolves to "John 3:18"</li>
+                                <li><strong>Partial Reference Handling</strong> — Handles references like "verses 5-7" using last mentioned book/chapter, and inverted patterns like "verse 31 of Romans eight"</li>
+                                <li><strong>Premium Feature Gating</strong> — Detection Settings now require Grace or Love subscription</li>
+                                <li><strong>Pastor Profile Limits</strong> — Tier-based limits (Mercy: 0, Grace: 2, Love: 5) with upgrade prompts</li>
+                                <li><strong>Modern PaywallView</strong> — Enhanced subscription experience with tier comparison, explicit limits, and Stripe integration</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="changed">🔄 Changed</h4>
+                            <ul>
+                                <li><strong>SubscriptionService</strong> — Enhanced tier tracking with SubscriptionTier enum (mercy, grace, love)</li>
+                                <li><strong>PastorProfilesView</strong> — Displays current profile count vs limit with conditional "Add Pastor" button</li>
+                                <li><strong>SettingsView</strong> — Detection Settings tab now premium-gated with upgrade button</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="release-section">
+                            <h4 class="technical">⚙️ Technical</h4>
+                            <ul>
+                                <li>Added <code>ReferenceBuffer.swift</code> — Stateful context management with configurable timeout</li>
+                                <li>Added <code>PremiumFeatureGate.swift</code> — View modifier for feature gating</li>
+                                <li>Created <code>docs/FEATURE-MATRIX.md</code> — Comprehensive feature matrix (source of truth)</li>
+                            </ul>
+                        </div>
+                        
+                        <a href="releases/DivineLink-1.3.0.zip" class="release-download">
+                            ⬇️ Download v1.3.0
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- v1.2.0 - Epic 6: Operator Safety & Detection Confidence -->
+            <div class="release-item">
                 <div class="release-header" onclick="toggleRelease(this)">
                     <div class="release-info">
                         <span class="release-version">v1.2.0</span>
                         <span class="release-date">5 February 2026</span>
-                        <span class="release-badge">Latest</span>
                     </div>
                     <div class="release-toggle">▼</div>
                 </div>
@@ -370,9 +534,9 @@
                             </ul>
                         </div>
                         
-                        <a href="releases/DivineLink-1.2.0.zip" class="release-download">
-                            ⬇️ Download v1.2.0
-                        </a>
+                        <p style="color: var(--text-muted); font-size: 0.85rem; margin-top: 16px; font-style: italic;">
+                            This version has been superseded by v1.3.0+. Please download the latest version.
+                        </p>
                     </div>
                 </div>
             </div>
@@ -558,7 +722,7 @@
                     <a href="mailto:support@divinelink.app">Contact Support</a>
                 </div>
                 <div class="footer-copy">
-                    © 2026 Divine Link by O'Rekun Media • <span class="footer-version">v1.1.0</span>
+                    © 2026 Divine Link by O'Rekun Media • <span class="footer-version">v1.3.3</span>
                 </div>
             </div>
         </div>
