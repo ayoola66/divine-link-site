@@ -8,6 +8,34 @@
         
         <!-- Latest Version -->
         <item>
+            <title>Version 1.3.4</title>
+            <sparkle:version>7</sparkle:version>
+            <sparkle:shortVersionString>1.3.4</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Mon, 10 Feb 2026 23:40:00 +0000</pubDate>
+            
+            <description><![CDATA[
+                <h2>What's New in Version 1.3.4</h2>
+                
+                <h3>In-App Updates Fixed</h3>
+                <ul>
+                    <li><strong>Sparkle sandbox fix</strong> - In-app updates now work correctly. The "error occurred while launching the installer" issue is resolved for sandboxed builds.</li>
+                    <li>Installer XPC Service enabled and entitlements added so updates can install from within the app.</li>
+                </ul>
+                
+                <p>Includes all fixes from 1.3.3 (admin tab security, premium state enforcement, auth sync, cache hygiene).</p>
+            ]]></description>
+            
+            <enclosure 
+                url="https://divinelink.netlify.app/releases/DivineLink-1.3.4.zip"
+                length="12958456"
+                type="application/octet-stream"
+                sparkle:edSignature="gb4l57FlTcNjjOz9u9W/TxpqQutNG88RE2SEBankhp+965MiR/uxPTl7iU8zWn2QeW93zuQS3lGcHOoG2P1aDw=="
+            />
+        </item>
+        
+        <!-- Previous Version -->
+        <item>
             <title>Version 1.3.3</title>
             <sparkle:version>6</sparkle:version>
             <sparkle:shortVersionString>1.3.3</sparkle:shortVersionString>
