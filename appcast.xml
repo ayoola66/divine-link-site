@@ -8,6 +8,41 @@
         
         <!-- Latest Version -->
         <item>
+            <title>Version 1.3.5</title>
+            <sparkle:version>9</sparkle:version>
+            <sparkle:shortVersionString>1.3.5</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Tue, 11 Feb 2026 20:40:00 +0000</pubDate>
+            
+            <description><![CDATA[
+                <h2>What's New in Version 1.3.5</h2>
+                
+                <h3>Audio Capture Fix (Critical)</h3>
+                <ul>
+                    <li><strong>Silent audio resolved</strong> &ndash; Removed a Core Audio HAL corruption caused by <code>audioEngine.reset()</code> that silenced all subsequent captures.</li>
+                    <li><strong>Multi-channel USB support</strong> &ndash; Devices such as the Focusrite Vocaster Two now correctly detect the active microphone channel instead of defaulting to channel&nbsp;0.</li>
+                    <li><strong>Startup race condition fixed</strong> &ndash; Debounced the device observer and eliminated redundant stop/start cycles during pipeline startup.</li>
+                    <li><strong>Automatic silent-start recovery</strong> &ndash; If the first 15 buffers are all silent the engine is automatically recreated once.</li>
+                </ul>
+                
+                <h3>Permission Handling</h3>
+                <ul>
+                    <li>Audio capture is now blocked when microphone permission is denied, preventing silent-running.</li>
+                    <li>Spacebar shortcut gated by permission status.</li>
+                    <li>Clicking the &ldquo;No Permission&rdquo; indicator opens System&nbsp;Settings directly to Microphone privacy.</li>
+                </ul>
+            ]]></description>
+            
+            <enclosure 
+                url="https://divinelink.netlify.app/releases/DivineLink-1.3.5.zip"
+                length="14768553"
+                type="application/octet-stream"
+                sparkle:edSignature="Y4meQ5vwCxKIPOJtG3YovxT0WrGhjb6txrR/+p+3WdYhKpSK478sJ89NJ1nEPHQUGGo+cldlv3IMCWotyNAoDw=="
+            />
+        </item>
+        
+        <!-- Previous Version -->
+        <item>
             <title>Version 1.3.4</title>
             <sparkle:version>7</sparkle:version>
             <sparkle:shortVersionString>1.3.4</sparkle:shortVersionString>
