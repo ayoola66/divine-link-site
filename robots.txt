@@ -1,0 +1,22 @@
+# Divine Link — Church Scripture Detection Software
+# https://divinelink.netlify.app
+
+User-agent: *
+Allow: /
+
+# Public pages
+Allow: /index.html
+Allow: /compare.html
+Allow: /releases.html
+Allow: /terms.html
+Allow: /privacy.html
+
+# Block admin and transactional pages
+Disallow: /admin.html
+Disallow: /success.html
+Disallow: /cancel.html
+
+# Block raw release downloads from indexing
+Disallow: /releases/
+
+Sitemap: https://divinelink.netlify.app/sitemap.xml
