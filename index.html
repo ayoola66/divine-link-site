@@ -849,6 +849,114 @@
         .th-grace { color: var(--grace); }
         .th-love { color: var(--love); }
         
+        /* Why Choose Section */
+        .why-choose {
+            padding: 120px 0;
+            background: var(--bg);
+            position: relative;
+        }
+
+        .why-choose::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, rgba(16, 185, 129, 0.05) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .why-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .why-card {
+            background: var(--bg-card);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: all 0.3s;
+            text-align: center;
+        }
+
+        .why-card:hover {
+            transform: translateY(-5px);
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .why-icon {
+            width: 70px;
+            height: 70px;
+            background: rgba(16, 185, 129, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            margin: 0 auto 24px;
+        }
+
+        .why-card h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 12px;
+        }
+
+        .why-card p {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .why-card .highlight-stat {
+            display: block;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--mercy);
+            margin-bottom: 8px;
+        }
+
+        .compare-cta {
+            text-align: center;
+            margin-top: 50px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .compare-cta p {
+            color: var(--text-muted);
+            margin-bottom: 20px;
+            font-size: 1rem;
+        }
+
+        .btn-compare {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--mercy);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            padding: 14px 28px;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .btn-compare:hover {
+            background: rgba(16, 185, 129, 0.2);
+            border-color: rgba(16, 185, 129, 0.5);
+            transform: translateY(-2px);
+        }
+
         /* CTA Section */
         .cta {
             padding: 120px 0;
@@ -952,9 +1060,11 @@
             .steps-container { grid-template-columns: repeat(2, 1fr); }
             .step::after { display: none; }
             .price-cards { grid-template-columns: 1fr; max-width: 400px; }
+            .why-grid { grid-template-columns: repeat(2, 1fr); }
         }
         
         @media (max-width: 768px) {
+            .why-grid { grid-template-columns: 1fr; }
             .nav-links { display: none; }
             .hero h1 { font-size: 2.5rem; }
             .section-title { font-size: 2rem; }
@@ -977,6 +1087,7 @@
                     <a href="#features">Features</a>
                     <a href="#how-it-works">How It Works</a>
                     <a href="#pricing">Pricing</a>
+                    <a href="/compare.html">Compare</a>
                     <a href="/releases.html">Release Notes</a>
                     <a href="releases/DivineLink-latest.zip" class="nav-cta">Download</a>
                 </nav>
@@ -992,11 +1103,11 @@
             <div class="hero-content">
                 <div class="hero-text">
                     <div class="hero-badge">
-                        <span>🎯</span> Operator-controlled • Human-verified • Always local
+                        <span>✨</span> Detects Bible verses during preaching • Works with ProPresenter
                     </div>
-                    <h1><span class="highlight">Quality-Controlled</span> Scripture Detection for Live Preaching</h1>
-                    <p>Divine Link puts <strong>you in control</strong>. Unlike fully automated tools, we detect scripture references during sermons and let you verify before displaying.
-                       Human-in-the-loop design ensures accuracy and gives you the final say—every time.</p>
+                    <h1>Real-time <span class="highlight">Scripture Detection</span> for Live Preaching</h1>
+                    <p>Divine Link listens to your pastor during sermons and automatically detects Bible verse references. 
+                       No more scrambling to find scriptures — let Divine Link do the work whilst you focus on the message.</p>
                     <div class="hero-buttons">
                         <a href="releases/DivineLink-latest.zip" class="btn btn-primary">
                             <span>⬇️</span> Download Free
@@ -1018,13 +1129,6 @@
                             <div class="stat-number">99.2%</div>
                             <div class="stat-label">Accuracy Rate</div>
                         </div>
-                    </div>
-                    <div style="margin-top: 40px; padding: 20px; background: rgba(224, 122, 43, 0.08); border: 1px solid rgba(224, 122, 43, 0.2); border-radius: 12px;">
-                        <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 8px;">
-                            <span style="font-size: 1.5rem;">🚀</span>
-                            <span style="font-size: 1.1rem; font-weight: 700; color: var(--primary-light);">v2.0 Coming Soon</span>
-                        </div>
-                        <p style="color: var(--text-muted); font-size: 0.95rem; margin: 0; line-height: 1.6;">Next-generation UI redesign, manual scripture search, expanded platform support, and more. The future of Divine Link is on the horizon.</p>
                     </div>
                 </div>
                 <div class="hero-image">
@@ -1060,19 +1164,19 @@
         <div class="container">
             <div class="section-header">
                 <div class="section-tag">Features</div>
-                <h2 class="section-title">Operator Control Meets AI Intelligence</h2>
-                <p class="section-subtitle">Divine Link detects Bible verses during preaching and <strong>puts you in control</strong>. Verify, edit, or dismiss detections before they reach the screen—combining AI speed with human accuracy.</p>
+                <h2 class="section-title">Everything You Need for Seamless Scripture Display</h2>
+                <p class="section-subtitle">Divine Link detects Bible verses mentioned during preaching and lets you push them to your presentation software with one click.</p>
             </div>
             <div class="feature-grid">
                 <div class="feature-card">
                     <div class="feature-icon">🎤</div>
                     <h3>Live Speech Recognition</h3>
-                    <p>Advanced AI transcription captures every word spoken. <strong>You verify before display</strong>—combining AI speed with human accuracy.</p>
+                    <p>Advanced AI transcription captures every word spoken, detecting scripture references in real-time with high accuracy.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">🔍</div>
-                    <h3>Intelligent Detection with Confidence Scores</h3>
-                    <p>Recognises multiple formats with <strong>transparent confidence indicators</strong>. You always know how certain the detection is before pushing to screen.</p>
+                    <h3>Intelligent Detection</h3>
+                    <p>Recognises multiple formats: "John 3:16", "John chapter 3 verse 16", spoken numbers, ranges, and contextual references.</p>
                 </div>
                 <div class="feature-card">
                     <div class="feature-icon">📺</div>
@@ -1113,49 +1217,6 @@
         </div>
     </section>
     
-    <!-- Why Choose Divine Link Section -->
-    <section class="showcase" style="background: var(--bg-dark); padding: 100px 0;">
-        <div class="container">
-            <div class="section-header">
-                <div class="section-tag">Why Choose Divine Link</div>
-                <h2 class="section-title">Quality & Control Over Full Automation</h2>
-                <p class="section-subtitle">We believe operators should have the final say. Here's what sets us apart from competitors like QuickVerse, SermonlyAI, and others.</p>
-            </div>
-            <div class="feature-grid" style="margin-top: 60px;">
-                <div class="feature-card">
-                    <div class="feature-icon">👤</div>
-                    <h3>Human-in-the-Loop</h3>
-                    <p>Unlike fully automated tools, <strong>you verify every scripture</strong> before it goes on screen. No surprises, no mistakes—just quality-controlled display.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
-                    <h3>100% Local-First</h3>
-                    <p><strong>No cloud dependencies.</strong> Your sermons never leave your Mac. Complete privacy, zero latency, works offline. Competitors require cloud connectivity.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">💰</div>
-                    <h3>Better Value</h3>
-                    <p>Premium starts at <strong>£9.99/month</strong> vs competitors' £15+. More features, lower price, no compromises on quality.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🛡️</div>
-                    <h3>Panic Button</h3>
-                    <p>Instantly clear the screen with one click if something goes wrong. <strong>Operators stay in control</strong> during live services.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📊</div>
-                    <h3>Confidence Indicators</h3>
-                    <p>See detection confidence scores before displaying. <strong>Transparency over black-box AI</strong>—you decide what's accurate enough.</p>
-                </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>ProPresenter Excellence</h3>
-                    <p>Deep ProPresenter integration with <strong>Messages API</strong> (Premium). Faster, more reliable than keyboard automation used by competitors.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <section class="showcase">
         <div class="container">
             <div class="showcase-grid">
@@ -1473,6 +1534,55 @@
                         </tr>
                     </tbody>
                 </table>
+            </div>
+        </div>
+    </section>
+    
+    <section class="why-choose" id="why-choose">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Why Choose Divine Link</div>
+                <h2 class="section-title">Quality &amp; Control Over Full Automation</h2>
+                <p class="section-subtitle">We believe operators should have the final say. Here's what sets us apart from cloud-based scripture detection tools.</p>
+            </div>
+            <div class="why-grid">
+                <div class="why-card">
+                    <div class="why-icon">👤</div>
+                    <h3>Human-in-the-Loop</h3>
+                    <p>Unlike fully automated tools, <strong>you verify every scripture</strong> before it goes on screen. No surprises, no mistakes — just quality-controlled display.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">🔒</div>
+                    <h3>100% Local-First</h3>
+                    <p><strong>No cloud dependencies.</strong> Your sermons never leave your Mac. Complete privacy, zero latency, works offline. Competitors require cloud connectivity.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">💰</div>
+                    <span class="highlight-stat">33% less</span>
+                    <h3>Better Value</h3>
+                    <p>Premium starts at <strong>£9.99/month</strong> vs competitors' £15+. More features, lower price, no compromises on quality.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">🛡️</div>
+                    <h3>Panic Button</h3>
+                    <p>Instantly clear the screen with one click if something goes wrong. <strong>Operators stay in control</strong> during live services.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">📊</div>
+                    <h3>Confidence Indicators</h3>
+                    <p>See detection confidence scores before displaying. <strong>Transparency over black-box AI</strong> — you decide what's accurate enough.</p>
+                </div>
+                <div class="why-card">
+                    <div class="why-icon">⚡</div>
+                    <h3>ProPresenter Excellence</h3>
+                    <p>Deep ProPresenter integration with <strong>Messages API</strong> (Premium). Faster, more reliable than keyboard automation used by competitors.</p>
+                </div>
+            </div>
+            <div class="compare-cta">
+                <p>Want to see how Divine Link stacks up against specific competitors?</p>
+                <a href="/compare.html" class="btn-compare">
+                    <span>📋</span> See Full Competitor Comparison
+                </a>
             </div>
         </div>
     </section>

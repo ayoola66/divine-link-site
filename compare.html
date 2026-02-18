@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Divine Link vs Competitors — Scripture Detection Comparison</title>
+    <meta name="description" content="Compare Divine Link with QuickVerse, SermonlyAI, and other scripture detection tools. See why churches choose local-first, human-verified scripture display.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #E07A2B;
+            --primary-dark: #C66A20;
+            --primary-light: #F59E4C;
+            --accent-blue: #3B82F6;
+            --accent-purple: #8B5CF6;
+            --bg-dark: #0f0f1a;
+            --bg: #141428;
+            --bg-light: #1a1a35;
+            --bg-card: #1e1e3a;
+            --text: #f0f0f5;
+            --text-muted: #9ca3af;
+            --mercy: #10B981;
+            --grace: #E07A2B;
+            --love: #8B5CF6;
+            --gradient-1: linear-gradient(135deg, #E07A2B 0%, #F59E4C 100%);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text);
+            line-height: 1.7;
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 1280px; margin: 0 auto; padding: 0 24px; }
+
+        header {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+            padding: 16px 0;
+            background: rgba(15, 15, 26, 0.9);
+            backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .header-inner { display: flex; justify-content: space-between; align-items: center; }
+
+        .logo {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 1.4rem; font-weight: 700; color: var(--text); text-decoration: none;
+        }
+
+        .logo-icon {
+            width: 36px; height: 36px; background: var(--gradient-1); border-radius: 8px;
+            display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+        }
+
+        .logo span {
+            background: var(--gradient-1); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .nav-links { display: flex; align-items: center; gap: 32px; }
+
+        .nav-links a {
+            color: var(--text-muted); text-decoration: none; font-size: 0.95rem;
+            font-weight: 500; transition: color 0.3s;
+        }
+        .nav-links a:hover { color: var(--primary); }
+        .nav-links a.active { color: var(--primary); }
+
+        .nav-cta {
+            background: var(--gradient-1) !important; color: white !important;
+            padding: 10px 24px; border-radius: 8px; font-weight: 600;
+        }
+
+        .page-hero {
+            padding: 160px 0 80px;
+            text-align: center;
+            background: var(--bg-dark);
+            position: relative;
+        }
+
+        .page-hero::after {
+            content: '';
+            position: absolute; bottom: 0; left: 50%; transform: translateX(-50%);
+            width: 800px; height: 400px;
+            background: radial-gradient(circle, rgba(224, 122, 43, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .page-hero h1 {
+            font-size: 3rem; font-weight: 800; line-height: 1.15; margin-bottom: 20px;
+        }
+
+        .page-hero h1 .highlight {
+            background: var(--gradient-1); -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; background-clip: text;
+        }
+
+        .page-hero p {
+            font-size: 1.15rem; color: var(--text-muted); max-width: 700px;
+            margin: 0 auto 16px; line-height: 1.8;
+        }
+
+        .disclaimer {
+            font-size: 0.8rem; color: #6b7280; max-width: 650px; margin: 0 auto;
+            padding-top: 12px; border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 60px; }
+
+        .section-tag {
+            display: inline-block; font-size: 0.85rem; font-weight: 600;
+            color: var(--primary); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 16px;
+        }
+
+        .section-title { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; line-height: 1.2; }
+
+        .section-subtitle { font-size: 1.05rem; color: var(--text-muted); line-height: 1.8; }
+
+        /* Main comparison table */
+        .comp-section {
+            padding: 80px 0;
+            background: var(--bg);
+        }
+
+        .comp-section:nth-child(even) { background: var(--bg-dark); }
+
+        .comp-table-wrapper { overflow-x: auto; margin-top: 40px; }
+
+        .comp-table {
+            width: 100%; border-collapse: collapse; min-width: 900px;
+        }
+
+        .comp-table th, .comp-table td {
+            padding: 18px 20px; text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .comp-table th {
+            background: var(--bg-card); font-weight: 600; font-size: 0.95rem;
+            position: sticky; top: 72px; z-index: 10;
+        }
+
+        .comp-table th:first-child, .comp-table td:first-child {
+            text-align: left; font-weight: 500; min-width: 240px;
+        }
+
+        .comp-table .check { color: var(--mercy); font-size: 1.1rem; }
+        .comp-table .cross { color: #4a4a5a; font-size: 1.1rem; }
+        .comp-table .unknown { color: #6b7280; font-size: 0.85rem; font-style: italic; }
+
+        .comp-table tbody tr:hover { background: rgba(255,255,255,0.02); }
+
+        .comp-table .dl-col { color: var(--primary); font-weight: 700; }
+        .comp-table .cat-row td {
+            background: rgba(224, 122, 43, 0.05);
+            font-weight: 600; font-size: 0.9rem;
+            text-transform: uppercase; letter-spacing: 1px; color: var(--primary-light);
+        }
+
+        /* Positioning map */
+        .positioning {
+            padding: 100px 0;
+            background: var(--bg-dark);
+        }
+
+        .pos-map {
+            max-width: 700px; margin: 40px auto 0;
+            background: var(--bg-card); border-radius: 20px;
+            border: 1px solid rgba(255,255,255,0.05); padding: 50px;
+            position: relative; min-height: 400px;
+        }
+
+        .pos-axis-y {
+            position: absolute; left: 20px; top: 50%; transform: translateY(-50%) rotate(-90deg);
+            font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 2px; white-space: nowrap;
+        }
+
+        .pos-axis-x {
+            position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%);
+            font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase;
+            letter-spacing: 2px; white-space: nowrap;
+        }
+
+        .pos-dot {
+            position: absolute; border-radius: 50%; display: flex;
+            align-items: center; justify-content: center;
+            font-size: 0.7rem; font-weight: 700; color: white;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+        }
+
+        .pos-label {
+            position: absolute; font-size: 0.8rem; font-weight: 600;
+            white-space: nowrap;
+        }
+
+        /* Advantage cards */
+        .advantages {
+            padding: 100px 0;
+            background: var(--bg);
+        }
+
+        .adv-grid {
+            display: grid; grid-template-columns: repeat(2, 1fr); gap: 30px;
+        }
+
+        .adv-card {
+            background: var(--bg-card); padding: 36px; border-radius: 18px;
+            border: 1px solid rgba(255,255,255,0.05); transition: all 0.3s;
+        }
+
+        .adv-card:hover {
+            transform: translateY(-3px);
+            border-color: rgba(16, 185, 129, 0.3);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+        }
+
+        .adv-card .adv-header {
+            display: flex; align-items: center; gap: 14px; margin-bottom: 14px;
+        }
+
+        .adv-icon {
+            width: 48px; height: 48px; background: rgba(16, 185, 129, 0.12);
+            border-radius: 12px; display: flex; align-items: center;
+            justify-content: center; font-size: 1.4rem; flex-shrink: 0;
+        }
+
+        .adv-card h3 { font-size: 1.15rem; font-weight: 600; }
+
+        .adv-card p { color: var(--text-muted); font-size: 0.92rem; line-height: 1.7; }
+
+        .adv-card .vs-note {
+            margin-top: 12px; padding: 10px 14px;
+            background: rgba(224, 122, 43, 0.08); border-radius: 8px;
+            font-size: 0.82rem; color: var(--primary-light); line-height: 1.5;
+        }
+
+        /* CTA */
+        .page-cta {
+            padding: 100px 0; text-align: center; background: var(--bg-dark);
+            position: relative;
+        }
+
+        .page-cta h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 20px; }
+        .page-cta p { color: var(--text-muted); margin-bottom: 30px; font-size: 1.1rem; max-width: 550px; margin-left: auto; margin-right: auto; }
+
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 16px 32px; border-radius: 12px; font-size: 1rem;
+            font-weight: 600; text-decoration: none; transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background: var(--gradient-1); color: white;
+            box-shadow: 0 4px 20px rgba(224, 122, 43, 0.3);
+        }
+        .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 30px rgba(224, 122, 43, 0.4); }
+
+        .btn-secondary {
+            background: rgba(255,255,255,0.05); color: var(--text);
+            border: 1px solid rgba(255,255,255,0.1); margin-left: 12px;
+        }
+        .btn-secondary:hover { background: rgba(255,255,255,0.1); }
+
+        footer {
+            padding: 60px 0; background: var(--bg-dark);
+            border-top: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .footer-inner {
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 20px;
+        }
+
+        .footer-links { display: flex; gap: 30px; }
+        .footer-links a { color: var(--text-muted); text-decoration: none; font-size: 0.95rem; transition: color 0.3s; }
+        .footer-links a:hover { color: var(--primary); }
+        .footer-copy { color: var(--text-muted); font-size: 0.9rem; }
+
+        @media (max-width: 1024px) {
+            .adv-grid { grid-template-columns: 1fr; }
+            .page-hero h1 { font-size: 2.2rem; }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .page-hero h1 { font-size: 1.8rem; }
+            .section-title { font-size: 1.8rem; }
+            .pos-map { padding: 30px; min-height: 300px; }
+            .footer-inner { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-inner">
+                <a href="/" class="logo">
+                    <div class="logo-icon">📖</div>
+                    <span>Divine Link</span>
+                </a>
+                <nav class="nav-links">
+                    <a href="/#features">Features</a>
+                    <a href="/#how-it-works">How It Works</a>
+                    <a href="/#pricing">Pricing</a>
+                    <a href="/compare.html" class="active">Compare</a>
+                    <a href="/releases.html">Release Notes</a>
+                    <a href="releases/DivineLink-latest.zip" class="nav-cta">Download</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <section class="page-hero">
+        <div class="container">
+            <h1>Divine Link vs <span class="highlight">The Competition</span></h1>
+            <p>See how Divine Link compares to cloud-based scripture detection tools. We believe in transparency — here are the facts so you can make the right choice for your church.</p>
+            <p class="disclaimer">All competitor information is accurate as of February 2026 based on publicly available data. Product names and trademarks belong to their respective owners. Where information was unavailable, it is marked accordingly.</p>
+        </div>
+    </section>
+
+    <section class="comp-section">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Feature Comparison</div>
+                <h2 class="section-title">Head-to-Head Feature Matrix</h2>
+                <p class="section-subtitle">A factual comparison of features across the leading scripture detection tools for churches.</p>
+            </div>
+            <div class="comp-table-wrapper">
+                <table class="comp-table">
+                    <thead>
+                        <tr>
+                            <th>Feature</th>
+                            <th class="dl-col">Divine Link</th>
+                            <th>QuickVerse</th>
+                            <th>SermonlyAI</th>
+                            <th>Beluga</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="cat-row"><td colspan="5">Core Transcription</td></tr>
+                        <tr>
+                            <td>Real-time transcription</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                        </tr>
+                        <tr>
+                            <td>Scripture detection</td>
+                            <td class="check">✓ (6 patterns)</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td>Paraphrasing / implicit detection</td>
+                            <td class="check">✓</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="check">✓</td>
+                        </tr>
+                        <tr>
+                            <td>Bible versions supported</td>
+                            <td>10+ (KJV, ESV, NIV, etc.)</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                        </tr>
+
+                        <tr class="cat-row"><td colspan="5">Quality &amp; Control</td></tr>
+                        <tr>
+                            <td>Human-in-the-loop verification</td>
+                            <td class="check">✓ Operator approval</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                        </tr>
+                        <tr>
+                            <td>Confidence indicators</td>
+                            <td class="check">✓</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                        </tr>
+                        <tr>
+                            <td>Panic button (emergency clear)</td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                        </tr>
+
+                        <tr class="cat-row"><td colspan="5">Privacy &amp; Architecture</td></tr>
+                        <tr>
+                            <td>Local-first (no cloud required)</td>
+                            <td class="check">✓ 100% local</td>
+                            <td class="cross">✗ Cloud-based</td>
+                            <td class="cross">✗ Cloud-based</td>
+                            <td class="cross">✗ Cloud-based</td>
+                        </tr>
+                        <tr>
+                            <td>Works offline</td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                        </tr>
+                        <tr>
+                            <td>Sermon data stays on your device</td>
+                            <td class="check">✓ Always</td>
+                            <td class="cross">✗ Uploaded to cloud</td>
+                            <td class="cross">✗ Uploaded to cloud</td>
+                            <td class="cross">✗ Uploaded to cloud</td>
+                        </tr>
+                        <tr>
+                            <td>Native macOS application</td>
+                            <td class="check">✓</td>
+                            <td>Web-based</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                        </tr>
+
+                        <tr class="cat-row"><td colspan="5">Presentation Integrations</td></tr>
+                        <tr>
+                            <td>ProPresenter</td>
+                            <td class="check">✓ Stage + Messages API</td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                        </tr>
+                        <tr>
+                            <td>EasyWorship</td>
+                            <td class="cross">✗ (Planned v2)</td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                        </tr>
+                        <tr>
+                            <td>FreeShow</td>
+                            <td class="cross">✗ (Planned v2)</td>
+                            <td class="check">✓</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                        </tr>
+                        <tr>
+                            <td>Direct API integration</td>
+                            <td class="check">✓ Messages API</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="cross">✗</td>
+                            <td class="cross">✗</td>
+                        </tr>
+
+                        <tr class="cat-row"><td colspan="5">User Experience</td></tr>
+                        <tr>
+                            <td>Pastor profiles</td>
+                            <td class="check">✓ (2-5 profiles)</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                        </tr>
+                        <tr>
+                            <td>Multi-verse navigation</td>
+                            <td class="check">✓</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                        </tr>
+                        <tr>
+                            <td>Manual scripture search</td>
+                            <td>Coming in v2</td>
+                            <td class="check">✓</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                        </tr>
+                        <tr>
+                            <td>Service session management</td>
+                            <td>Coming in v2</td>
+                            <td class="check">✓</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                        </tr>
+                        <tr>
+                            <td>Export functionality</td>
+                            <td>Coming in v2</td>
+                            <td class="check">✓</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                        </tr>
+                        <tr>
+                            <td>AI similar scriptures</td>
+                            <td>Future roadmap</td>
+                            <td class="check">✓</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="cross">✗</td>
+                        </tr>
+
+                        <tr class="cat-row"><td colspan="5">Pricing</td></tr>
+                        <tr>
+                            <td>Free tier available</td>
+                            <td class="check">✓ Freemium</td>
+                            <td class="cross">✗</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                        </tr>
+                        <tr>
+                            <td>Premium starting price</td>
+                            <td><strong style="color: var(--mercy);">£9.99/month</strong></td>
+                            <td>£15/month</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                        </tr>
+                        <tr>
+                            <td>Annual discount available</td>
+                            <td class="check">✓ Up to 37% off</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                            <td class="unknown">Unknown</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="advantages">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Our Unique Advantages</div>
+                <h2 class="section-title">What Only Divine Link Offers</h2>
+                <p class="section-subtitle">Features and principles that no competitor in the market currently matches.</p>
+            </div>
+            <div class="adv-grid">
+                <div class="adv-card">
+                    <div class="adv-header">
+                        <div class="adv-icon">👤</div>
+                        <h3>Human-in-the-Loop Verification</h3>
+                    </div>
+                    <p>Every detected scripture requires operator approval before it reaches the screen. No automation errors during live services — you have the final say, every time.</p>
+                    <div class="vs-note">vs. Competitors: Fully automated systems risk displaying incorrect verses in front of your congregation with no way to intervene.</div>
+                </div>
+                <div class="adv-card">
+                    <div class="adv-header">
+                        <div class="adv-icon">🔒</div>
+                        <h3>100% Local-First Architecture</h3>
+                    </div>
+                    <p>Your sermons never leave your Mac. All processing happens locally — no cloud uploads, no internet dependency, no third-party data storage. Complete privacy.</p>
+                    <div class="vs-note">vs. Competitors: Every other tool uploads sermon audio to cloud servers for processing. Your private sermons pass through external infrastructure.</div>
+                </div>
+                <div class="adv-card">
+                    <div class="adv-header">
+                        <div class="adv-icon">🛡️</div>
+                        <h3>Panic Button &amp; Confidence Scores</h3>
+                    </div>
+                    <p>Instantly clear the screen if something goes wrong. Confidence indicators show detection certainty before you push — transparency over black-box AI.</p>
+                    <div class="vs-note">vs. Competitors: No competitor offers an emergency stop or transparent confidence scoring for their detections.</div>
+                </div>
+                <div class="adv-card">
+                    <div class="adv-header">
+                        <div class="adv-icon">💰</div>
+                        <h3>Better Value for Churches</h3>
+                    </div>
+                    <p>Premium from £9.99/month with a genuine free tier. No per-use fees, no cloud costs passed to you. Try before you buy with our Mercy (free) plan.</p>
+                    <div class="vs-note">vs. QuickVerse: £15/month with no free tier — that's 33% more expensive with no way to trial before committing.</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="positioning">
+        <div class="container">
+            <div class="section-header">
+                <div class="section-tag">Market Positioning</div>
+                <h2 class="section-title">Where Divine Link Sits in the Market</h2>
+                <p class="section-subtitle">Two dimensions that matter most for live church services: privacy and quality control.</p>
+            </div>
+            <div class="pos-map">
+                <span class="pos-axis-y">Quality Control: Automated ← → Human-Verified</span>
+                <span class="pos-axis-x">Architecture: Cloud ← → Local</span>
+
+                <div class="pos-dot" style="width: 60px; height: 60px; background: var(--gradient-1); top: 15%; right: 15%;">DL</div>
+                <span class="pos-label" style="top: 10%; right: calc(15% + 70px); color: var(--primary);">Divine Link</span>
+
+                <div class="pos-dot" style="width: 44px; height: 44px; background: #4a5568; bottom: 35%; left: 20%;">QV</div>
+                <span class="pos-label" style="bottom: 30%; left: calc(20% + 54px); color: var(--text-muted);">QuickVerse</span>
+
+                <div class="pos-dot" style="width: 32px; height: 32px; background: #374151; bottom: 45%; left: 35%;">S</div>
+                <span class="pos-label" style="bottom: 40%; left: calc(35% + 42px); color: #6b7280;">SermonlyAI</span>
+
+                <div class="pos-dot" style="width: 32px; height: 32px; background: #374151; bottom: 50%; left: 25%;">B</div>
+                <span class="pos-label" style="bottom: 55%; left: calc(25% + 42px); color: #6b7280;">Beluga</span>
+
+                <div style="position: absolute; top: 8px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;">Human-Verified</div>
+                <div style="position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); font-size: 0.7rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1px;">Automated</div>
+                <div style="position: absolute; top: 50%; right: 8px; transform: translateY(-50%); font-size: 0.7rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; writing-mode: vertical-rl;">Local</div>
+                <div style="position: absolute; top: 50%; left: 8px; transform: translateY(-50%); font-size: 0.7rem; color: #6b7280; text-transform: uppercase; letter-spacing: 1px; writing-mode: vertical-rl; rotate: 180deg;">Cloud</div>
+            </div>
+        </div>
+    </section>
+
+    <section class="page-cta">
+        <div class="container">
+            <h2>Ready to Choose Quality &amp; Privacy?</h2>
+            <p>Download Divine Link free and experience human-verified, local-first scripture detection for your church.</p>
+            <div>
+                <a href="releases/DivineLink-latest.zip" class="btn btn-primary">
+                    <span>⬇️</span> Download Free
+                </a>
+                <a href="/#pricing" class="btn btn-secondary">
+                    View Pricing Plans
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-inner">
+                <a href="/" class="logo">
+                    <div class="logo-icon">📖</div>
+                    <span>Divine Link</span>
+                </a>
+                <div class="footer-links">
+                    <a href="/terms.html">Terms of Service</a>
+                    <a href="/privacy.html">Privacy Policy</a>
+                    <a href="/releases.html">Release Notes</a>
+                    <a href="mailto:support@divinelink.app">Contact Support</a>
+                </div>
+                <div class="footer-copy">
+                    &copy; 2026 Divine Link by O'Rekun Media &bull; <span style="background: rgba(224, 122, 43, 0.15); padding: 4px 12px; border-radius: 50px; font-size: 0.8rem; color: #F59E4C; font-weight: 600;">v1.3.5</span>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
