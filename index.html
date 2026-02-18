@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Divine Link - Real-time Scripture Detection for Preaching</title>
     <meta name="description" content="Automatically detect Bible verses during live preaching and display them on screen. Divine Link listens to your pastor and pushes scriptures to ProPresenter.">
+    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="apple-touch-icon" href="/logo.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -80,12 +82,15 @@
         .logo-icon {
             width: 36px;
             height: 36px;
-            background: var(--gradient-1);
             border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
+            overflow: hidden;
+            flex-shrink: 0;
+        }
+
+        .logo-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
         }
         
         .logo span {
@@ -1080,7 +1085,7 @@
         <div class="container">
             <div class="header-inner">
                 <a href="/" class="logo">
-                    <div class="logo-icon">📖</div>
+                    <div class="logo-icon"><img src="/logo.png" alt="Divine Link icon"></div>
                     <span>Divine Link</span>
                 </a>
                 <nav class="nav-links">
@@ -1606,7 +1611,7 @@
         <div class="container">
             <div class="footer-inner">
                 <a href="/" class="logo">
-                    <div class="logo-icon">📖</div>
+                    <div class="logo-icon"><img src="/logo.png" alt="Divine Link icon"></div>
                     <span>Divine Link</span>
                 </a>
                 <div class="footer-links">
