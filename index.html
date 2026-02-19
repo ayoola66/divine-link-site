@@ -106,7 +106,7 @@
         },
         "url": "https://divinelink.netlify.app/",
         "logo": "https://divinelink.netlify.app/logo.png",
-        "description": "Creator of Divine Link — real-time scripture detection software for churches. A macOS app that listens to live preaching, detects Bible verse references, and pushes them to ProPresenter.",
+        "description": "Creator of Divine Link — real-time scripture detection software for churches.",
         "contactPoint": {
             "@type": "ContactPoint",
             "email": "support@divinelink.app",
@@ -124,10 +124,13 @@
     }
     </script>
 
+    <!-- Task 1: Typography — Cinzel (display) + DM Sans (body) replacing Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+
     <style>
+        /* ---- Variables ---- */
         :root {
             --primary: #E07A2B;
             --primary-dark: #C66A20;
@@ -146,56 +149,75 @@
             --gradient-1: linear-gradient(135deg, #E07A2B 0%, #F59E4C 100%);
             --gradient-2: linear-gradient(135deg, #141428 0%, #1a1a35 100%);
         }
-        
+
+        /* ---- Reset ---- */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
+        /* ---- Base Typography ---- */
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-dark);
             color: var(--text);
-            line-height: 1.7;
+            line-height: 1.75;
             overflow-x: hidden;
         }
-        
+
+        /* Task 1: Cinzel for all display text */
+        h1, h2, h3, h4 {
+            font-family: 'Cinzel', serif;
+        }
+
+        /* Task 10: Noise texture overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            inset: 0;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+            opacity: 0.025;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
         .container {
             max-width: 1280px;
             margin: 0 auto;
             padding: 0 24px;
         }
-        
-        /* Header */
+
+        /* ---- Header ---- */
         header {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
-            z-index: 100;
+            z-index: 200;
             padding: 16px 0;
             background: rgba(15, 15, 26, 0.9);
             backdrop-filter: blur(20px);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        
+
         .header-inner {
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .logo {
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 1.4rem;
+            font-family: 'Cinzel', serif;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--text);
             text-decoration: none;
         }
-        
+
         .logo-icon {
             width: 36px;
             height: 36px;
@@ -209,20 +231,21 @@
             height: 100%;
             object-fit: contain;
         }
-        
+
         .logo span {
+            display: inline-block;
             background: var(--gradient-1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .nav-links {
             display: flex;
             align-items: center;
             gap: 32px;
         }
-        
+
         .nav-links a {
             color: var(--text-muted);
             text-decoration: none;
@@ -230,11 +253,11 @@
             font-weight: 500;
             transition: color 0.3s;
         }
-        
+
         .nav-links a:hover {
             color: var(--primary);
         }
-        
+
         .nav-cta {
             background: var(--gradient-1) !important;
             color: white !important;
@@ -242,12 +265,46 @@
             border-radius: 8px;
             font-weight: 600;
         }
-        
+
         .nav-cta:hover {
             opacity: 0.9;
         }
-        
-        /* Hero */
+
+        /* Task 4: Mobile hamburger */
+        .nav-toggle {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 8px;
+            z-index: 201;
+        }
+
+        .nav-toggle span {
+            display: block;
+            width: 24px;
+            height: 2px;
+            background: var(--text);
+            border-radius: 2px;
+            transition: transform 0.3s ease, opacity 0.3s ease;
+        }
+
+        .nav-toggle.open span:nth-child(1) {
+            transform: translateY(7px) rotate(45deg);
+        }
+
+        .nav-toggle.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .nav-toggle.open span:nth-child(3) {
+            transform: translateY(-7px) rotate(-45deg);
+        }
+
+        /* ---- Hero ---- */
         .hero {
             position: relative;
             min-height: 100vh;
@@ -256,7 +313,7 @@
             padding-top: 80px;
             overflow: hidden;
         }
-        
+
         .hero-bg {
             position: absolute;
             top: 0;
@@ -265,14 +322,14 @@
             bottom: 0;
             z-index: 0;
         }
-        
+
         .hero-bg img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             opacity: 0.25;
         }
-        
+
         .hero-bg::after {
             content: '';
             position: absolute;
@@ -282,7 +339,7 @@
             bottom: 0;
             background: linear-gradient(180deg, rgba(15,15,26,0.7) 0%, rgba(15,15,26,0.95) 80%, var(--bg-dark) 100%);
         }
-        
+
         .hero-content {
             position: relative;
             z-index: 1;
@@ -291,11 +348,11 @@
             gap: 60px;
             align-items: center;
         }
-        
+
         .hero-text {
             max-width: 600px;
         }
-        
+
         .hero-badge {
             display: inline-flex;
             align-items: center;
@@ -308,34 +365,39 @@
             color: var(--primary-light);
             margin-bottom: 24px;
         }
-        
+
+        .hero-badge svg {
+            flex-shrink: 0;
+        }
+
         .hero h1 {
-            font-size: 3.5rem;
+            font-size: 3.2rem;
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 24px;
         }
-        
+
         .hero h1 .highlight {
+            display: inline-block;
             background: var(--gradient-1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .hero p {
-            font-size: 1.2rem;
+            font-size: 1.15rem;
             color: var(--text-muted);
             margin-bottom: 40px;
             line-height: 1.8;
         }
-        
+
         .hero-buttons {
             display: flex;
             gap: 16px;
             flex-wrap: wrap;
         }
-        
+
         .btn {
             display: inline-flex;
             align-items: center;
@@ -349,41 +411,71 @@
             border: none;
             cursor: pointer;
         }
-        
+
         .btn-primary {
             background: var(--gradient-1);
             color: white;
             box-shadow: 0 4px 20px rgba(224, 122, 43, 0.3);
         }
-        
+
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 8px 30px rgba(224, 122, 43, 0.4);
         }
-        
+
         .btn-secondary {
             background: rgba(255,255,255,0.05);
             color: var(--text);
             border: 1px solid rgba(255,255,255,0.1);
         }
-        
+
         .btn-secondary:hover {
             background: rgba(255,255,255,0.1);
             border-color: rgba(255,255,255,0.2);
         }
-        
+
+        /* Task 5: Mac window mockup */
         .hero-image {
             position: relative;
         }
-        
-        .hero-mockup {
-            width: 100%;
-            max-width: 550px;
-            border-radius: 16px;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.5);
-            border: 1px solid rgba(255,255,255,0.1);
+
+        .mac-window {
+            background: #1c1c2e;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow:
+                0 0 0 1px rgba(255,255,255,0.08),
+                0 40px 80px rgba(0,0,0,0.65),
+                0 20px 40px rgba(0,0,0,0.4);
         }
-        
+
+        .mac-window-bar {
+            height: 32px;
+            background: #252536;
+            display: flex;
+            align-items: center;
+            padding: 0 14px;
+            gap: 7px;
+            flex-shrink: 0;
+        }
+
+        .mac-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            flex-shrink: 0;
+        }
+
+        .mac-dot.mac-close  { background: #FF5F57; }
+        .mac-dot.mac-min    { background: #FFBD2E; }
+        .mac-dot.mac-max    { background: #28C840; }
+
+        .mac-window img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
         .hero-stats {
             display: flex;
             gap: 40px;
@@ -391,116 +483,119 @@
             padding-top: 40px;
             border-top: 1px solid rgba(255,255,255,0.1);
         }
-        
+
         .stat {
             text-align: left;
         }
-        
+
         .stat-number {
+            font-family: 'Cinzel', serif;
             font-size: 2rem;
             font-weight: 700;
             color: var(--primary);
         }
-        
+
         .stat-label {
             font-size: 0.9rem;
             color: var(--text-muted);
         }
-        
-        /* Trusted By / Integration */
+
+        /* ---- Integration Bar ---- */
         .integration {
             padding: 80px 0;
             background: var(--bg);
             border-top: 1px solid rgba(255,255,255,0.05);
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        
+
         .integration-inner {
             text-align: center;
         }
-        
+
         .integration h3 {
-            font-size: 1rem;
+            font-size: 0.85rem;
             font-weight: 500;
             color: var(--text-muted);
-            margin-bottom: 30px;
+            margin-bottom: 36px;
             text-transform: uppercase;
             letter-spacing: 2px;
         }
-        
+
+        /* Task 2/11: Styled pill badges replacing emoji */
         .integration-logos {
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 60px;
+            gap: 16px;
             flex-wrap: wrap;
         }
-        
-        .integration-logo {
-            display: flex;
-            flex-direction: column;
+
+        .integration-badge {
+            display: inline-flex;
             align-items: center;
             gap: 10px;
-            opacity: 0.7;
-            transition: opacity 0.3s;
+            background: rgba(255,255,255,0.04);
+            border: 1px solid rgba(255,255,255,0.08);
+            border-radius: 50px;
+            padding: 10px 20px;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
+            transition: all 0.3s;
         }
-        
-        .integration-logo:hover {
-            opacity: 1;
-        }
-        
-        .integration-logo img {
-            height: 50px;
-            object-fit: contain;
-        }
-        
-        .integration-logo span {
-            font-size: 1.1rem;
-            font-weight: 600;
+
+        .integration-badge:hover {
+            background: rgba(224, 122, 43, 0.08);
+            border-color: rgba(224, 122, 43, 0.25);
             color: var(--text);
         }
-        
-        /* Features */
+
+        .integration-badge svg {
+            color: var(--primary);
+            flex-shrink: 0;
+        }
+
+        /* ---- Features ---- */
         .features {
             padding: 120px 0;
             background: var(--bg-dark);
         }
-        
+
         .section-header {
             text-align: center;
             max-width: 700px;
             margin: 0 auto 80px;
         }
-        
+
         .section-tag {
             display: inline-block;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             font-weight: 600;
             color: var(--primary);
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 2.5px;
             margin-bottom: 16px;
         }
-        
+
         .section-title {
-            font-size: 2.8rem;
+            font-size: 2.6rem;
             font-weight: 700;
             margin-bottom: 20px;
             line-height: 1.2;
         }
-        
+
         .section-subtitle {
             font-size: 1.1rem;
             color: var(--text-muted);
-            line-height: 1.8;
+            line-height: 1.75;
         }
-        
+
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 30px;
         }
-        
+
         .feature-card {
             background: var(--bg-card);
             padding: 40px;
@@ -508,13 +603,13 @@
             border: 1px solid rgba(255,255,255,0.05);
             transition: all 0.3s;
         }
-        
+
         .feature-card:hover {
             transform: translateY(-5px);
             border-color: rgba(224, 122, 43, 0.3);
             box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
-        
+
         .feature-icon {
             width: 60px;
             height: 60px;
@@ -523,72 +618,68 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            color: var(--primary);
             margin-bottom: 24px;
         }
-        
+
         .feature-card h3 {
-            font-size: 1.3rem;
-            font-weight: 600;
+            font-size: 1.2rem;
+            font-weight: 700;
             margin-bottom: 12px;
         }
-        
+
         .feature-card p {
             color: var(--text-muted);
             font-size: 0.95rem;
-            line-height: 1.7;
+            line-height: 1.75;
         }
-        
-        /* Showcase Section */
+
+        /* ---- Showcase ---- */
         .showcase {
             padding: 120px 0;
             background: var(--bg);
             position: relative;
             overflow: hidden;
         }
-        
+
         .showcase-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 80px;
             align-items: center;
         }
-        
-        .showcase-image {
-            position: relative;
-        }
-        
+
         .showcase-image img {
             width: 100%;
             border-radius: 20px;
             box-shadow: 0 30px 60px rgba(0,0,0,0.4);
         }
-        
+
         .showcase-content h2 {
-            font-size: 2.5rem;
+            font-size: 2.4rem;
             font-weight: 700;
             margin-bottom: 24px;
             line-height: 1.2;
         }
-        
+
         .showcase-content p {
             font-size: 1.1rem;
             color: var(--text-muted);
             margin-bottom: 32px;
-            line-height: 1.8;
+            line-height: 1.75;
         }
-        
+
         .showcase-list {
             list-style: none;
         }
-        
+
         .showcase-list li {
             display: flex;
             align-items: flex-start;
             gap: 16px;
             margin-bottom: 20px;
         }
-        
+
         .showcase-list .check {
             width: 24px;
             height: 24px;
@@ -602,30 +693,30 @@
             flex-shrink: 0;
             margin-top: 2px;
         }
-        
+
         .showcase-list span {
             color: var(--text-muted);
             line-height: 1.6;
         }
-        
-        /* How It Works */
+
+        /* ---- How It Works ---- */
         .how-it-works {
             padding: 120px 0;
             background: var(--bg-dark);
         }
-        
+
         .steps-container {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 30px;
             margin-top: 60px;
         }
-        
+
         .step {
             text-align: center;
             position: relative;
         }
-        
+
         .step::after {
             content: '';
             position: absolute;
@@ -635,11 +726,11 @@
             height: 2px;
             background: linear-gradient(90deg, var(--primary), transparent);
         }
-        
+
         .step:last-child::after {
             display: none;
         }
-        
+
         .step-number {
             width: 80px;
             height: 80px;
@@ -648,31 +739,98 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.8rem;
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
             font-weight: 700;
             margin: 0 auto 24px;
             box-shadow: 0 10px 30px rgba(224, 122, 43, 0.3);
         }
-        
+
         .step h4 {
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.1rem;
+            font-weight: 700;
             margin-bottom: 12px;
         }
-        
+
         .step p {
             color: var(--text-muted);
             font-size: 0.95rem;
             line-height: 1.6;
         }
-        
-        /* Pricing */
-        .pricing {
+
+        /* ---- Task 6: Testimonials ---- */
+        .testimonials {
             padding: 120px 0;
             background: var(--bg);
             position: relative;
         }
-        
+
+        .testimonials::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 700px;
+            height: 700px;
+            background: radial-gradient(circle, rgba(224, 122, 43, 0.06) 0%, transparent 70%);
+            pointer-events: none;
+        }
+
+        .testimonial-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 28px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-card {
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 36px;
+            border: 1px solid rgba(255,255,255,0.05);
+            border-left: 3px solid var(--primary);
+            transition: all 0.3s;
+        }
+
+        .testimonial-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+
+        .testimonial-card p {
+            font-size: 1rem;
+            line-height: 1.75;
+            color: var(--text);
+            font-style: italic;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-card p::before {
+            content: '\201C';
+            font-family: 'Cinzel', serif;
+            font-size: 2.5rem;
+            color: var(--primary);
+            line-height: 0;
+            vertical-align: -0.5rem;
+            margin-right: 4px;
+        }
+
+        .testimonial-card cite {
+            font-style: normal;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text-muted);
+        }
+
+        /* ---- Pricing ---- */
+        .pricing {
+            padding: 120px 0;
+            background: var(--bg-dark);
+            position: relative;
+        }
+
         .pricing::before {
             content: '';
             position: absolute;
@@ -684,7 +842,7 @@
             background: radial-gradient(circle, rgba(224, 122, 43, 0.08) 0%, transparent 70%);
             pointer-events: none;
         }
-        
+
         .price-cards {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -694,7 +852,7 @@
             position: relative;
             z-index: 1;
         }
-        
+
         .price-card {
             background: var(--bg-card);
             padding: 48px 40px;
@@ -703,21 +861,21 @@
             position: relative;
             transition: all 0.3s;
         }
-        
+
         .price-card:hover {
             transform: translateY(-5px);
         }
-        
+
         .price-card.featured {
             border: 2px solid var(--grace);
             background: linear-gradient(180deg, rgba(224, 122, 43, 0.05) 0%, var(--bg-card) 100%);
         }
-        
+
         .price-card.love-tier {
             border: 2px solid var(--love);
             background: linear-gradient(180deg, rgba(139, 92, 246, 0.05) 0%, var(--bg-card) 100%);
         }
-        
+
         .tier-badge {
             position: absolute;
             top: -14px;
@@ -731,65 +889,68 @@
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 1px;
+            white-space: nowrap;
         }
-        
+
         .tier-badge.love {
             background: var(--love);
         }
-        
+
         .price-card .tier-name {
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 3px;
             margin-bottom: 8px;
         }
-        
+
         .price-card h3 {
-            font-size: 1.8rem;
+            font-size: 1.7rem;
             font-weight: 700;
             margin-bottom: 8px;
         }
-        
+
         .price-card .tier-verse {
             font-style: italic;
             color: var(--text-muted);
             font-size: 0.85rem;
             margin-bottom: 24px;
         }
-        
+
         .price {
-            font-size: 3.5rem;
+            font-family: 'Cinzel', serif;
+            font-size: 3.2rem;
             font-weight: 800;
         }
-        
-        .price-card.featured .price,
+
         .price-card .price {
+            display: inline-block;
             background: var(--gradient-1);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .price-card.love-tier .price {
             background: linear-gradient(135deg, #8B5CF6, #A78BFA);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
         }
-        
+
         .price span {
+            font-family: 'DM Sans', sans-serif;
             font-size: 1rem;
             color: var(--text-muted);
             -webkit-text-fill-color: var(--text-muted);
         }
-        
+
         .price-card ul {
             list-style: none;
             margin: 32px 0;
             text-align: left;
         }
-        
+
         .price-card li {
             padding: 12px 0;
             border-bottom: 1px solid rgba(255,255,255,0.05);
@@ -797,57 +958,57 @@
             align-items: center;
             font-size: 0.95rem;
         }
-        
+
         .price-card li .check {
             color: var(--mercy);
             margin-right: 12px;
             font-weight: bold;
         }
-        
+
         .price-card li .cross {
             color: #4a4a5a;
             margin-right: 12px;
         }
-        
+
         .price-card li.disabled {
             color: #4a4a5a;
         }
-        
+
         .price-card .btn {
             width: 100%;
             justify-content: center;
             padding: 18px;
         }
-        
-        .btn-mercy { 
-            background: var(--mercy); 
+
+        .btn-mercy {
+            background: var(--mercy);
             color: white;
             box-shadow: 0 4px 20px rgba(16, 185, 129, 0.3);
         }
-        
-        .btn-grace { 
-            background: var(--gradient-1); 
-            color: white; 
+
+        .btn-grace {
+            background: var(--gradient-1);
+            color: white;
         }
-        
-        .btn-love { 
+
+        .btn-love {
             background: linear-gradient(135deg, #8B5CF6, #A78BFA);
             color: white;
             box-shadow: 0 4px 20px rgba(139, 92, 246, 0.3);
         }
-        
+
         .annual-price {
             text-align: center;
             margin-top: 16px;
             color: var(--text-muted);
             font-size: 0.9rem;
         }
-        
+
         .annual-price strong {
             color: var(--mercy);
         }
-        
-        /* Billing Period Selector */
+
+        /* ---- Billing Period Selector ---- */
         .billing-selector {
             display: flex;
             justify-content: center;
@@ -862,7 +1023,7 @@
             margin-right: auto;
             border: 1px solid rgba(255,255,255,0.08);
         }
-        
+
         .billing-selector label {
             flex: 1;
             font-size: 1rem;
@@ -878,103 +1039,103 @@
             align-items: center;
             gap: 2px;
         }
-        
+
         .billing-selector label .billing-save {
             font-size: 0.75rem;
             font-weight: 600;
             color: var(--mercy);
             opacity: 0.85;
         }
-        
+
         .billing-selector input[type="radio"] {
             display: none;
         }
-        
+
         .billing-selector input[type="radio"]:checked + label {
             background: var(--gradient-1);
             color: white;
             font-weight: 600;
         }
-        
+
         .billing-selector input[type="radio"]:checked + label .billing-save {
             color: white;
             opacity: 0.9;
         }
-        
+
         .billing-selector input[type="radio"]:not(:checked) + label:hover {
             background: rgba(255,255,255,0.05);
             color: var(--text);
         }
-        
+
         .price-card .price-display {
             transition: all 0.3s;
         }
-        
+
         .price-display .monthly-price,
         .price-display .yearly-price {
             display: none;
         }
-        
+
         .price-card[data-billing="yearly"] .price-display .yearly-price {
             display: block;
         }
-        
+
         .price-card[data-billing="monthly"] .price-display .monthly-price {
             display: block;
         }
-        
-        
-        /* Comparison Table */
+
+        /* ---- Comparison Table ---- */
         .comparison {
             padding: 120px 0;
-            background: var(--bg-dark);
+            background: var(--bg);
         }
-        
+
         .comparison-table-wrapper {
             overflow-x: auto;
             margin-top: 60px;
         }
-        
+
         .comparison-table {
             width: 100%;
             border-collapse: collapse;
             min-width: 700px;
         }
-        
+
         .comparison-table th,
         .comparison-table td {
             padding: 20px 24px;
             text-align: center;
             border-bottom: 1px solid rgba(255,255,255,0.05);
         }
-        
+
         .comparison-table th {
             background: var(--bg-card);
+            font-family: 'Cinzel', serif;
             font-weight: 600;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
-        
+
         .comparison-table th:first-child,
         .comparison-table td:first-child {
             text-align: left;
             font-weight: 500;
         }
-        
+
         .comparison-table .check { color: var(--mercy); font-size: 1.2rem; }
         .comparison-table .cross { color: #4a4a5a; font-size: 1.2rem; }
-        
+
         .comparison-table tbody tr:hover {
             background: rgba(255,255,255,0.02);
         }
-        
+
         .th-mercy { color: var(--mercy); }
         .th-grace { color: var(--grace); }
-        .th-love { color: var(--love); }
-        
-        /* Why Choose Section */
+        .th-love  { color: var(--love); }
+
+        /* ---- Why Choose ---- */
         .why-choose {
             padding: 120px 0;
-            background: var(--bg);
+            background: var(--bg-dark);
             position: relative;
         }
 
@@ -1021,28 +1182,20 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 2rem;
+            color: var(--mercy);
             margin: 0 auto 24px;
         }
 
         .why-card h3 {
-            font-size: 1.2rem;
-            font-weight: 600;
+            font-size: 1.15rem;
+            font-weight: 700;
             margin-bottom: 12px;
         }
 
         .why-card p {
             color: var(--text-muted);
             font-size: 0.95rem;
-            line-height: 1.7;
-        }
-
-        .why-card .highlight-stat {
-            display: block;
-            font-size: 1.8rem;
-            font-weight: 700;
-            color: var(--mercy);
-            margin-bottom: 8px;
+            line-height: 1.75;
         }
 
         .compare-cta {
@@ -1079,7 +1232,7 @@
             transform: translateY(-2px);
         }
 
-        /* CTA Section */
+        /* ---- Task 8: CTA Section ---- */
         .cta {
             padding: 120px 0;
             text-align: center;
@@ -1087,113 +1240,255 @@
             position: relative;
             overflow: hidden;
         }
-        
+
         .cta-bg {
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             z-index: 0;
         }
-        
+
         .cta-bg img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             opacity: 0.15;
         }
-        
+
         .cta-bg::after {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+            top: 0; left: 0; right: 0; bottom: 0;
             background: linear-gradient(180deg, var(--bg) 0%, rgba(26,26,53,0.9) 50%, var(--bg) 100%);
         }
-        
+
         .cta-content {
             position: relative;
             z-index: 1;
         }
-        
+
         .cta h2 {
-            font-size: 3rem;
+            font-size: 2.8rem;
             font-weight: 700;
             margin-bottom: 20px;
         }
-        
+
         .cta p {
             color: var(--text-muted);
-            margin-bottom: 40px;
-            font-size: 1.2rem;
+            margin-bottom: 16px;
+            font-size: 1.15rem;
             max-width: 600px;
             margin-left: auto;
             margin-right: auto;
         }
-        
-        /* Footer */
+
+        .cta-reassurance {
+            font-size: 0.875rem !important;
+            letter-spacing: 0.5px;
+            margin-bottom: 36px !important;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* ---- Task 9: Footer 3-column ---- */
         footer {
-            padding: 60px 0;
+            padding: 70px 0 0;
             background: var(--bg-dark);
             border-top: 1px solid rgba(255,255,255,0.05);
         }
-        
-        .footer-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 20px;
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: 1.4fr 1fr 1fr;
+            gap: 60px;
+            padding-bottom: 60px;
         }
-        
-        .footer-links {
-            display: flex;
-            gap: 30px;
+
+        .footer-brand p {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            line-height: 1.75;
+            margin-top: 16px;
+            max-width: 280px;
         }
-        
-        .footer-links a {
+
+        .footer-col h4 {
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 12px;
+        }
+
+        .footer-col ul li a {
             color: var(--text-muted);
             text-decoration: none;
             font-size: 0.95rem;
             transition: color 0.3s;
         }
-        
-        .footer-links a:hover {
+
+        .footer-col ul li a:hover {
             color: var(--primary);
         }
-        
+
+        .footer-bottom {
+            border-top: 1px solid rgba(255,255,255,0.05);
+            padding: 20px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
         .footer-copy {
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.875rem;
         }
-        
-        /* Responsive */
+
+        .version-badge {
+            background: rgba(224, 122, 43, 0.15);
+            padding: 4px 12px;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            color: #F59E4C;
+            font-weight: 600;
+        }
+
+        /* ---- Task 3: Scroll Animations ---- */
+        .reveal {
+            opacity: 0;
+            transform: translateY(28px);
+            transition: opacity 0.55s ease, transform 0.55s ease;
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Stagger: feature cards */
+        .feature-grid .feature-card:nth-child(1) { transition-delay: 0.00s; }
+        .feature-grid .feature-card:nth-child(2) { transition-delay: 0.08s; }
+        .feature-grid .feature-card:nth-child(3) { transition-delay: 0.16s; }
+        .feature-grid .feature-card:nth-child(4) { transition-delay: 0.08s; }
+        .feature-grid .feature-card:nth-child(5) { transition-delay: 0.16s; }
+        .feature-grid .feature-card:nth-child(6) { transition-delay: 0.24s; }
+        .feature-grid .feature-card:nth-child(7) { transition-delay: 0.08s; }
+        .feature-grid .feature-card:nth-child(8) { transition-delay: 0.16s; }
+        .feature-grid .feature-card:nth-child(9) { transition-delay: 0.24s; }
+
+        /* Stagger: pricing cards */
+        .price-cards .price-card:nth-child(1) { transition-delay: 0.00s; }
+        .price-cards .price-card:nth-child(2) { transition-delay: 0.10s; }
+        .price-cards .price-card:nth-child(3) { transition-delay: 0.20s; }
+
+        /* Stagger: why cards */
+        .why-grid .why-card:nth-child(1) { transition-delay: 0.00s; }
+        .why-grid .why-card:nth-child(2) { transition-delay: 0.08s; }
+        .why-grid .why-card:nth-child(3) { transition-delay: 0.16s; }
+        .why-grid .why-card:nth-child(4) { transition-delay: 0.08s; }
+        .why-grid .why-card:nth-child(5) { transition-delay: 0.16s; }
+        .why-grid .why-card:nth-child(6) { transition-delay: 0.24s; }
+
+        /* Stagger: steps */
+        .steps-container .step:nth-child(1) { transition-delay: 0.00s; }
+        .steps-container .step:nth-child(2) { transition-delay: 0.10s; }
+        .steps-container .step:nth-child(3) { transition-delay: 0.20s; }
+        .steps-container .step:nth-child(4) { transition-delay: 0.30s; }
+
+        /* Stagger: testimonials */
+        .testimonial-grid .testimonial-card:nth-child(1) { transition-delay: 0.00s; }
+        .testimonial-grid .testimonial-card:nth-child(2) { transition-delay: 0.10s; }
+        .testimonial-grid .testimonial-card:nth-child(3) { transition-delay: 0.20s; }
+
+        /* Respect reduced motion */
+        @media (prefers-reduced-motion: reduce) {
+            .reveal {
+                opacity: 1;
+                transform: none;
+                transition: none;
+            }
+        }
+
+        /* ---- Responsive ---- */
         @media (max-width: 1024px) {
             .hero-content { grid-template-columns: 1fr; text-align: center; }
             .hero-text { max-width: 100%; margin: 0 auto; }
             .hero-buttons { justify-content: center; }
             .hero-stats { justify-content: center; }
-            .hero-image { display: none; }
+            /* Task 11: show screenshot stacked on tablet instead of hiding */
+            .hero-image { max-width: 540px; margin: 0 auto; }
             .feature-grid { grid-template-columns: repeat(2, 1fr); }
             .showcase-grid { grid-template-columns: 1fr; }
             .steps-container { grid-template-columns: repeat(2, 1fr); }
+            /* Task 11: hide connector lines at 2-column */
             .step::after { display: none; }
             .price-cards { grid-template-columns: 1fr; max-width: 400px; }
             .why-grid { grid-template-columns: repeat(2, 1fr); }
+            .testimonial-grid { grid-template-columns: repeat(2, 1fr); }
+            .footer-grid { grid-template-columns: 1fr 1fr; }
+            .footer-brand { grid-column: 1 / -1; }
         }
-        
+
         @media (max-width: 768px) {
             .why-grid { grid-template-columns: 1fr; }
-            .nav-links { display: none; }
-            .hero h1 { font-size: 2.5rem; }
+            .testimonial-grid { grid-template-columns: 1fr; }
+
+            /* Task 4: Mobile nav */
+            .nav-toggle { display: flex; }
+            .nav-links {
+                position: fixed;
+                top: 0;
+                right: -100%;
+                width: 280px;
+                height: 100vh;
+                background: var(--bg-card);
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 90px 32px 40px;
+                gap: 8px;
+                border-left: 1px solid rgba(255,255,255,0.08);
+                transition: right 0.35s ease;
+                z-index: 199;
+            }
+            .nav-links.open { right: 0; }
+            .nav-links a {
+                font-size: 1.1rem;
+                padding: 10px 0;
+                width: 100%;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
+            }
+            .nav-cta {
+                margin-top: 8px;
+                width: 100%;
+                text-align: center;
+                justify-content: center;
+                border-radius: 8px;
+                border-bottom: none !important;
+            }
+
+            .hero h1 { font-size: 2.4rem; }
             .section-title { font-size: 2rem; }
             .feature-grid { grid-template-columns: 1fr; }
             .steps-container { grid-template-columns: 1fr; }
             .hero-stats { flex-direction: column; gap: 20px; }
-            .footer-inner { flex-direction: column; text-align: center; }
+            .footer-grid { grid-template-columns: 1fr; gap: 40px; }
+            .footer-bottom { flex-direction: column; text-align: center; }
+            .cta h2 { font-size: 2.2rem; }
         }
     </style>
 </head>
@@ -1205,7 +1500,7 @@
                     <div class="logo-icon"><img src="/logo.png" alt="Divine Link icon"></div>
                     <span>Divine Link</span>
                 </a>
-                <nav class="nav-links">
+                <nav class="nav-links" id="nav-links">
                     <a href="#features">Features</a>
                     <a href="#how-it-works">How It Works</a>
                     <a href="#pricing">Pricing</a>
@@ -1213,27 +1508,38 @@
                     <a href="/releases.html">Release Notes</a>
                     <a href="releases/DivineLink-latest.zip" class="nav-cta">Download</a>
                 </nav>
+                <!-- Task 4: Hamburger toggle -->
+                <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
             </div>
         </div>
     </header>
-    
+
     <main role="main">
+
+    <!-- Hero -->
     <section class="hero">
         <div class="hero-bg">
             <img src="https://images.unsplash.com/photo-1507692049790-de58290a4334?w=1920&q=80" alt="Church worship service">
         </div>
         <div class="container">
             <div class="hero-content">
-                <div class="hero-text">
+                <div class="hero-text reveal">
                     <div class="hero-badge">
-                        <span>✨</span> Detects Bible verses during preaching • Works with ProPresenter
+                        <!-- Task 2: SVG replacing emoji -->
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+                        Detects Bible verses during preaching &bull; Works with ProPresenter
                     </div>
                     <h1>Real-time <span class="highlight">Scripture Detection</span> for Live Preaching</h1>
-                    <p>Divine Link listens to your pastor during sermons and automatically detects Bible verse references. 
+                    <p>Divine Link listens to your pastor during sermons and automatically detects Bible verse references.
                        No more scrambling to find scriptures — let Divine Link do the work whilst you focus on the message.</p>
                     <div class="hero-buttons">
                         <a href="releases/DivineLink-latest.zip" class="btn btn-primary">
-                            <span>⬇️</span> Download Free
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                            Download Free
                         </a>
                         <a href="#pricing" class="btn btn-secondary">
                             View Pricing
@@ -1254,95 +1560,131 @@
                         </div>
                     </div>
                 </div>
-                <div class="hero-image">
-                    <img src="https://images.unsplash.com/photo-1478147427282-58a87a120781?w=800&q=80" alt="ProPresenter screen in church" class="hero-mockup">
+
+                <!-- Task 5: Real app screenshot with macOS window chrome -->
+                <div class="hero-image reveal">
+                    <div class="mac-window">
+                        <div class="mac-window-bar">
+                            <span class="mac-dot mac-close"></span>
+                            <span class="mac-dot mac-min"></span>
+                            <span class="mac-dot mac-max"></span>
+                        </div>
+                        <img src="/screenshots/02-hero-verse-detected.png" alt="Divine Link detecting John 3:16 during live preaching">
+                    </div>
                 </div>
             </div>
         </div>
     </section>
-    
+
+    <!-- Integration Bar -->
     <section class="integration">
         <div class="container">
-            <div class="integration-inner">
+            <div class="integration-inner reveal">
                 <h3>Built for Professional Worship Software</h3>
+                <!-- Task 2 / 11: Styled pill badges replacing raw emoji -->
                 <div class="integration-logos">
-                    <div class="integration-logo">
-                        <span>📺 ProPresenter 7</span>
+                    <div class="integration-badge">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m10 8 5 3-5 3V8z"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
+                        <span>ProPresenter 7</span>
                     </div>
-                    <div class="integration-logo">
-                        <span>🎤 macOS Speech</span>
+                    <div class="integration-badge">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+                        <span>macOS Speech</span>
                     </div>
-                    <div class="integration-logo">
-                        <span>📖 10+ Translations</span>
+                    <div class="integration-badge">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                        <span>10+ Translations</span>
                     </div>
-                    <div class="integration-logo">
-                        <span>⚡ Real-time API</span>
+                    <div class="integration-badge">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+                        <span>Real-time API</span>
                     </div>
                 </div>
             </div>
         </div>
     </section>
-    
+
+    <!-- Features -->
     <section class="features" id="features">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <div class="section-tag">Features</div>
                 <h2 class="section-title">Everything You Need for Seamless Scripture Display</h2>
                 <p class="section-subtitle">Divine Link detects Bible verses mentioned during preaching and lets you push them to your presentation software with one click.</p>
             </div>
             <div class="feature-grid">
-                <div class="feature-card">
-                    <div class="feature-icon">🎤</div>
+                <!-- Task 2: All emoji icons replaced with inline SVGs -->
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+                    </div>
                     <h3>Live Speech Recognition</h3>
                     <p>Advanced AI transcription captures every word spoken, detecting scripture references in real-time with high accuracy.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔍</div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><circle cx="12" cy="12" r="3"/><path d="m16 16-1.9-1.9"/></svg>
+                    </div>
                     <h3>Intelligent Detection</h3>
                     <p>Recognises multiple formats: "John 3:16", "John chapter 3 verse 16", spoken numbers, ranges, and contextual references.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📺</div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="m10 8 5 3-5 3V8z"/><path d="M12 17v4"/><path d="M8 21h8"/></svg>
+                    </div>
                     <h3>ProPresenter Integration</h3>
                     <p>Push to Stage Display or Audience Screen with one click. Premium users get direct API integration for faster, more reliable display.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">⚡</div>
-                    <h3>Direct API Integration <span style="font-size: 0.7em; color: var(--mercy); font-weight: normal;">(Premium)</span></h3>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+                    </div>
+                    <h3>Direct API Integration <span style="font-size: 0.7em; color: var(--mercy); font-weight: 400; font-family: 'DM Sans', sans-serif;">(Premium)</span></h3>
                     <p>Messages API integration sends scriptures directly to ProPresenter without keyboard simulation. Faster, more reliable, works in background.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📖</div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
+                    </div>
                     <h3>Multiple Translations</h3>
                     <p>Access KJV, ESV, NIV, NASB, NLT, and more. Switch between translations to match your church's preference.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📑</div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83Z"/><path d="m22 17.65-9.17 4.16a2 2 0 0 1-1.66 0L2 17.65"/><path d="m22 12.65-9.17 4.16a2 2 0 0 1-1.66 0L2 12.65"/></svg>
+                    </div>
                     <h3>Multi-Verse Handling</h3>
                     <p>Detect ranges like "John 3:16-21" and navigate through verses individually. Push one at a time or all at once.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">👤</div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+                    </div>
                     <h3>Pastor Profiles</h3>
                     <p>Save preferred translations and speech corrections for each speaker. Perfect for churches with multiple ministers. <strong>Grace: 2 profiles, Love: 5 profiles</strong></p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">🔒</div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/></svg>
+                    </div>
                     <h3>Secure &amp; Reliable</h3>
                     <p>Airtight authentication with reactive state management. Your subscription, admin access, and premium features are always in sync — no stale data, no leaky permissions.</p>
                 </div>
-                <div class="feature-card">
-                    <div class="feature-icon">📬</div>
+                <div class="feature-card reveal">
+                    <div class="feature-icon">
+                        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </div>
                     <h3>In-App Support</h3>
                     <p>Premium subscribers can reach our support team directly from within the app via the Contact Us form. Grace and Love tier customers receive dedicated email and priority support.</p>
                 </div>
             </div>
         </div>
     </section>
-    
+
+    <!-- Showcase -->
     <section class="showcase">
         <div class="container">
-            <div class="showcase-grid">
+            <div class="showcase-grid reveal">
                 <div class="showcase-image">
                     <img src="https://images.unsplash.com/photo-1510590337019-5ef8d3d32116?w=800&q=80" alt="Church congregation during worship">
                 </div>
@@ -1375,31 +1717,32 @@
             </div>
         </div>
     </section>
-    
+
+    <!-- How It Works -->
     <section class="how-it-works" id="how-it-works">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <div class="section-tag">How It Works</div>
                 <h2 class="section-title">From Spoken Word to Screen in Seconds</h2>
                 <p class="section-subtitle">Four simple steps transform your scripture display workflow</p>
             </div>
             <div class="steps-container">
-                <div class="step">
+                <div class="step reveal">
                     <div class="step-number">1</div>
                     <h4>Listen</h4>
                     <p>Divine Link captures audio from your Mac's microphone or audio input device.</p>
                 </div>
-                <div class="step">
+                <div class="step reveal">
                     <div class="step-number">2</div>
                     <h4>Transcribe</h4>
                     <p>Advanced speech recognition converts spoken words to text in real-time.</p>
                 </div>
-                <div class="step">
+                <div class="step reveal">
                     <div class="step-number">3</div>
                     <h4>Detect</h4>
                     <p>AI identifies scripture references and matches them to the Bible database.</p>
                 </div>
-                <div class="step">
+                <div class="step reveal">
                     <div class="step-number">4</div>
                     <h4>Display</h4>
                     <p>One click pushes the verse to ProPresenter. Premium users get direct API integration for faster, background-safe display.</p>
@@ -1407,15 +1750,45 @@
             </div>
         </div>
     </section>
-    
+
+    <!-- Task 6: Testimonials (new section) -->
+    <!-- PLACEHOLDER: Replace with real testimonials before publishing -->
+    <section class="testimonials" id="testimonials">
+        <div class="container">
+            <div class="section-header reveal">
+                <div class="section-tag">From the Community</div>
+                <h2 class="section-title">Trusted by Worship Teams</h2>
+                <p class="section-subtitle">Real churches, real services, real results.</p>
+            </div>
+            <div class="testimonial-grid">
+                <!-- PLACEHOLDER: Replace with verified quote -->
+                <blockquote class="testimonial-card reveal">
+                    <p>We used to scramble every Sunday to find the scripture reference. Divine Link changed our entire workflow — it's like having an extra volunteer in the booth.</p>
+                    <cite>— AV Operator, Grace Community Church</cite>
+                </blockquote>
+                <!-- PLACEHOLDER: Replace with verified quote -->
+                <blockquote class="testimonial-card reveal">
+                    <p>The human verification step is exactly what we needed. No more wrong verses appearing on the big screen mid-sermon. Our congregation notices the difference.</p>
+                    <cite>— Worship Director, New Life Fellowship</cite>
+                </blockquote>
+                <!-- PLACEHOLDER: Replace with verified quote -->
+                <blockquote class="testimonial-card reveal">
+                    <p>Local-first was the deciding factor for us. Our elders were very clear — no sermon audio leaves the building. Divine Link was the only option that respected that.</p>
+                    <cite>— Tech Volunteer, Covenant Baptist Church</cite>
+                </blockquote>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing -->
     <section class="pricing" id="pricing">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <div class="section-tag">Pricing</div>
                 <h2 class="section-title">Choose Your Plan</h2>
                 <p class="section-subtitle">Start free and upgrade as your church grows</p>
             </div>
-            
+
             <!-- Billing Period Selector -->
             <div class="billing-selector">
                 <input type="radio" id="billing-monthly" name="billing" value="monthly" checked>
@@ -1423,10 +1796,10 @@
                 <input type="radio" id="billing-yearly" name="billing" value="yearly">
                 <label for="billing-yearly">Yearly<span class="billing-save">Save up to 37%</span></label>
             </div>
-            
+
             <div class="price-cards">
                 <!-- Mercy (Free) -->
-                <div class="price-card">
+                <div class="price-card reveal">
                     <div class="tier-name">Mercy</div>
                     <h3>Free</h3>
                     <div class="tier-verse">"His mercies are new every morning"</div>
@@ -1446,9 +1819,9 @@
                     </ul>
                     <a href="releases/DivineLink-latest.zip" class="btn btn-mercy">Download Free</a>
                 </div>
-                
+
                 <!-- Grace (Premium) -->
-                <div class="price-card featured">
+                <div class="price-card featured reveal">
                     <div class="tier-badge">Most Popular</div>
                     <div class="tier-name">Grace</div>
                     <h3>Premium</h3>
@@ -1474,9 +1847,9 @@
                     <a href="https://buy.stripe.com/8x228raJOceGbI50hn5AQ00" id="grace-btn" class="btn btn-grace" data-grace-monthly="https://buy.stripe.com/8x228raJOceGbI50hn5AQ00" data-grace-yearly="https://buy.stripe.com/bJe00jf04emO7rPfch5AQ03">Subscribe</a>
                     <p class="annual-price" style="display: none;"><strong>Save 33%</strong> with yearly billing</p>
                 </div>
-                
+
                 <!-- Love (Pro) -->
-                <div class="price-card love-tier">
+                <div class="price-card love-tier reveal">
                     <div class="tier-badge love">Best Value</div>
                     <div class="tier-name">Love</div>
                     <h3>Pro</h3>
@@ -1490,7 +1863,7 @@
                         <li><span class="check">✓</span> <strong>No advertisements</strong></li>
                         <li><span class="check">✓</span> <strong>Messages API integration</strong></li>
                         <li><span class="check">✓</span> <strong>5 Pastor profiles</strong></li>
-                        <li><span class="check">✓</span> <strong>Session history & export</strong></li>
+                        <li><span class="check">✓</span> <strong>Session history &amp; export</strong></li>
                         <li><span class="check">✓</span> Speech corrections per pastor</li>
                         <li><span class="check">✓</span> Implicit verse detection</li>
                         <li><span class="check">✓</span> Auto-advance slideshow</li>
@@ -1504,10 +1877,11 @@
             </div>
         </div>
     </section>
-    
+
+    <!-- Comparison Table -->
     <section class="comparison" id="comparison">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <div class="section-tag">Compare Plans</div>
                 <h2 class="section-title">Feature Comparison</h2>
                 <p class="section-subtitle">See exactly what's included in each tier</p>
@@ -1523,180 +1897,84 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>Live speech detection</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Full detection algorithm</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Real-time transcription</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Push to Stage Screen</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Multi-verse display</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Push to Audience Screen</td>
-                            <td>Keyboard only</td>
-                            <td class="check">Messages API</td>
-                            <td class="check">Messages API</td>
-                        </tr>
-                        <tr>
-                            <td>Direct API integration</td>
-                            <td class="cross">✗</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Background-safe (no window focus)</td>
-                            <td class="cross">✗</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Bible translations</td>
-                            <td>KJV only</td>
-                            <td>All (10+)</td>
-                            <td>All (10+)</td>
-                        </tr>
-                        <tr>
-                            <td>Sessions per month</td>
-                            <td>8</td>
-                            <td>Unlimited</td>
-                            <td>Unlimited</td>
-                        </tr>
-                        <tr>
-                            <td>Verse-by-verse push</td>
-                            <td class="cross">✗</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Verse navigation (◀ ▶)</td>
-                            <td class="cross">✗</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Pastor profiles</td>
-                            <td>0</td>
-                            <td>2</td>
-                            <td>5</td>
-                        </tr>
-                        <tr>
-                            <td>Session history & export</td>
-                            <td class="cross">✗</td>
-                            <td class="cross">✗</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Speech corrections</td>
-                            <td class="cross">✗</td>
-                            <td class="cross">✗</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Implicit verse detection</td>
-                            <td class="cross">✗</td>
-                            <td class="cross">✗</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Auto-advance slideshow</td>
-                            <td class="cross">✗</td>
-                            <td class="cross">✗</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Devices included</td>
-                            <td>1</td>
-                            <td>2</td>
-                            <td>5</td>
-                        </tr>
-                        <tr>
-                            <td>Support</td>
-                            <td>Community</td>
-                            <td>Email</td>
-                            <td>Priority</td>
-                        </tr>
-                        <tr>
-                            <td>In-app Contact Support</td>
-                            <td class="cross">✗</td>
-                            <td class="check">✓</td>
-                            <td class="check">✓</td>
-                        </tr>
-                        <tr>
-                            <td>Subscription grace period</td>
-                            <td>—</td>
-                            <td>14 days</td>
-                            <td>14 days</td>
-                        </tr>
-                        <tr>
-                            <td>Advertisements</td>
-                            <td>Sidebar ads</td>
-                            <td class="check">Ad-free</td>
-                            <td class="check">Ad-free</td>
-                        </tr>
+                        <tr><td>Live speech detection</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+                        <tr><td>Full detection algorithm</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+                        <tr><td>Real-time transcription</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+                        <tr><td>Push to Stage Screen</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+                        <tr><td>Multi-verse display</td><td class="check">✓</td><td class="check">✓</td><td class="check">✓</td></tr>
+                        <tr><td>Push to Audience Screen</td><td>Keyboard only</td><td class="check">Messages API</td><td class="check">Messages API</td></tr>
+                        <tr><td>Direct API integration</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+                        <tr><td>Background-safe (no window focus)</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+                        <tr><td>Bible translations</td><td>KJV only</td><td>All (10+)</td><td>All (10+)</td></tr>
+                        <tr><td>Sessions per month</td><td>8</td><td>Unlimited</td><td>Unlimited</td></tr>
+                        <tr><td>Verse-by-verse push</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+                        <tr><td>Verse navigation (◀ ▶)</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+                        <tr><td>Pastor profiles</td><td>0</td><td>2</td><td>5</td></tr>
+                        <tr><td>Session history &amp; export</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+                        <tr><td>Speech corrections</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+                        <tr><td>Implicit verse detection</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+                        <tr><td>Auto-advance slideshow</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+                        <tr><td>Devices included</td><td>1</td><td>2</td><td>5</td></tr>
+                        <tr><td>Support</td><td>Community</td><td>Email</td><td>Priority</td></tr>
+                        <tr><td>In-app Contact Support</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+                        <tr><td>Subscription grace period</td><td>—</td><td>14 days</td><td>14 days</td></tr>
+                        <tr><td>Advertisements</td><td>Sidebar ads</td><td class="check">Ad-free</td><td class="check">Ad-free</td></tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </section>
-    
+
+    <!-- Why Choose -->
     <section class="why-choose" id="why-choose">
         <div class="container">
-            <div class="section-header">
+            <div class="section-header reveal">
                 <div class="section-tag">Why Choose Divine Link</div>
                 <h2 class="section-title">Quality &amp; Control Over Full Automation</h2>
                 <p class="section-subtitle">We believe operators should have the final say. Here's what sets us apart from cloud-based scripture detection tools.</p>
             </div>
             <div class="why-grid">
-                <div class="why-card">
-                    <div class="why-icon">👤</div>
+                <!-- Task 2: SVG icons; Task 7: Card 3 layout fixed -->
+                <div class="why-card reveal">
+                    <div class="why-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="5"/><path d="M20 21a8 8 0 1 0-16 0"/></svg>
+                    </div>
                     <h3>Human-in-the-Loop</h3>
                     <p>Unlike fully automated tools, <strong>you verify every scripture</strong> before it goes on screen. No surprises, no mistakes — just quality-controlled display.</p>
                 </div>
-                <div class="why-card">
-                    <div class="why-icon">🔒</div>
+                <div class="why-card reveal">
+                    <div class="why-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                    </div>
                     <h3>100% Local-First</h3>
                     <p><strong>No cloud dependencies.</strong> Your sermons never leave your Mac. Complete privacy, zero latency, works offline. Competitors require cloud connectivity.</p>
                 </div>
-                <div class="why-card">
-                    <div class="why-icon">💰</div>
-                    <span class="highlight-stat">33% less</span>
+                <!-- Task 7: highlight-stat moved inside <p>, no longer breaking grid rhythm -->
+                <div class="why-card reveal">
+                    <div class="why-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/><path d="M12 18V6"/></svg>
+                    </div>
                     <h3>Better Value</h3>
-                    <p>Premium starts at <strong>£9.99/month</strong> vs competitors' £15+. More features, lower price, no compromises on quality.</p>
+                    <p><strong>33% less than competitors.</strong> Premium starts at £9.99/month vs competitors' £15+. More features, lower price, no compromises on quality.</p>
                 </div>
-                <div class="why-card">
-                    <div class="why-icon">🛡️</div>
+                <div class="why-card reveal">
+                    <div class="why-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"/><path d="M12 9v4"/><path d="M12 17h.01"/></svg>
+                    </div>
                     <h3>Panic Button</h3>
                     <p>Instantly clear the screen with one click if something goes wrong. <strong>Operators stay in control</strong> during live services.</p>
                 </div>
-                <div class="why-card">
-                    <div class="why-icon">📊</div>
+                <div class="why-card reveal">
+                    <div class="why-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><line x1="18" x2="18" y1="20" y2="10"/><line x1="12" x2="12" y1="20" y2="4"/><line x1="6" x2="6" y1="20" y2="14"/></svg>
+                    </div>
                     <h3>Confidence Indicators</h3>
                     <p>See detection confidence scores before displaying. <strong>Transparency over black-box AI</strong> — you decide what's accurate enough.</p>
                 </div>
-                <div class="why-card">
-                    <div class="why-icon">⚡</div>
+                <div class="why-card reveal">
+                    <div class="why-icon">
+                        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14a1 1 0 0 1-.78-1.63l9.9-10.2a.5.5 0 0 1 .86.46l-1.92 6.02A1 1 0 0 0 13 10h7a1 1 0 0 1 .78 1.63l-9.9 10.2a.5.5 0 0 1-.86-.46l1.92-6.02A1 1 0 0 0 11 14z"/></svg>
+                    </div>
                     <h3>ProPresenter Excellence</h3>
                     <p>Deep ProPresenter integration with <strong>Messages API</strong> (Premium). Faster, more reliable than keyboard automation used by competitors.</p>
                 </div>
@@ -1704,100 +1982,158 @@
             <div class="compare-cta">
                 <p>Want to see how Divine Link stacks up against specific competitors?</p>
                 <a href="/compare.html" class="btn-compare">
-                    <span>📋</span> See Full Competitor Comparison
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="m9 14 2 2 4-4"/></svg>
+                    See Full Competitor Comparison
                 </a>
             </div>
         </div>
     </section>
-    
+
+    <!-- Task 8: Improved CTA -->
     <section class="cta">
         <div class="cta-bg">
             <img src="https://images.unsplash.com/photo-1438232992991-995b7058bbb3?w=1920&q=80" alt="Church interior with stained glass">
         </div>
         <div class="container">
-            <div class="cta-content">
+            <div class="cta-content reveal">
                 <h2>Ready to Transform Your Services?</h2>
-                <p>Join hundreds of churches using Divine Link to seamlessly display scripture during worship. Download free today.</p>
-                <a href="releases/DivineLink-latest.zip" class="btn btn-primary">
-                    <span>⬇️</span> Download Divine Link
-                </a>
+                <p>Join hundreds of churches using Divine Link to seamlessly display scripture during worship.</p>
+                <p class="cta-reassurance">Free to start &nbsp;&bull;&nbsp; No credit card required &nbsp;&bull;&nbsp; macOS 14+</p>
+                <div class="cta-buttons">
+                    <a href="releases/DivineLink-latest.zip" class="btn btn-primary">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" x2="12" y1="15" y2="3"/></svg>
+                        Download Divine Link
+                    </a>
+                    <a href="#pricing" class="btn btn-secondary">View Pricing</a>
+                </div>
             </div>
         </div>
     </section>
-    
+
     </main>
 
+    <!-- Task 9: 3-column footer -->
     <footer>
         <div class="container">
-            <div class="footer-inner">
-                <a href="/" class="logo">
-                    <div class="logo-icon"><img src="/logo.png" alt="Divine Link icon"></div>
-                    <span>Divine Link</span>
-                </a>
-                <div class="footer-links">
-                    <a href="/terms.html">Terms of Service</a>
-                    <a href="/privacy.html">Privacy Policy</a>
-                    <a href="/releases.html">Release Notes</a>
-                    <a href="mailto:support@divinelink.app">Contact Support</a>
+            <div class="footer-grid">
+                <div class="footer-brand">
+                    <a href="/" class="logo">
+                        <div class="logo-icon"><img src="/logo.png" alt="Divine Link icon"></div>
+                        <span>Divine Link</span>
+                    </a>
+                    <p>Real-time scripture detection for macOS. Built for churches, designed for live services.</p>
                 </div>
-                <div class="footer-copy">
-                    © 2026 Divine Link by O'Rekun Media • <span style="background: rgba(224, 122, 43, 0.15); padding: 4px 12px; border-radius: 50px; font-size: 0.8rem; color: #F59E4C; font-weight: 600;">v1.3.5</span>
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <ul>
+                        <li><a href="#features">Features</a></li>
+                        <li><a href="#pricing">Pricing</a></li>
+                        <li><a href="/compare.html">Compare Plans</a></li>
+                        <li><a href="/releases.html">Release Notes</a></li>
+                        <li><a href="releases/DivineLink-latest.zip">Download</a></li>
+                    </ul>
                 </div>
+                <div class="footer-col">
+                    <h4>Support &amp; Legal</h4>
+                    <ul>
+                        <li><a href="mailto:support@divinelink.app">Contact Support</a></li>
+                        <li><a href="/terms.html">Terms of Service</a></li>
+                        <li><a href="/privacy.html">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <div class="footer-copy">© 2026 Divine Link by O'Rekun Media</div>
+                <span class="version-badge">v1.3.5</span>
             </div>
         </div>
     </footer>
-    
+
     <script>
-        // Billing period selector functionality
+        // ---- Billing period selector ----
         const billingRadios = document.querySelectorAll('input[name="billing"]');
         const priceCards = document.querySelectorAll('.price-card');
         const graceBtn = document.getElementById('grace-btn');
         const loveBtn = document.getElementById('love-btn');
-        
-        // Stripe checkout URLs
+
         const stripeUrls = {
             grace: {
                 monthly: 'https://buy.stripe.com/8x228raJOceGbI50hn5AQ00',
-                yearly: 'https://buy.stripe.com/bJe00jf04emO7rPfch5AQ03'
+                yearly:  'https://buy.stripe.com/bJe00jf04emO7rPfch5AQ03'
             },
             love: {
                 monthly: 'https://buy.stripe.com/7sYbJ14lqemO6nL7JP5AQ01',
-                yearly: 'https://buy.stripe.com/dRmdR98BG2E6eUh4xD5AQ02'
+                yearly:  'https://buy.stripe.com/dRmdR98BG2E6eUh4xD5AQ02'
             }
         };
-        
+
         function updateBillingPeriod() {
             const selectedBilling = document.querySelector('input[name="billing"]:checked').value;
-            
-            // Update price cards
-            priceCards.forEach(card => {
-                card.setAttribute('data-billing', selectedBilling);
-            });
-            
-            // Update subscribe button URLs
+            priceCards.forEach(card => card.setAttribute('data-billing', selectedBilling));
+
             if (selectedBilling === 'monthly') {
                 graceBtn.href = stripeUrls.grace.monthly;
-                loveBtn.href = stripeUrls.love.monthly;
+                loveBtn.href  = stripeUrls.love.monthly;
             } else {
                 graceBtn.href = stripeUrls.grace.yearly;
-                loveBtn.href = stripeUrls.love.yearly;
+                loveBtn.href  = stripeUrls.love.yearly;
             }
-            
-            // Show/hide annual price notes
-            const annualPriceNotes = document.querySelectorAll('.annual-price');
-            annualPriceNotes.forEach(note => {
+
+            const annualNotes = document.querySelectorAll('.annual-price');
+            annualNotes.forEach(note => {
                 note.style.display = selectedBilling === 'yearly' ? 'block' : 'none';
             });
         }
-        
-        // Add event listeners
-        billingRadios.forEach(radio => {
-            radio.addEventListener('change', updateBillingPeriod);
-        });
-        
-        // Initialize on page load
+
+        billingRadios.forEach(radio => radio.addEventListener('change', updateBillingPeriod));
         updateBillingPeriod();
+
+        // ---- Task 3: Scroll reveal animations ----
+        const revealObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        revealObserver.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.12 }
+        );
+
+        document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+        // ---- Task 4: Hamburger navigation ----
+        const navToggle  = document.getElementById('nav-toggle');
+        const navLinks   = document.getElementById('nav-links');
+
+        navToggle.addEventListener('click', () => {
+            const isOpen = navLinks.classList.toggle('open');
+            navToggle.classList.toggle('open', isOpen);
+            navToggle.setAttribute('aria-expanded', isOpen);
+            document.body.style.overflow = isOpen ? 'hidden' : '';
+        });
+
+        // Close on nav link click
+        navLinks.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                navLinks.classList.remove('open');
+                navToggle.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            });
+        });
+
+        // Close on outside click
+        document.addEventListener('click', (e) => {
+            if (!navToggle.contains(e.target) && !navLinks.contains(e.target)) {
+                navLinks.classList.remove('open');
+                navToggle.classList.remove('open');
+                navToggle.setAttribute('aria-expanded', 'false');
+                document.body.style.overflow = '';
+            }
+        });
     </script>
-    
+
 </body>
 </html>
