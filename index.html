@@ -809,6 +809,30 @@
             line-height: 1.6;
         }
 
+        /* Step & card screenshots */
+        .step-screenshot {
+            margin-top: 20px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+        }
+
+        .step-screenshot img,
+        .card-screenshot img {
+            display: block;
+            width: 100%;
+            height: auto;
+        }
+
+        .card-screenshot {
+            margin-top: 16px;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.08);
+            box-shadow: 0 4px 16px rgba(0,0,0,0.35);
+        }
+
         /* ---- Task 6: Testimonials ---- */
         .testimonials {
             padding: 120px 0;
@@ -1726,6 +1750,9 @@
                     </div>
                     <h3>Pastor Profiles</h3>
                     <p>Save preferred translations and speech corrections for each speaker. Perfect for churches with multiple ministers. <strong>Grace: 2 profiles, Love: 5 profiles</strong></p>
+                    <div class="card-screenshot">
+                        <img src="/screenshots/23-pastors-list.png" alt="Divine Link pastor profiles list">
+                    </div>
                 </div>
                 <div class="feature-card reveal">
                     <div class="feature-icon">
@@ -1795,21 +1822,33 @@
                     <div class="step-number">1</div>
                     <h4>Listen</h4>
                     <p>Divine Link captures audio from your Mac's microphone or audio input device.</p>
+                    <div class="step-screenshot">
+                        <img src="/screenshots/01-hero-listening.png" alt="Divine Link listening — microphone active, waiting for scripture">
+                    </div>
                 </div>
                 <div class="step reveal">
                     <div class="step-number">2</div>
                     <h4>Transcribe</h4>
                     <p>Advanced speech recognition converts spoken words to text in real-time.</p>
+                    <div class="step-screenshot">
+                        <img src="/screenshots/02-hero-verse-detected.png" alt="Divine Link live transcript with John 3:16 appearing">
+                    </div>
                 </div>
                 <div class="step reveal">
                     <div class="step-number">3</div>
                     <h4>Detect</h4>
                     <p>AI identifies scripture references and matches them to the Bible database.</p>
+                    <div class="step-screenshot">
+                        <img src="/screenshots/11-feature-confidence-indicators.png" alt="Divine Link showing confidence score for detected verse">
+                    </div>
                 </div>
                 <div class="step reveal">
                     <div class="step-number">4</div>
                     <h4>Display</h4>
                     <p>One click pushes the verse to ProPresenter. Premium users get direct API integration for faster, background-safe display.</p>
+                    <div class="step-screenshot">
+                        <img src="/screenshots/03-hero-verse-pushed.png" alt="Divine Link verse pushed to ProPresenter">
+                    </div>
                 </div>
             </div>
         </div>
@@ -1881,6 +1920,9 @@
                         <li style="color: var(--text-muted); font-size: 0.9em;"><span style="color: #f59e0b; margin-right: 8px;">ℹ</span> Keyboard automation available</li>
                         <li class="disabled"><span class="cross">✗</span> Additional translations</li>
                     </ul>
+                    <div class="card-screenshot" style="margin-bottom: 20px;">
+                        <img src="/screenshots/07-free-tier-with-ads.png" alt="Divine Link free tier showing sidebar ads">
+                    </div>
                     <a href="releases/DivineLink-latest.zip" class="btn btn-mercy">Download Free</a>
                 </div>
 
@@ -2027,6 +2069,9 @@
                     </div>
                     <h3>Panic Button</h3>
                     <p>Instantly clear the screen with one click if something goes wrong. <strong>Operators stay in control</strong> during live services.</p>
+                    <div class="card-screenshot">
+                        <img src="/screenshots/09-feature-panic-button.png" alt="Divine Link panic button — one click to clear screen">
+                    </div>
                 </div>
                 <div class="why-card reveal">
                     <div class="why-icon">
@@ -2034,6 +2079,9 @@
                     </div>
                     <h3>Confidence Indicators</h3>
                     <p>See detection confidence scores before displaying. <strong>Transparency over black-box AI</strong> — you decide what's accurate enough.</p>
+                    <div class="card-screenshot">
+                        <img src="/screenshots/11-feature-confidence-indicators.png" alt="Divine Link showing High confidence badge on detected verse">
+                    </div>
                 </div>
                 <div class="why-card reveal">
                     <div class="why-icon">
