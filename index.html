@@ -150,6 +150,12 @@
             --gradient-2: linear-gradient(135deg, #141428 0%, #1a1a35 100%);
         }
 
+        /* ---- Smooth scroll (same-page anchors only) ---- */
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 80px; /* offset for sticky header */
+        }
+
         /* ---- Reset ---- */
         * {
             margin: 0;
@@ -470,10 +476,55 @@
         .mac-dot.mac-min    { background: #FFBD2E; }
         .mac-dot.mac-max    { background: #28C840; }
 
-        .mac-window img {
+        /* Hero carousel — stacked images with CSS fade */
+        .mac-window-carousel {
+            position: relative;
+            width: 100%;
+            /* height anchored to first image's natural ratio */
+        }
+
+        .mac-window-carousel img {
             display: block;
             width: 100%;
             height: auto;
+            position: absolute;
+            top: 0;
+            left: 0;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out;
+        }
+
+        /* First image visible by default; JS overrides with .active */
+        .mac-window-carousel img:first-child {
+            position: relative; /* holds natural height */
+        }
+
+        .mac-window-carousel img.active {
+            opacity: 1;
+        }
+
+        /* Dot indicators */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 7px;
+            margin-top: 14px;
+        }
+
+        .carousel-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.25);
+            cursor: pointer;
+            transition: background 0.3s, transform 0.3s;
+            border: none;
+            padding: 0;
+        }
+
+        .carousel-dot.active {
+            background: var(--primary);
+            transform: scale(1.3);
         }
 
         .hero-stats {
@@ -1561,7 +1612,7 @@
                     </div>
                 </div>
 
-                <!-- Task 5: Real app screenshot with macOS window chrome -->
+                <!-- Hero image carousel: 5 screenshots cycling with fade -->
                 <div class="hero-image reveal">
                     <div class="mac-window">
                         <div class="mac-window-bar">
@@ -1569,7 +1620,20 @@
                             <span class="mac-dot mac-min"></span>
                             <span class="mac-dot mac-max"></span>
                         </div>
-                        <img src="/screenshots/02-hero-verse-detected.png" alt="Divine Link detecting John 3:16 during live preaching">
+                        <div class="mac-window-carousel" id="heroCarousel">
+                            <img src="/screenshots/02-hero-verse-detected.png" alt="Divine Link detecting John 3:16 during live preaching" class="active">
+                            <img src="/screenshots/03-hero-verse-pushed.png" alt="Divine Link verse pushed to ProPresenter">
+                            <img src="/screenshots/04-hero-multiple-verses.png" alt="Divine Link displaying multiple detected verses">
+                            <img src="/screenshots/18-settings-propresenter.png" alt="Divine Link ProPresenter connection settings">
+                            <img src="/screenshots/20-settings-detection.png" alt="Divine Link detection sensitivity settings">
+                        </div>
+                    </div>
+                    <div class="carousel-dots" id="carouselDots">
+                        <button class="carousel-dot active" aria-label="Slide 1"></button>
+                        <button class="carousel-dot" aria-label="Slide 2"></button>
+                        <button class="carousel-dot" aria-label="Slide 3"></button>
+                        <button class="carousel-dot" aria-label="Slide 4"></button>
+                        <button class="carousel-dot" aria-label="Slide 5"></button>
                     </div>
                 </div>
             </div>
@@ -2133,6 +2197,44 @@
                 document.body.style.overflow = '';
             }
         });
+
+        // ---- Hero image carousel ----
+        (function () {
+            const carousel   = document.getElementById('heroCarousel');
+            const dotsWrap   = document.getElementById('carouselDots');
+            if (!carousel || !dotsWrap) return;
+
+            const imgs  = Array.from(carousel.querySelectorAll('img'));
+            const dots  = Array.from(dotsWrap.querySelectorAll('.carousel-dot'));
+            let current = 0;
+            let timer;
+
+            function goTo(n) {
+                imgs[current].classList.remove('active');
+                dots[current].classList.remove('active');
+                current = (n + imgs.length) % imgs.length;
+                imgs[current].classList.add('active');
+                dots[current].classList.add('active');
+            }
+
+            function advance() { goTo(current + 1); }
+
+            function startTimer() {
+                clearInterval(timer);
+                timer = setInterval(advance, 3800);
+            }
+
+            // Dot click: jump to slide and restart timer
+            dots.forEach((dot, i) => {
+                dot.addEventListener('click', () => { goTo(i); startTimer(); });
+            });
+
+            // Pause on hover, resume on leave
+            carousel.addEventListener('mouseenter', () => clearInterval(timer));
+            carousel.addEventListener('mouseleave', startTimer);
+
+            startTimer();
+        })();
     </script>
 
 </body>
