@@ -17,6 +17,13 @@
     Content-Type = "application/zip"
     Content-Disposition = "attachment"
 
+# Headers for DMG downloads
+[[headers]]
+  for = "/releases/*.dmg"
+  [headers.values]
+    Content-Type = "application/x-apple-diskimage"
+    Content-Disposition = "attachment"
+
 # Ensure HTML files are served correctly
 [[headers]]
   for = "/*.html"
@@ -26,5 +33,5 @@
 # Redirects
 [[redirects]]
   from = "/download"
-  to = "/releases/DivineLink-latest.zip"
-  status = 302
+  to = "/download.html"
+  status = 200

@@ -19,6 +19,12 @@
         <priority>0.7</priority>
     </url>
     <url>
+        <loc>https://divinelink.netlify.app/download</loc>
+        <lastmod>2026-04-04</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://divinelink.netlify.app/terms.html</loc>
         <lastmod>2026-02-18</lastmod>
         <changefreq>yearly</changefreq>
