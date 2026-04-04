@@ -8,36 +8,120 @@
         
         <!-- Latest Version -->
         <item>
-            <title>Version 1.3.5</title>
-            <sparkle:version>9</sparkle:version>
-            <sparkle:shortVersionString>1.3.5</sparkle:shortVersionString>
+            <title>Version 1.3.8</title>
+            <sparkle:version>14</sparkle:version>
+            <sparkle:shortVersionString>1.3.8</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <pubDate>Tue, 11 Feb 2026 20:40:00 +0000</pubDate>
-            
+            <pubDate>Sun, 15 Mar 2026 11:49:00 +0000</pubDate>
+
             <description><![CDATA[
-                <h2>What's New in Version 1.3.5</h2>
-                
-                <h3>Audio Capture Fix (Critical)</h3>
+                <h2>Version 1.3.8 — External Audio Device Transcription Fix</h2>
+
+                <h3>Bug Fix</h3>
                 <ul>
-                    <li><strong>Silent audio resolved</strong> &ndash; Removed a Core Audio HAL corruption caused by <code>audioEngine.reset()</code> that silenced all subsequent captures.</li>
-                    <li><strong>Multi-channel USB support</strong> &ndash; Devices such as the Focusrite Vocaster Two now correctly detect the active microphone channel instead of defaulting to channel&nbsp;0.</li>
-                    <li><strong>Startup race condition fixed</strong> &ndash; Debounced the device observer and eliminated redundant stop/start cycles during pipeline startup.</li>
-                    <li><strong>Automatic silent-start recovery</strong> &ndash; If the first 15 buffers are all silent the engine is automatically recreated once.</li>
-                </ul>
-                
-                <h3>Permission Handling</h3>
-                <ul>
-                    <li>Audio capture is now blocked when microphone permission is denied, preventing silent-running.</li>
-                    <li>Spacebar shortcut gated by permission status.</li>
-                    <li>Clicking the &ldquo;No Permission&rdquo; indicator opens System&nbsp;Settings directly to Microphone privacy.</li>
+                    <li><strong>External devices now transcribe</strong> &ndash; USB interfaces, audio mixers, and virtual devices (BlackHole) now transcribe correctly. Previously only the built-in MacBook microphone produced transcription; all other sources were silent despite audio flowing. Root cause: the speech recognition restart timer was firing on a background thread RunLoop that was not spinning, so transcription permanently stalled after any device switch.</li>
                 </ul>
             ]]></description>
-            
-            <enclosure 
-                url="https://divinelink.netlify.app/releases/DivineLink-1.3.5.zip"
-                length="14768553"
+
+            <enclosure
+                url="https://divinelink.netlify.app/releases/DivineLink-1.3.8.zip"
+                length="13068077"
                 type="application/octet-stream"
-                sparkle:edSignature="Y4meQ5vwCxKIPOJtG3YovxT0WrGhjb6txrR/+p+3WdYhKpSK478sJ89NJ1nEPHQUGGo+cldlv3IMCWotyNAoDw=="
+                sparkle:edSignature="qrrlY2ASmvLKA7DjgI119AcfR/7RSJBvRROlMNj/VQrPnPdQbfn4V99EN29Gl/a7OwCVpPEBBUyR0i8xJXA4AA=="
+            />
+        </item>
+
+        <!-- Previous Version -->
+        <item>
+            <title>Version 1.3.7</title>
+            <sparkle:version>13</sparkle:version>
+            <sparkle:shortVersionString>1.3.7</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Sun, 15 Mar 2026 11:32:00 +0000</pubDate>
+
+            <description><![CDATA[
+                <h2>Version 1.3.7 — Audio Device Switch Fix</h2>
+
+                <h3>Bug Fixes</h3>
+                <ul>
+                    <li><strong>Audio device switching fixed</strong> &ndash; Switching the audio input device no longer freezes audio capture.</li>
+                    <li><strong>BlackHole wording clarified</strong> &ndash; Settings no longer says BlackHole is &ldquo;required&rdquo;.</li>
+                </ul>
+            ]]></description>
+
+            <enclosure
+                url="https://divinelink.netlify.app/releases/DivineLink-1.3.7.zip"
+                length="13066870"
+                type="application/octet-stream"
+                sparkle:edSignature="fso/IAfQ0oqfqaPLm2Ho6ivOQWBMvcuMU7SGSJatQ0j4GTufHxpsOJMVdLkjFndNGexiiI/Ko+MhTNrJ8fIhBQ=="
+            />
+        </item>
+
+        <!-- Previous Version -->
+        <item>
+            <title>Version 1.3.6</title>
+            <sparkle:version>12</sparkle:version>
+            <sparkle:shortVersionString>1.3.6</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Sun, 15 Mar 2026 11:15:00 +0000</pubDate>
+
+            <description><![CDATA[
+                <h2>Version 1.3.6 — Transcription Reliability Fix</h2>
+
+                <h3>Bug Fix</h3>
+                <ul>
+                    <li><strong>Transcription always starts</strong> &ndash; Fixed a silent failure where the audio meter was active but no transcription text appeared. On devices where the on-device speech model is unavailable (e.g. not downloaded for this language), the app now automatically falls back to server-based recognition.</li>
+                </ul>
+            ]]></description>
+
+            <enclosure
+                url="https://divinelink.netlify.app/releases/DivineLink-1.3.6.zip"
+                length="13066987"
+                type="application/octet-stream"
+                sparkle:edSignature="ooNZL/y2PSSgBqnPjSUXBHB930jPDldSewA6WAvHdzmlol96ncaoACYTycv7grb10dAKz46Ezkh/o8NcbRQSAA=="
+            />
+        </item>
+
+        <!-- Previous Version -->
+        <item>
+            <title>Version 1.3.5</title>
+            <sparkle:version>11</sparkle:version>
+            <sparkle:shortVersionString>1.3.5</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Sun, 08 Mar 2026 22:00:00 +0000</pubDate>
+
+            <description><![CDATA[
+                <h2>Version 1.3.5 — Transcript &amp; Compatibility Update</h2>
+
+                <h3>Live Transcript Improvements</h3>
+                <ul>
+                    <li><strong>Transcript now persists</strong> &ndash; Spoken sentences are no longer wiped when a new sentence begins. Each sentence is committed as a scrollable line, just like dictating to a document.</li>
+                    <li><strong>Native text selection</strong> &ndash; Words and phrases in the transcript can now be selected with click, double-click, or drag for review and correction.</li>
+                    <li><strong>Auto-scroll with user override</strong> &ndash; The transcript auto-scrolls to the latest line. Scrolling up pauses auto-scroll; it resumes automatically when you return to the bottom.</li>
+                </ul>
+
+                <h3>Audio Reliability</h3>
+                <ul>
+                    <li><strong>Silent transcription fixed</strong> &ndash; Disabled Voice Processing I/O which conflicted with Apple Speech, causing HALC overload and no text output despite the audio meter being active.</li>
+                    <li><strong>Swift concurrency fixes</strong> &ndash; Resolved Sendable closure warnings that could cause threading instability on some machines.</li>
+                </ul>
+
+                <h3>Session Transcript File</h3>
+                <ul>
+                    <li><strong>Structured format</strong> &ndash; Saved transcript files now include a service header (name, date, pastor, duration), a &ldquo;Detected Scriptures&rdquo; section with verse text and timestamps, and the full per-line transcript.</li>
+                </ul>
+
+                <h3>macOS Compatibility</h3>
+                <ul>
+                    <li><strong>macOS 14 &amp; 15 support</strong> &ndash; App now runs on macOS Sonoma (14) and Sequoia (15) in addition to macOS Tahoe (16).</li>
+                </ul>
+            ]]></description>
+
+            <enclosure
+                url="https://divinelink.netlify.app/releases/DivineLink-1.3.5.zip"
+                length="13066766"
+                type="application/octet-stream"
+                sparkle:edSignature="PaUaVTwkqqkX+dtdaxB0pOKEIFiWwqIYArNRJBTBbuWTAy43CdyMTvLoUQMdZHjmvtOCgB6jH0f5jbOR5+iaDA=="
             />
         </item>
         
