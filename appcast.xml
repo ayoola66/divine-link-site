@@ -12,7 +12,7 @@
             <sparkle:version>17</sparkle:version>
             <sparkle:shortVersionString>1.4.0</sparkle:shortVersionString>
             <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
-            <pubDate>Sat, 18 Jul 2026 21:51:00 +0000</pubDate>
+            <pubDate>Sat, 18 Jul 2026 22:22:00 +0000</pubDate>
 
             <description><![CDATA[
                 <h2>Version 1.4.0</h2>
@@ -25,9 +25,9 @@
 
             <enclosure
                 url="https://divinelink.netlify.app/releases/DivineLink-1.4.0.zip"
-                length="13118167"
+                length="13120037"
                 type="application/octet-stream"
-                sparkle:edSignature="/1LR06RhrtZQbXajy8nCJtoijBv6pIFj3mnVvM+bDMYvV7bYg7B7uCeAcx+gqy1lgYlnLpBkUolx5v1bfVu9Dg=="
+                sparkle:edSignature="OW5L95+BwBONHz/pjAb6lPzVg5J+sVTugJ71UTKnwl1n3ggdKdvk9fep/WITKVGDQMtCGAVNt9JiIpRi8KWUBw=="
             />
         </item>
 
