@@ -1,0 +1,51 @@
+name: Supabase Keep-Alive
+
+# Prevents the free-tier Supabase project from pausing after ~7 days of
+# inactivity (a pause takes down auth, subscription checks, and the Stripe
+# webhook — i.e. it breaks sales). This runs in GitHub's cloud on a schedule,
+# independent of any laptop being on, and pings the database so it stays active.
+#
+# The anon key below is public-safe by design (it is already shipped inside the
+# macOS app binary and is protected by Row Level Security). No secret required.
+
+on:
+  schedule:
+    # 06:00 UTC every day. Supabase pauses after ~7 idle days, so daily gives a
+    # 7x safety margin. A ~10s curl costs effectively nothing in Actions minutes.
+    - cron: "0 6 * * *"
+  workflow_dispatch: {}   # allows manual "Run workflow" from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    env:
+      SUPABASE_URL: "https://qzjhjgkvvcamcqpdrgkf.supabase.co"
+      SUPABASE_ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6amhqZ2t2dmNhbWNxcGRyZ2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4ODM0NzMsImV4cCI6MjA4NTQ1OTQ3M30.IQYO9V99IO7hubM87nVL14l6qaxvjNTKllDz2sXk6aU"
+    steps:
+      - name: Ping Postgres via REST (keeps the DB active)
+        run: |
+          set -euo pipefail
+          echo "Pinging app_heartbeats to register database activity..."
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            -H "Authorization: Bearer ${SUPABASE_ANON_KEY}" \
+            "${SUPABASE_URL}/rest/v1/app_heartbeats?select=count")
+          echo "app_heartbeats -> HTTP $code"
+          if [ "$code" != "200" ]; then
+            echo "::error::Supabase REST ping failed (HTTP $code) — project may be paused or unhealthy."
+            exit 1
+          fi
+
+      - name: Verify auth service is healthy
+        run: |
+          set -euo pipefail
+          code=$(curl -s -o /dev/null -w "%{http_code}" \
+            -H "apikey: ${SUPABASE_ANON_KEY}" \
+            "${SUPABASE_URL}/auth/v1/health")
+          echo "auth/v1/health -> HTTP $code"
+          if [ "$code" != "200" ]; then
+            echo "::error::Supabase auth health check failed (HTTP $code)."
+            exit 1
+          fi
+          echo "Supabase is alive and healthy. ✅"
