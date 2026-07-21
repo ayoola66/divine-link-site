@@ -9,6 +9,26 @@
         <!-- Latest Version -->
 
         <item>
+            <title>Version 1.5.2</title>
+            <sparkle:version>20</sparkle:version>
+            <sparkle:shortVersionString>1.5.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Tue, 21 Jul 2026 16:45:56 +0000</pubDate>
+            
+            <description><![CDATA[
+<h2>Smoother startup + ad improvements</h2><ul><li>New "Engine loading… / Ready" indicator on launch, so you know when transcription is actually ready (waits for the on-device model on Apple Silicon).</li><li>Ads: clicking an ad always opens the advertiser's link, and video ads use YouTube's player for more reliable autoplay.</li><li>Reliability and fallback improvements.</li></ul>
+
+            ]]></description>
+            
+            <enclosure 
+                url="https://divinelink.netlify.app/releases/DivineLink-1.5.2.zip"
+                length="11359568"
+                type="application/octet-stream"
+                sparkle:edSignature="sparkle:edSignature="zggbt11xnwgeJoc+9xlCjnfgp44GAYfu/ZZDmxpsTpdK9ma8PBgJikhZzxwIR8Zf+Yexr7dwwBBepVqCl8PQAw==" length="11359568""
+            />
+        </item>
+
+        <item>
             <title>Version 1.5.1</title>
             <sparkle:version>19</sparkle:version>
             <sparkle:shortVersionString>1.5.1</sparkle:shortVersionString>
