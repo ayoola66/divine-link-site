@@ -1560,16 +1560,20 @@
             
             if (ad) {
                 const hasImage = ad.image_url && ad.image_url.trim().length > 0;
+                const kind = ad.media_type === 'gif' ? '🎬 GIF' : (ad.video_url ? '🎥 Video' : 'Ad');
+                const safeName = (ad.name || '').replace(/</g, '&lt;');
                 if (hasImage) {
-                    // Fall back to a label (not a broken-image icon) if the URL fails to load.
-                    const fallback = ad.media_type === 'gif' ? '🎬 GIF' : (ad.video_url ? '🎥 Video' : 'Ad');
-                    el.innerHTML = `<img src="${ad.image_url}" alt="${ad.name}" onerror="this.parentElement.innerHTML='<div class=\\'empty\\'>${fallback}</div>'">`;
+                    // Fall back to a labelled box (not a broken-image icon) if the URL fails.
+                    el.innerHTML = `<img src="${ad.image_url}" alt="${ad.name}" onerror="this.parentElement.innerHTML='<div class=\\'empty\\'>${kind}<br>${safeName}</div>'">`;
                 } else {
-                    // Video/GIF ad with no static image — show a label instead of a broken image.
-                    const label = ad.media_type === 'gif' ? '🎬 GIF' : (ad.video_url ? '🎥 Video' : 'Ad');
-                    el.innerHTML = `<div class="empty">${label}</div>`;
+                    // Video/GIF ad with no static image — show kind + name so it's identifiable.
+                    el.innerHTML = `<div class="empty">${kind}<br><span style="font-size:10px; opacity:0.75;">${safeName}</span></div>`;
                 }
                 el.classList.toggle('enforced', ad.is_enforced);
+                // Click a preview slot to jump straight to editing that ad.
+                el.style.cursor = 'pointer';
+                el.title = 'Edit "' + (ad.name || 'ad') + '"';
+                el.onclick = function () { openEditAd(ad.id); };
             } else {
                 // Determine placeholder text based on slot type
                 let placeholderText = 'Ad Space';
@@ -1582,6 +1586,9 @@
                 }
                 el.innerHTML = `<div class="empty">${placeholderText}</div>`;
                 el.classList.remove('enforced');
+                el.style.cursor = '';
+                el.title = '';
+                el.onclick = null;
             }
         }
         
