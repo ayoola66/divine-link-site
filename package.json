@@ -1,0 +1,9 @@
+{
+  "name": "divine-link-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Divine Link marketing site + Netlify functions",
+  "dependencies": {
+    "@netlify/blobs": "^8.0.0"
+  }
+}

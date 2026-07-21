@@ -1633,6 +1633,10 @@
                             <div class="stat-number">99.2%</div>
                             <div class="stat-label">Accuracy Rate</div>
                         </div>
+                        <div class="stat">
+                            <div class="stat-number" id="dlCountHome">35</div>
+                            <div class="stat-label">Downloads</div>
+                        </div>
                     </div>
                 </div>
 
@@ -2283,6 +2287,18 @@
 
             startTimer();
         })();
+    </script>
+
+    <script>
+      // Live global download count in the hero stats.
+      (function () {
+        var el = document.getElementById("dlCountHome");
+        if (!el) return;
+        fetch("/api/downloads")
+          .then(function (r) { return r.json(); })
+          .then(function (d) { el.textContent = Number(d.count).toLocaleString("en-GB"); })
+          .catch(function () { /* keep the seed already in the markup */ });
+      })();
     </script>
 
 </body>

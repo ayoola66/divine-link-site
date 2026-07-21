@@ -121,6 +121,36 @@
         color: var(--muted);
         text-align: center;
       }
+
+      .downloads {
+        margin-top: 14px;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 0.95rem;
+        color: var(--text);
+        background: rgba(16, 185, 129, 0.1);
+        border: 1px solid rgba(16, 185, 129, 0.25);
+        border-radius: 99px;
+        padding: 6px 14px;
+      }
+      .downloads strong {
+        color: var(--ok);
+        font-variant-numeric: tabular-nums;
+      }
+      .downloads .dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--ok);
+        box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.6);
+        animation: pulse 2s infinite;
+      }
+      @keyframes pulse {
+        0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.5); }
+        70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+      }
     </style>
   </head>
   <body>
@@ -130,6 +160,10 @@
         <p class="sub">
           Download Divine Link for macOS. Extract the ZIP and drag the app
           to your Applications folder.
+        </p>
+        <p class="downloads">
+          <span class="dot"></span>
+          <strong id="dlCount">35</strong>&nbsp;downloads and counting
         </p>
       </section>
 
@@ -142,7 +176,7 @@
             to your Applications folder.
           </p>
           <div class="actions">
-            <a class="btn btn-primary" href="/releases/DivineLink-latest.zip"
+            <a class="btn btn-primary" id="dlBtn" href="/releases/DivineLink-latest.zip"
               >Download ZIP</a
             >
           </div>
@@ -165,5 +199,35 @@
         normal for internet downloads.
       </p>
     </main>
+    <script>
+      (function () {
+        var el = document.getElementById("dlCount");
+        var btn = document.getElementById("dlBtn");
+        function render(n) {
+          if (el) el.textContent = Number(n).toLocaleString("en-GB");
+        }
+        // Show the current global total on load.
+        fetch("/api/downloads")
+          .then(function (r) { return r.json(); })
+          .then(function (d) { render(d.count); })
+          .catch(function () { /* keep the seed already in the markup */ });
+
+        // Count the click, then let the normal download proceed.
+        if (btn) {
+          btn.addEventListener("click", function () {
+            // Optimistic bump so the number moves immediately.
+            if (el) {
+              var cur = parseInt((el.textContent || "35").replace(/[^0-9]/g, ""), 10) || 35;
+              render(cur + 1);
+            }
+            // keepalive lets the request finish even as the download navigation starts.
+            fetch("/api/downloads", { method: "POST", keepalive: true })
+              .then(function (r) { return r.json(); })
+              .then(function (d) { render(d.count); })
+              .catch(function () { /* optimistic value already shown */ });
+          });
+        }
+      })();
+    </script>
   </body>
 </html>
