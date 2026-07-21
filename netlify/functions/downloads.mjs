@@ -25,7 +25,10 @@ export default async (req) => {
   }
 
   try {
-    const store = getStore(STORE);
+    // Strong consistency so a read reflects the most recent write — a counter must
+    // be read-after-write correct (the default eventual consistency lets rapid
+    // increments read a stale value and lose counts).
+    const store = getStore({ name: STORE, consistency: "strong" });
 
     let count = parseInt(await store.get(KEY), 10);
     if (!Number.isFinite(count) || count < SEED) count = SEED;
