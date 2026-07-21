@@ -668,6 +668,7 @@
                 <div class="tabs">
                     <button class="tab active" data-tab="create">➕ Create Ad</button>
                     <button class="tab" data-tab="manage">📋 Manage Ads</button>
+                    <button class="tab" data-tab="edit" id="edit-tab-btn" title="Click the ✏️ pencil on an ad to edit it" style="opacity: 0.4; pointer-events: none;">✏️ Edit Ad</button>
                     <button class="tab" data-tab="stats">📊 Statistics</button>
                 </div>
                 
@@ -812,6 +813,107 @@
                     </div>
                 </div>
                 
+                <!-- Edit Ad Tab (only reachable via the ✏️ pencil on a Manage card) -->
+                <div id="tab-edit" class="tab-content">
+                    <div class="form-card">
+                        <h3>✏️ Edit Ad</h3>
+
+                        <label style="display: block; margin-bottom: 12px; font-size: 13px; color: var(--text-muted);">
+                            Select Ad Format
+                        </label>
+                        <div class="format-selector">
+                            <div class="format-option active" data-format="square" onclick="editSelectFormat('square')">
+                                <div class="icon">⬜</div>
+                                <div class="name">Square</div>
+                                <div class="size">1:1 ratio</div>
+                            </div>
+                            <div class="format-option" data-format="portrait" onclick="editSelectFormat('portrait')">
+                                <div class="icon">📱</div>
+                                <div class="name">Portrait</div>
+                                <div class="size">9:16 ratio</div>
+                            </div>
+                            <div class="format-option" data-format="banner" onclick="editSelectFormat('banner')">
+                                <div class="icon">📏</div>
+                                <div class="name">Banner</div>
+                                <div class="size">728×90</div>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Ad Name *</label>
+                                <input type="text" id="edit-ad-name" placeholder="e.g., Bible Study Journal">
+                            </div>
+                            <div class="form-group">
+                                <label>Priority (1-100)</label>
+                                <input type="number" id="edit-ad-priority" value="50" min="1" max="100">
+                                <small>Higher = shown more often</small>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Target URL (Affiliate Link) *</label>
+                            <input type="url" id="edit-ad-link" placeholder="https://amzn.to/xxxxx">
+                            <small>Where users go when they click the ad</small>
+                        </div>
+
+                        <div class="form-side-by-side">
+                            <div class="form-fields-column">
+                                <div class="form-group" style="margin-bottom: 8px;">
+                                    <label>Media Type</label>
+                                    <select id="edit-ad-media-type" onchange="editUpdateMediaType()" style="width: 100%; padding: 8px; background: var(--bg-input); border: 1px solid var(--border); border-radius: 6px; color: var(--text); font-size: 13px;">
+                                        <option value="image">Image (Static)</option>
+                                        <option value="video">Video (looping)</option>
+                                        <option value="gif">GIF (looping)</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group" id="edit-image-url-group" style="margin-bottom: 8px;">
+                                    <label>Image URL <span id="edit-image-required-indicator">*</span></label>
+                                    <input type="url" id="edit-ad-image" placeholder="https://..." oninput="editUpdateImagePreview()" style="padding: 8px; font-size: 13px;">
+                                    <small id="edit-image-help-text">Static image</small>
+                                </div>
+
+                                <div class="form-group" id="edit-video-url-group" style="display: none; margin-bottom: 8px;">
+                                    <label>Video/YouTube URL <span style="color: var(--primary);">*</span></label>
+                                    <input type="url" id="edit-ad-video" placeholder="https://..." oninput="editUpdateVideoPreview()" style="padding: 8px; font-size: 13px;">
+                                    <small>MP4, GIF, or YouTube Shorts</small>
+                                </div>
+
+                                <div class="toggle-compact">
+                                    <label class="toggle" style="transform: scale(0.8);">
+                                        <input type="checkbox" id="edit-ad-enforced">
+                                        <span class="toggle-slider"></span>
+                                    </label>
+                                    <div class="toggle-label">
+                                        <strong>📌 Enforce</strong>
+                                        <span>Always show this ad</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-preview-column">
+                                <label>Preview</label>
+                                <div class="image-preview" id="edit-image-preview">
+                                    <span class="placeholder">Preview</span>
+                                </div>
+                                <div class="image-preview" id="edit-video-preview" style="display: none;">
+                                    <span class="placeholder">Video</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="updateAdFromForm()">
+                                ✓ Update Ad
+                            </button>
+                            <button class="btn btn-secondary" onclick="cancelEdit()">
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Stats Tab -->
                 <div id="tab-stats" class="tab-content">
                     <div class="form-card">
@@ -830,6 +932,8 @@
         const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6amhqZ2t2dmNhbWNxcGRyZ2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4ODM0NzMsImV4cCI6MjA4NTQ1OTQ3M30.IQYO9V99IO7hubM87nVL14l6qaxvjNTKllDz2sXk6aU';
         
         let selectedFormat = 'square';
+        let selectedEditFormat = 'square';
+        let editingAdId = null;
         let allAds = [];
         
         // Check session
@@ -838,13 +942,18 @@
         }
         
         // Tab switching
+        function switchToTab(name) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            const btn = document.querySelector('.tab[data-tab="' + name + '"]');
+            if (btn) btn.classList.add('active');
+            const content = document.getElementById('tab-' + name);
+            if (content) content.classList.add('active');
+        }
         document.querySelectorAll('.tab').forEach(tab => {
-            tab.addEventListener('click', () => {
-                document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
-                tab.classList.add('active');
-                document.getElementById('tab-' + tab.dataset.tab).classList.add('active');
-            });
+            // The Edit tab is disabled (pointer-events:none) until a pencil is clicked, so
+            // this handler never fires for it while greyed out.
+            tab.addEventListener('click', () => switchToTab(tab.dataset.tab));
         });
         
         // Login
@@ -1121,7 +1230,224 @@
             updateMediaType();
             updateVideoPreview();
         }
-        
+
+        // ===== Edit Ad =====
+
+        function enableEditTab() {
+            const b = document.getElementById('edit-tab-btn');
+            b.style.opacity = '1';
+            b.style.pointerEvents = 'auto';
+        }
+        function disableEditTab() {
+            const b = document.getElementById('edit-tab-btn');
+            b.style.opacity = '0.4';
+            b.style.pointerEvents = 'none';
+        }
+
+        function editSelectFormat(format) {
+            selectedEditFormat = format;
+            document.querySelectorAll('#tab-edit .format-option').forEach(opt => {
+                opt.classList.toggle('active', opt.dataset.format === format);
+            });
+        }
+
+        function editUpdateMediaType() {
+            const mediaType = document.getElementById('edit-ad-media-type').value;
+            const videoGroup = document.getElementById('edit-video-url-group');
+            const imageGroup = document.getElementById('edit-image-url-group');
+            const videoInput = document.getElementById('edit-ad-video');
+            const imagePreview = document.getElementById('edit-image-preview');
+            const videoPreview = document.getElementById('edit-video-preview');
+            const imageRequiredIndicator = document.getElementById('edit-image-required-indicator');
+            const imageHelpText = document.getElementById('edit-image-help-text');
+
+            if (mediaType === 'video' || mediaType === 'gif') {
+                videoGroup.style.display = 'block';
+                const hasVideoURL = videoInput && videoInput.value.trim().length > 0;
+                if (hasVideoURL) {
+                    imageGroup.style.display = 'none';
+                    imagePreview.style.display = 'none';
+                    videoPreview.style.display = 'flex';
+                } else {
+                    imageGroup.style.display = 'block';
+                    imageRequiredIndicator.style.display = 'none';
+                    imageHelpText.textContent = 'Optional fallback';
+                    imagePreview.style.display = 'flex';
+                    videoPreview.style.display = 'none';
+                    imagePreview.innerHTML = '<span class="placeholder">Video</span>';
+                }
+            } else {
+                videoGroup.style.display = 'none';
+                videoPreview.style.display = 'none';
+                imageGroup.style.display = 'block';
+                imagePreview.style.display = 'flex';
+                imageRequiredIndicator.style.display = 'inline';
+                imageHelpText.textContent = 'Required: Static image';
+                editUpdateImagePreview();
+            }
+        }
+
+        function editUpdateImagePreview() {
+            const url = document.getElementById('edit-ad-image').value;
+            const imagePreview = document.getElementById('edit-image-preview');
+            const videoPreview = document.getElementById('edit-video-preview');
+            const mediaType = document.getElementById('edit-ad-media-type').value;
+            if (mediaType === 'image') {
+                imagePreview.style.display = 'flex';
+                videoPreview.style.display = 'none';
+                if (url) {
+                    imagePreview.innerHTML = `<img src="${url}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
+                } else {
+                    imagePreview.innerHTML = '<span class="placeholder">Preview</span>';
+                }
+            }
+        }
+
+        function editUpdateVideoPreview() {
+            const url = document.getElementById('edit-ad-video').value.trim();
+            const imagePreview = document.getElementById('edit-image-preview');
+            const videoPreview = document.getElementById('edit-video-preview');
+            const mediaType = document.getElementById('edit-ad-media-type').value;
+            const imageGroup = document.getElementById('edit-image-url-group');
+            const imageRequiredIndicator = document.getElementById('edit-image-required-indicator');
+            const imageHelpText = document.getElementById('edit-image-help-text');
+
+            if (url && (mediaType === 'video' || mediaType === 'gif')) {
+                imageGroup.style.display = 'none';
+            } else if (mediaType === 'video' || mediaType === 'gif') {
+                imageGroup.style.display = 'block';
+                imageRequiredIndicator.style.display = 'none';
+                imageHelpText.textContent = 'Optional fallback';
+            }
+
+            if (url) {
+                videoPreview.style.display = 'flex';
+                imagePreview.style.display = 'none';
+                const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
+                if (isYouTube) {
+                    let videoID = '';
+                    if (url.includes('/shorts/')) videoID = url.split('/shorts/')[1].split('?')[0].split('&')[0].split('#')[0];
+                    else if (url.includes('youtu.be/')) videoID = url.split('youtu.be/')[1].split('?')[0].split('&')[0];
+                    else if (url.includes('watch?v=')) videoID = url.split('watch?v=')[1].split('&')[0].split('#')[0];
+                    else if (url.includes('embed/')) videoID = url.split('embed/')[1].split('?')[0].split('&')[0];
+                    if (videoID) {
+                        const embedURL = `https://www.youtube.com/embed/${videoID}?autoplay=0&loop=1&playlist=${videoID}&mute=1&controls=0&modestbranding=1`;
+                        videoPreview.innerHTML = `<iframe src="${embedURL}" style="width: 100%; height: 100%; border-radius: 8px; border: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
+                    } else {
+                        videoPreview.innerHTML = '<span class="placeholder" style="color: var(--danger);">Invalid URL</span>';
+                    }
+                } else if (mediaType === 'gif') {
+                    videoPreview.innerHTML = `<img src="${url}" alt="GIF" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
+                } else {
+                    videoPreview.innerHTML = `<video src="${url}" autoplay loop muted style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'"></video>`;
+                }
+            } else {
+                videoPreview.style.display = 'none';
+                if (mediaType === 'video' || mediaType === 'gif') {
+                    imagePreview.style.display = 'flex';
+                    imagePreview.innerHTML = '<span class="placeholder">Video</span>';
+                }
+            }
+        }
+
+        // Open the Edit tab pre-filled with an ad's data (called by the ✏️ pencil).
+        function openEditAd(id) {
+            const ad = allAds.find(a => String(a.id) === String(id));
+            if (!ad) return;
+            editingAdId = ad.id;
+
+            let fmt = ad.format;
+            if (!fmt) fmt = (ad.slot && ad.slot.indexOf('square') === 0) ? 'square' : (ad.slot || 'square');
+            editSelectFormat(fmt);
+
+            document.getElementById('edit-ad-name').value = ad.name || '';
+            document.getElementById('edit-ad-priority').value = (ad.priority != null ? ad.priority : 50);
+            document.getElementById('edit-ad-link').value = ad.click_url || '';
+            document.getElementById('edit-ad-media-type').value = ad.media_type || 'image';
+            document.getElementById('edit-ad-image').value = ad.image_url || '';
+            document.getElementById('edit-ad-video').value = ad.video_url || '';
+            document.getElementById('edit-ad-enforced').checked = !!ad.is_enforced;
+
+            editUpdateMediaType();
+            editUpdateImagePreview();
+            editUpdateVideoPreview();
+
+            enableEditTab();
+            switchToTab('edit');
+        }
+
+        // Save edits back to Supabase, then return to the Manage tab.
+        async function updateAdFromForm() {
+            if (!editingAdId) return;
+            const name = document.getElementById('edit-ad-name').value.trim();
+            const link = document.getElementById('edit-ad-link').value.trim();
+            const image = document.getElementById('edit-ad-image').value.trim();
+            const video = document.getElementById('edit-ad-video').value.trim();
+            const mediaType = document.getElementById('edit-ad-media-type').value;
+            const priority = parseInt(document.getElementById('edit-ad-priority').value) || 50;
+            const enforced = document.getElementById('edit-ad-enforced').checked;
+            const messageEl = document.getElementById('dashboard-message');
+
+            const hasVideoURL = video && video.length > 0;
+            const needsImage = !hasVideoURL || mediaType === 'image';
+            if (!name || !link) { showMessage(messageEl, 'Please fill in Ad Name and Target URL', 'error'); return; }
+            if (needsImage && !image) { showMessage(messageEl, 'Please provide either an Image URL or Video/GIF URL', 'error'); return; }
+            if ((mediaType === 'video' || mediaType === 'gif') && !hasVideoURL) { showMessage(messageEl, 'Please provide a Video/GIF URL for video/GIF ads', 'error'); return; }
+
+            const slotMap = { 'square': 'square_1', 'portrait': 'portrait', 'banner': 'banner' };
+            // Preserve the ad's existing slot unless the format actually changed (so a
+            // square_2 ad isn't silently collapsed to square_1 on an unrelated edit).
+            const original = allAds.find(a => String(a.id) === String(editingAdId));
+            let slot = original ? original.slot : slotMap[selectedEditFormat];
+            if (!original || (original.format || '') !== selectedEditFormat) {
+                slot = slotMap[selectedEditFormat];
+            }
+
+            const updates = {
+                name: name,
+                slot: slot,
+                format: selectedEditFormat,
+                image_url: image || '',
+                click_url: link,
+                alt_text: name,
+                is_enforced: enforced,
+                priority: priority,
+                media_type: mediaType,
+                video_url: (video && (mediaType === 'video' || mediaType === 'gif')) ? video : null
+            };
+
+            try {
+                const response = await fetch(`${SUPABASE_URL}/rest/v1/ads?id=eq.${editingAdId}`, {
+                    method: 'PATCH',
+                    headers: {
+                        'apikey': SUPABASE_ANON_KEY,
+                        'Content-Type': 'application/json',
+                        'Prefer': 'return=representation'
+                    },
+                    body: JSON.stringify(updates)
+                });
+                if (response.ok) {
+                    showMessage(messageEl, '✅ Ad updated successfully!', 'success');
+                    finishEdit();
+                    loadAds();
+                    setTimeout(() => messageEl.className = 'message', 3000);
+                } else {
+                    const error = await response.json().catch(() => ({}));
+                    showMessage(messageEl, 'Failed to update: ' + (error.message || JSON.stringify(error)), 'error');
+                }
+            } catch (error) {
+                console.error('Error updating ad:', error);
+                showMessage(messageEl, 'Failed to update ad: ' + error.message, 'error');
+            }
+        }
+
+        function finishEdit() {
+            editingAdId = null;
+            disableEditTab();
+            switchToTab('manage');
+        }
+        function cancelEdit() { finishEdit(); }
+
         // Load ads
         async function loadAds() {
             const grid = document.getElementById('ads-grid');
@@ -1178,11 +1504,12 @@
                                     `<button class="btn btn-sm btn-success" onclick="releaseAd('${ad.id}')">Release</button>` :
                                     `<button class="btn btn-sm btn-danger" onclick="enforceAd('${ad.id}')">📌 Enforce</button>`
                                 }
-                                <button class="btn btn-sm ${ad.is_active ? 'btn-secondary' : 'btn-success'}" 
+                                <button class="btn btn-sm ${ad.is_active ? 'btn-secondary' : 'btn-success'}"
                                         onclick="toggleAd('${ad.id}', ${!ad.is_active})">
                                     ${ad.is_active ? 'Disable' : 'Enable'}
                                 </button>
-                                <button class="btn btn-sm btn-secondary" onclick="deleteAd('${ad.id}')">🗑</button>
+                                <button class="btn btn-sm btn-secondary" onclick="openEditAd('${ad.id}')" title="Edit ad">✏️ Edit</button>
+                                <button class="btn btn-sm btn-secondary" onclick="deleteAd('${ad.id}')" title="Delete ad">🗑</button>
                             </div>
                         </div>
                     </div>
@@ -1227,7 +1554,16 @@
             if (!el) return;
             
             if (ad) {
-                el.innerHTML = `<img src="${ad.image_url}" alt="${ad.name}">`;
+                const hasImage = ad.image_url && ad.image_url.trim().length > 0;
+                if (hasImage) {
+                    // Fall back to a label (not a broken-image icon) if the URL fails to load.
+                    const fallback = ad.media_type === 'gif' ? '🎬 GIF' : (ad.video_url ? '🎥 Video' : 'Ad');
+                    el.innerHTML = `<img src="${ad.image_url}" alt="${ad.name}" onerror="this.parentElement.innerHTML='<div class=\\'empty\\'>${fallback}</div>'">`;
+                } else {
+                    // Video/GIF ad with no static image — show a label instead of a broken image.
+                    const label = ad.media_type === 'gif' ? '🎬 GIF' : (ad.video_url ? '🎥 Video' : 'Ad');
+                    el.innerHTML = `<div class="empty">${label}</div>`;
+                }
                 el.classList.toggle('enforced', ad.is_enforced);
             } else {
                 // Determine placeholder text based on slot type
