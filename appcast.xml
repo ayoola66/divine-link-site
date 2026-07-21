@@ -7,6 +7,27 @@
         <language>en</language>
         
         <!-- Latest Version -->
+
+        <item>
+            <title>Version 1.5.1</title>
+            <sparkle:version>19</sparkle:version>
+            <sparkle:shortVersionString>1.5.1</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Tue, 21 Jul 2026 00:46:40 +0000</pubDate>
+            
+            <description><![CDATA[
+<h2>Smaller download, smarter recognition</h2><ul><li>Divine Link is now a small universal download. On Apple Silicon Macs, the enhanced on-device speech model downloads once on first launch (with a progress bar) and then works fully offline.</li><li>Intel Macs use the built-in speech recogniser automatically — no extra download.</li><li>Reliability improvements and safer fallback when the model is not yet installed.</li></ul>
+
+            ]]></description>
+            
+            <enclosure 
+                url="https://divinelink.netlify.app/releases/DivineLink-1.5.1.zip"
+                length="11347920"
+                type="application/octet-stream"
+                sparkle:edSignature="sparkle:edSignature="k5pOxwYru90dPNgbUlTSm6lfv7Twswm0pjaRsfAF+XMOp5hfKLl59l+QUin+fRmhjZY3KdhecuzWqg+RY5ykBw==" length="11347920""
+            />
+        </item>
+
         <item>
             <title>Version 1.4.0</title>
             <sparkle:version>17</sparkle:version>
