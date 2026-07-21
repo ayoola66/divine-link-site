@@ -928,17 +928,30 @@
     
     <script>
         // Configuration
-        const SUPABASE_URL = 'https://qzjhjgkvvcamcqpdrgkf.supabase.co';
-        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6amhqZ2t2dmNhbWNxcGRyZ2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4ODM0NzMsImV4cCI6MjA4NTQ1OTQ3M30.IQYO9V99IO7hubM87nVL14l6qaxvjNTKllDz2sXk6aU';
-        
+        // No Supabase keys live in this page any more. All ad management goes through the
+        // token-gated /api/admin-ads function, which uses the service-role key server-side.
+
         let selectedFormat = 'square';
         let selectedEditFormat = 'square';
         let editingAdId = null;
         let allAds = [];
         
-        // Check session
-        if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+        // Check session — a valid token must be present (set only by a successful login).
+        if (sessionStorage.getItem('adminToken')) {
             showDashboard();
+        }
+
+        // Attach the admin session token to every ad-management request.
+        function adminAuthHeaders(extra) {
+            const h = extra || {};
+            h['Authorization'] = 'Bearer ' + (sessionStorage.getItem('adminToken') || '');
+            return h;
+        }
+        // Token invalid/expired -> clear it and send the user back to the login screen.
+        function handleAuthFailure() {
+            sessionStorage.removeItem('adminToken');
+            alert('Your admin session has expired. Please log in again.');
+            location.reload();
         }
         
         // Tab switching
@@ -975,7 +988,8 @@
                     body: JSON.stringify({ password })
                 });
                 const data = await res.json().catch(() => ({}));
-                if (res.ok && data.ok) {
+                if (res.ok && data.ok && data.token) {
+                    sessionStorage.setItem('adminToken', data.token);
                     showDashboard();
                 } else if (res.status === 503) {
                     showMessage(messageEl, 'Admin login not configured yet — set ADMIN_PASSWORD in Netlify.', 'error');
@@ -990,12 +1004,11 @@
         function showDashboard() {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('admin-dashboard').style.display = 'block';
-            sessionStorage.setItem('adminLoggedIn', 'true');
             loadAds();
         }
-        
+
         function logout() {
-            sessionStorage.removeItem('adminLoggedIn');
+            sessionStorage.removeItem('adminToken');
             location.reload();
         }
         
@@ -1192,16 +1205,13 @@
             }
             
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/ads`, {
+                const response = await fetch('/api/admin-ads', {
                     method: 'POST',
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    },
+                    headers: adminAuthHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify(adData)
                 });
-                
+                if (response.status === 401) { handleAuthFailure(); return; }
+
                 if (response.ok) {
                     showMessage(messageEl, '✅ Ad created successfully!', 'success');
                     clearForm();
@@ -1417,15 +1427,12 @@
             };
 
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/ads?id=eq.${editingAdId}`, {
+                const response = await fetch(`/api/admin-ads?id=${encodeURIComponent(editingAdId)}`, {
                     method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Content-Type': 'application/json',
-                        'Prefer': 'return=representation'
-                    },
+                    headers: adminAuthHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify(updates)
                 });
+                if (response.status === 401) { handleAuthFailure(); return; }
                 if (response.ok) {
                     showMessage(messageEl, '✅ Ad updated successfully!', 'success');
                     finishEdit();
@@ -1453,13 +1460,11 @@
             const grid = document.getElementById('ads-grid');
             
             try {
-                const response = await fetch(`${SUPABASE_URL}/rest/v1/ads?order=created_at.desc`, {
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Content-Type': 'application/json'
-                    }
+                const response = await fetch('/api/admin-ads', {
+                    headers: adminAuthHeaders({ 'Content-Type': 'application/json' })
                 });
-                
+                if (response.status === 401) { handleAuthFailure(); return; }
+
                 allAds = await response.json();
                 
                 // Update stats
@@ -1634,14 +1639,12 @@
         // Update ad
         async function updateAd(id, updates) {
             try {
-                await fetch(`${SUPABASE_URL}/rest/v1/ads?id=eq.${id}`, {
+                const r = await fetch(`/api/admin-ads?id=${encodeURIComponent(id)}`, {
                     method: 'PATCH',
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY,
-                        'Content-Type': 'application/json'
-                    },
+                    headers: adminAuthHeaders({ 'Content-Type': 'application/json' }),
                     body: JSON.stringify(updates)
                 });
+                if (r.status === 401) { handleAuthFailure(); return; }
                 loadAds();
             } catch (error) {
                 console.error('Error updating ad:', error);
@@ -1653,12 +1656,11 @@
             if (!confirm('Are you sure you want to delete this ad?')) return;
             
             try {
-                await fetch(`${SUPABASE_URL}/rest/v1/ads?id=eq.${id}`, {
+                const r = await fetch(`/api/admin-ads?id=${encodeURIComponent(id)}`, {
                     method: 'DELETE',
-                    headers: {
-                        'apikey': SUPABASE_ANON_KEY
-                    }
+                    headers: adminAuthHeaders()
                 });
+                if (r.status === 401) { handleAuthFailure(); return; }
                 loadAds();
             } catch (error) {
                 console.error('Error deleting ad:', error);

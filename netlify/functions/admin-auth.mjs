@@ -1,11 +1,11 @@
-// Server-side admin password check.
+import crypto from "node:crypto";
+
+// Server-side admin login. On the correct password it returns a short-lived signed
+// session token; the admin dashboard then sends that token to /api/admin-ads for every
+// create/edit/delete. The password lives ONLY in the ADMIN_PASSWORD env var and the
+// token is signed with ADMIN_SESSION_SECRET — neither is ever exposed to the browser.
 //
-// The password lives ONLY in the Netlify environment variable ADMIN_PASSWORD
-// (Site configuration -> Environment variables). It is never sent to the browser
-// and never committed to the repo. The admin page POSTs the entered password here
-// and only receives { ok: true|false } back.
-//
-// POST /api/admin-auth   body: { "password": "..." }  ->  { ok: boolean }
+// POST /api/admin-auth   body: { "password": "..." }  ->  { ok, token }
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -15,12 +15,20 @@ const CORS = {
   "Cache-Control": "no-store",
 };
 
-// Constant-time string compare so response timing doesn't leak the password.
+const SESSION_HOURS = 8;
+
 function safeEqual(a, b) {
   if (typeof a !== "string" || typeof b !== "string" || a.length !== b.length) return false;
   let diff = 0;
   for (let i = 0; i < a.length; i++) diff |= a.charCodeAt(i) ^ b.charCodeAt(i);
   return diff === 0;
+}
+
+// token = base64url(JSON{exp}) + "." + HMAC-SHA256(payload, secret)
+function issueToken(secret) {
+  const payload = Buffer.from(JSON.stringify({ exp: Date.now() + SESSION_HOURS * 3600 * 1000 })).toString("base64url");
+  const sig = crypto.createHmac("sha256", secret).update(payload).digest("base64url");
+  return payload + "." + sig;
 }
 
 export default async (req) => {
@@ -30,9 +38,10 @@ export default async (req) => {
   }
 
   const expected = process.env.ADMIN_PASSWORD;
-  if (!expected) {
+  const secret = process.env.ADMIN_SESSION_SECRET;
+  if (!expected || !secret) {
     return new Response(
-      JSON.stringify({ ok: false, error: "Admin password not configured. Set ADMIN_PASSWORD in Netlify env." }),
+      JSON.stringify({ ok: false, error: "Admin auth not fully configured (need ADMIN_PASSWORD + ADMIN_SESSION_SECRET in Netlify env)." }),
       { status: 503, headers: CORS }
     );
   }
@@ -41,10 +50,13 @@ export default async (req) => {
   try {
     const body = await req.json();
     password = String(body?.password ?? "");
-  } catch { /* empty / bad body -> treated as wrong password */ }
+  } catch { /* bad body -> wrong password */ }
 
-  const ok = safeEqual(password, expected);
-  return new Response(JSON.stringify({ ok }), { status: ok ? 200 : 401, headers: CORS });
+  if (!safeEqual(password, expected)) {
+    return new Response(JSON.stringify({ ok: false }), { status: 401, headers: CORS });
+  }
+
+  return new Response(JSON.stringify({ ok: true, token: issueToken(secret) }), { status: 200, headers: CORS });
 };
 
 export const config = { path: "/api/admin-auth" };
