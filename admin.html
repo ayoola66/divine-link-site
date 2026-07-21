@@ -857,11 +857,24 @@
                 return;
             }
             
-            // Simple password check - in production use proper auth
-            if (password === 'DivineLink2026!' || password === 'admin') {
-                showDashboard();
-            } else {
-                showMessage(messageEl, 'Invalid password', 'error');
+            // Validated SERVER-SIDE by the /api/admin-auth Netlify function against the
+            // ADMIN_PASSWORD env var. No password is stored in this page or the repo.
+            try {
+                const res = await fetch('/api/admin-auth', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ password })
+                });
+                const data = await res.json().catch(() => ({}));
+                if (res.ok && data.ok) {
+                    showDashboard();
+                } else if (res.status === 503) {
+                    showMessage(messageEl, 'Admin login not configured yet — set ADMIN_PASSWORD in Netlify.', 'error');
+                } else {
+                    showMessage(messageEl, 'Invalid password', 'error');
+                }
+            } catch (e) {
+                showMessage(messageEl, 'Login failed — network error, please try again', 'error');
             }
         }
         
