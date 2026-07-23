@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "versions": [
+    {
+      "id": "WEBBE",
+      "name": "World English Bible (British Edition)",
+      "year": 2000,
+      "tier": "premium",
+      "downloadable": true,
+      "verse_count": 31098,
+      "file": "WEBBE.sqlite",
+      "file_size": 5423104,
+      "sha256": "99efc8ff45c91581a12e859dc61e9da82f148cd51b7e366e9651537f755b2d48",
+      "requires_attribution": false,
+      "attribution_text": "World English Bible British Edition (public domain).",
+      "sort_order": 6,
+      "download_url": "https://divinelink.netlify.app/bibles/WEBBE.sqlite"
+    },
+    {
+      "id": "YLT",
+      "name": "Young's Literal Translation",
+      "year": 1898,
+      "tier": "premium",
+      "downloadable": true,
+      "verse_count": 31102,
+      "file": "YLT.sqlite",
+      "file_size": 5439488,
+      "sha256": "8d4e6af785f36ff1ac5e165bb5d1411cb110de88bb238ffb093b257b408adf94",
+      "requires_attribution": false,
+      "attribution_text": null,
+      "sort_order": 7,
+      "download_url": "https://divinelink.netlify.app/bibles/YLT.sqlite"
+    },
+    {
+      "id": "DBY",
+      "name": "Darby Translation",
+      "year": 1890,
+      "tier": "premium",
+      "downloadable": true,
+      "verse_count": 31099,
+      "file": "DBY.sqlite",
+      "file_size": 5369856,
+      "sha256": "ac74bdd9363a416e16dd3cf5bf64944b2b61ea83aa56a43573b74e6d36d99ac6",
+      "requires_attribution": false,
+      "attribution_text": null,
+      "sort_order": 8,
+      "download_url": "https://divinelink.netlify.app/bibles/DBY.sqlite"
+    },
+    {
+      "id": "DRA",
+      "name": "Douay-Rheims 1899",
+      "year": 1899,
+      "tier": "premium",
+      "downloadable": true,
+      "verse_count": 31438,
+      "file": "DRA.sqlite",
+      "file_size": 5378048,
+      "sha256": "68d1a5f1645f9090e8c155a57dac330136eef05a9f930bac9ba87f4e812536cf",
+      "requires_attribution": false,
+      "attribution_text": null,
+      "sort_order": 9,
+      "download_url": "https://divinelink.netlify.app/bibles/DRA.sqlite"
+    },
+    {
+      "id": "BBE",
+      "name": "Bible in Basic English",
+      "year": 1949,
+      "tier": "premium",
+      "downloadable": true,
+      "verse_count": 31102,
+      "file": "BBE.sqlite",
+      "file_size": 5435392,
+      "sha256": "4f06306179553db954e83f1889a1e26d33fac46398377196424ce6d9e9ea16b7",
+      "requires_attribution": false,
+      "attribution_text": "Bible in Basic English (public domain).",
+      "sort_order": 10,
+      "download_url": "https://divinelink.netlify.app/bibles/BBE.sqlite"
+    }
+  ]
+}

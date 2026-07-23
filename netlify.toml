@@ -17,6 +17,19 @@
     Content-Type = "application/zip"
     Content-Disposition = "attachment"
 
+# Headers for downloadable Bible version files (premium translations, fetched on demand)
+[[headers]]
+  for = "/bibles/*.sqlite"
+  [headers.values]
+    Content-Type = "application/octet-stream"
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/bibles/catalog.json"
+  [headers.values]
+    Content-Type = "application/json"
+    Cache-Control = "public, max-age=300"
+
 # Ensure HTML files are served correctly
 [[headers]]
   for = "/*.html"
