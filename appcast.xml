@@ -9,6 +9,26 @@
         <!-- Latest Version -->
 
         <item>
+            <title>Version 1.6.0</title>
+            <sparkle:version>21</sparkle:version>
+            <sparkle:shortVersionString>1.6.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Sun, 26 Jul 2026 22:14:26 +0000</pubDate>
+            
+            <description><![CDATA[
+<h2>10 Bible versions, free registration &amp; account management</h2><ul><li>Ten Bible versions: three free (KJV, WEB, ASV), plus the Berean Standard Bible and Literal Standard Version unlocked when you create a free account — and five more with Premium.</li><li>Create a free account with just your email (we send a code, no password) to unlock two extra versions.</li><li>Premium: download only the versions you want in Settings &rarr; Bible Versions, and manage your billing — address, payment method, invoices — right from the app.</li><li>Edit your name and church in Account settings; your billing details are pulled in automatically from Stripe.</li><li>Reliability fixes and a smoother sign-in.</li></ul>
+
+            ]]></description>
+            
+            <enclosure 
+                url="https://divinelink.netlify.app/releases/DivineLink-1.6.0.zip"
+                length="15194198"
+                type="application/octet-stream"
+                sparkle:edSignature="PFQCbjod6/ZPD02iKjVyQCZ6hr1sHSgn1/+uT+6Ha5DHLUJ0PBruDy13z7SdstbHDsharDFcBvALZsXq5HqgCw=="
+            />
+        </item>
+
+        <item>
             <title>Version 1.5.2</title>
             <sparkle:version>20</sparkle:version>
             <sparkle:shortVersionString>1.5.2</sparkle:shortVersionString>
