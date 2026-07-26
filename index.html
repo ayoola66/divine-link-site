@@ -56,7 +56,7 @@
                 "name": "Mercy (Free)",
                 "price": "0",
                 "priceCurrency": "GBP",
-                "description": "Free tier with live speech detection, KJV translation, Push to Stage Screen, 8 sessions per month"
+                "description": "Free tier with live speech detection, 3 Bible versions, Push to Stage Screen"
             },
             {
                 "@type": "Offer",
@@ -78,14 +78,14 @@
                     "@type": "UnitPriceSpecification",
                     "billingDuration": "P1M"
                 },
-                "description": "Pro tier with 5 pastor profiles, session history, speech corrections, auto-advance slideshow, church site licence"
+                "description": "Pro tier with 5 pastor profiles, session history, speech corrections, church site licence"
             }
         ],
         "featureList": [
             "Real-time Bible verse detection during live preaching",
             "ProPresenter 7 integration via Messages API",
-            "Local-first processing — sermons never leave your Mac",
-            "10+ Bible translations including KJV, ESV, NIV, NASB, NLT",
+            "On-device transcription — sermon audio never leaves your Mac",
+            "10 Bible versions including KJV, WEB, ASV, and the Berean Standard Bible",
             "Human-in-the-loop verification before display",
             "Pastor profiles with speech correction dictionaries",
             "Multi-verse range detection and navigation",
@@ -1739,7 +1739,7 @@
                         <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>
                     </div>
                     <h3>Multiple Translations</h3>
-                    <p>Access KJV, ESV, NIV, NASB, NLT, and more. Switch between translations to match your church's preference.</p>
+                    <p>Access up to 10 versions — KJV, WEB, ASV, Berean Standard Bible, Literal Standard Version, and more. Switch between translations to match your church's preference.</p>
                 </div>
                 <div class="feature-card reveal">
                     <div class="feature-icon">
@@ -1914,15 +1914,14 @@
                     <ul>
                         <li><span class="check">✓</span> Live speech detection</li>
                         <li><span class="check">✓</span> Full detection algorithm</li>
-                        <li><span class="check">✓</span> KJV translation</li>
                         <li><span class="check">✓</span> Push to Stage Screen</li>
                         <li><span class="check">✓</span> Multi-verse display</li>
-                        <li><span class="check">✓</span> 8 sessions per month</li>
-                        <li><span class="check">✓</span> Unlimited detections</li>
+                        <li><span class="check">✓</span> Unlimited sessions &amp; detections</li>
                         <li style="color: var(--text-muted);"><span style="color: #f59e0b; margin-right: 12px;">ℹ</span> Includes sidebar ads</li>
                         <li class="disabled"><span class="cross">✗</span> Push to Audience Screen (API)</li>
                         <li style="color: var(--text-muted); font-size: 0.9em;"><span style="color: #f59e0b; margin-right: 8px;">ℹ</span> Keyboard automation available</li>
-                        <li class="disabled"><span class="cross">✗</span> Additional translations</li>
+                        <li><span class="check">✓</span> 3 Bible versions (KJV, WEB, ASV)</li>
+                        <li><span class="check">✓</span> <strong>+2 free versions with a free account</strong> (BSB &amp; LSV)</li>
                     </ul>
                     <div class="card-screenshot" style="margin-bottom: 20px;">
                         <img src="/screenshots/07-free-tier-with-ads.png" alt="Divine Link free tier showing sidebar ads">
@@ -1976,7 +1975,6 @@
                         <li><span class="check">✓</span> <strong>Session history &amp; export</strong></li>
                         <li><span class="check">✓</span> Speech corrections per pastor</li>
                         <li><span class="check">✓</span> Implicit verse detection</li>
-                        <li><span class="check">✓</span> Auto-advance slideshow</li>
                         <li><span class="check">✓</span> Use on 5 devices</li>
                         <li><span class="check">✓</span> Priority support</li>
                         <li><span class="check">✓</span> Church site licence</li>
@@ -2015,15 +2013,13 @@
                         <tr><td>Push to Audience Screen</td><td>Keyboard only</td><td class="check">Messages API</td><td class="check">Messages API</td></tr>
                         <tr><td>Direct API integration</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
                         <tr><td>Background-safe (no window focus)</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
-                        <tr><td>Bible translations</td><td>KJV only</td><td>All (10+)</td><td>All (10+)</td></tr>
-                        <tr><td>Sessions per month</td><td>8</td><td>Unlimited</td><td>Unlimited</td></tr>
-                        <tr><td>Verse-by-verse push</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
+                        <tr><td>Bible versions</td><td>3 free · 5 with free account</td><td>All 10</td><td>All 10</td></tr>                        <tr><td>Verse-by-verse push</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
                         <tr><td>Verse navigation (◀ ▶)</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
                         <tr><td>Pastor profiles</td><td>0</td><td>2</td><td>5</td></tr>
                         <tr><td>Session history &amp; export</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
                         <tr><td>Speech corrections</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
                         <tr><td>Implicit verse detection</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
-                        <tr><td>Auto-advance slideshow</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
+                        <tr><td>Session history &amp; export (CSV)</td><td class="cross">✗</td><td class="cross">✗</td><td class="check">✓</td></tr>
                         <tr><td>Devices included</td><td>1</td><td>2</td><td>5</td></tr>
                         <tr><td>Support</td><td>Community</td><td>Email</td><td>Priority</td></tr>
                         <tr><td>In-app Contact Support</td><td class="cross">✗</td><td class="check">✓</td><td class="check">✓</td></tr>
@@ -2056,8 +2052,8 @@
                     <div class="why-icon">
                         <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
                     </div>
-                    <h3>100% Local-First</h3>
-                    <p><strong>No cloud dependencies.</strong> Your sermons never leave your Mac. Complete privacy, zero latency, works offline. Competitors require cloud connectivity.</p>
+                    <h3>On-Device Transcription</h3>
+                    <p><strong>Your sermon audio is never uploaded.</strong> Transcription runs on your Mac with zero latency, and works offline between periodic licence checks. Divine Link goes online only for sign-in, updates, and licence — never your sermons. Competitors upload your audio to the cloud.</p>
                 </div>
                 <!-- Task 7: highlight-stat moved inside <p>, no longer breaking grid rhythm -->
                 <div class="why-card reveal">
