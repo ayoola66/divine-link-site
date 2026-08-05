@@ -9,6 +9,26 @@
         <!-- Latest Version -->
 
         <item>
+            <title>Version 1.6.2</title>
+            <sparkle:version>23</sparkle:version>
+            <sparkle:shortVersionString>1.6.2</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Wed, 05 Aug 2026 16:06:29 +0000</pubDate>
+            
+            <description><![CDATA[
+<h2>What's New in 1.6.2</h2><ul><li>First change, plain language, what it fixes for the user</li><li>Second change</li></ul>
+
+            ]]></description>
+            
+            <enclosure 
+                url="https://divinelink.netlify.app/releases/DivineLink-1.6.2.zip"
+                length="15210648"
+                type="application/octet-stream"
+                sparkle:edSignature="zE6vAKi61TNnA18UYFIPmIPb7rR790HdJAcJLVk96LQRaVkrY3L1usxQbVfqxLbHcK/3OWM/7hSnNWgLCxtbBA=="
+            />
+        </item>
+
+        <item>
             <title>Version 1.6.1</title>
             <sparkle:version>22</sparkle:version>
             <sparkle:shortVersionString>1.6.1</sparkle:shortVersionString>
