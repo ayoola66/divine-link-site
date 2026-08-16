@@ -9,6 +9,28 @@
         <!-- Latest Version -->
 
         <item>
+            <title>Version 1.7.0</title>
+            <sparkle:version>24</sparkle:version>
+            <sparkle:shortVersionString>1.7.0</sparkle:shortVersionString>
+            <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+            <pubDate>Sun, 16 Aug 2026 11:06:12 +0000</pubDate>
+            
+            <description><![CDATA[
+<h2>Version 1.7.0</h2>
+                <ul>
+                    <li>Bug fixes and improvements</li>
+                </ul>
+            ]]></description>
+            
+            <enclosure 
+                url="https://divinelink.netlify.app/releases/DivineLink-1.7.0.zip"
+                length="15309600"
+                type="application/octet-stream"
+                sparkle:edSignature="QbGYQ3EVpN/2stEFLeanmlOZNqRh7b7+oY/32l5s9HihJiIOom4G+Llk93cxNirPUU9wUF9Qtv7IWCULAzaAAg=="
+            />
+        </item>
+
+        <item>
             <title>Version 1.6.2</title>
             <sparkle:version>23</sparkle:version>
             <sparkle:shortVersionString>1.6.2</sparkle:shortVersionString>
@@ -16,7 +38,7 @@
             <pubDate>Wed, 05 Aug 2026 16:06:29 +0000</pubDate>
             
             <description><![CDATA[
-<h2>What's New in 1.6.2</h2><ul><li>First change, plain language, what it fixes for the user</li><li>Second change</li></ul>
+<h2>What's New in 1.6.2</h2><ul><li>ProPresenter Setup: choose Same Machine or Two Machines so the app only offers outputs that actually work for your rig.</li><li>Two Machines mode is a Premium feature and hides Keyboard Automation, since it can't reach an app on a different Mac.</li></ul>
 
             ]]></description>
             
