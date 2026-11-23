@@ -1,15 +1,4 @@
-// Create a Stripe Billing Portal session for a signed-in premium user, so they can update
-// their billing address, payment method, invoices, and cancel/renew — all on Stripe's hosted,
-// PCI-safe page. The app opens the returned URL in the browser.
-//
-// POST /api/stripe-portal
-//   headers: Authorization: Bearer <supabase access token>
-//   body:    { "customerId": "cus_..." }
-//   -> { url }   (Stripe portal URL)
-//
-// Requires Netlify env: STRIPE_SECRET_KEY (owner adds), SUPABASE_URL (optional, has default).
-// The Supabase token is validated against Supabase so only real logged-in users can create a
-// session, and the Stripe portal only ever exposes the passed customer's own billing.
+import { billingAccount } from "../lib/billing-account.ts";
 
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -19,11 +8,6 @@ const CORS = {
   "Cache-Control": "no-store",
 };
 
-const SUPABASE_URL = process.env.SUPABASE_URL || "https://qzjhjgkvvcamcqpdrgkf.supabase.co";
-// Public anon key (safe to embed — same one shipped in the macOS app's SupabaseConfig.swift).
-// Required by Supabase's /auth/v1/user as the `apikey` header; it identifies the CALLING
-// PROJECT, not the user — it is NOT a substitute for the user's own bearer token below.
-const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InF6amhqZ2t2dmNhbWNxcGRyZ2tmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk4ODM0NzMsImV4cCI6MjA4NTQ1OTQ3M30.IQYO9V99IO7hubM87nVL14l6qaxvjNTKllDz2sXk6aU";
 const RETURN_URL = "https://divinelink.netlify.app/account-updated.html";
 
 export default async (req) => {
@@ -35,34 +19,16 @@ export default async (req) => {
   const stripeKey = process.env.STRIPE_SECRET_KEY;
   if (!stripeKey) {
     return new Response(
-      JSON.stringify({ error: "Billing portal not configured. Set STRIPE_SECRET_KEY in Netlify env." }),
+      JSON.stringify({ error: "Billing service is unavailable." }),
       { status: 503, headers: CORS }
     );
   }
 
-  // Require a valid Supabase session — validate the token against Supabase.
-  const token = (req.headers.get("authorization") || "").replace(/^Bearer\s+/i, "");
-  if (!token) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: CORS });
+  const account = await billingAccount(req);
+  if ("error" in account) {
+    return new Response(JSON.stringify({ error: account.error }), { status: account.status, headers: CORS });
   }
-  try {
-    const who = await fetch(`${SUPABASE_URL}/auth/v1/user`, {
-      headers: { Authorization: `Bearer ${token}`, apikey: SUPABASE_ANON_KEY },
-    });
-    if (who.status !== 200) {
-      return new Response(JSON.stringify({ error: "Invalid session" }), { status: 401, headers: CORS });
-    }
-  } catch {
-    return new Response(JSON.stringify({ error: "Auth check failed" }), { status: 502, headers: CORS });
-  }
-
-  let customerId = "";
-  try {
-    customerId = String((await req.json())?.customerId ?? "");
-  } catch { /* handled below */ }
-  if (!customerId.startsWith("cus_")) {
-    return new Response(JSON.stringify({ error: "No billing account found for this user." }), { status: 400, headers: CORS });
-  }
+  const { customerId } = account;
 
   // Create the portal session via Stripe's REST API (no SDK dependency needed).
   try {
@@ -77,11 +43,11 @@ export default async (req) => {
     });
     const data = await res.json();
     if (!res.ok || !data.url) {
-      return new Response(JSON.stringify({ error: data?.error?.message || "Could not open billing portal." }), { status: 502, headers: CORS });
+      return new Response(JSON.stringify({ error: "Could not open billing portal." }), { status: 502, headers: CORS });
     }
     return new Response(JSON.stringify({ url: data.url }), { status: 200, headers: CORS });
-  } catch (err) {
-    return new Response(JSON.stringify({ error: String(err?.message || err) }), { status: 502, headers: CORS });
+  } catch {
+    return new Response(JSON.stringify({ error: "Billing service is unavailable." }), { status: 502, headers: CORS });
   }
 };
 

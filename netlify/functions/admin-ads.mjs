@@ -12,10 +12,7 @@ import crypto from "node:crypto";
 //   DELETE /api/admin-ads?id=<id>  -> delete
 // All require header: Authorization: Bearer <token>
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "GET, POST, PATCH, DELETE, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+const HEADERS = {
   "Content-Type": "application/json",
   "Cache-Control": "no-store",
 };
@@ -42,22 +39,25 @@ function verifyToken(token, secret) {
   }
 }
 
-export default async (req) => {
-  if (req.method === "OPTIONS") return new Response("", { headers: CORS });
+export default async (req, context) => {
+  const allowedIPs = process.env.ADMIN_ALLOWED_IPS;
+  if (allowedIPs && !allowedIPs.split(",").some(ip => ip.trim() === context?.ip)) {
+    return new Response(null, { status: 404, headers: HEADERS });
+  }
 
   const secret = process.env.ADMIN_SESSION_SECRET;
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!secret || !serviceKey) {
     return new Response(
-      JSON.stringify({ error: "Server not configured (need ADMIN_SESSION_SECRET + SUPABASE_SERVICE_ROLE_KEY in Netlify env)." }),
-      { status: 503, headers: CORS }
+      JSON.stringify({ error: "Admin service unavailable." }),
+      { status: 503, headers: HEADERS }
     );
   }
 
   const auth = req.headers.get("authorization") || "";
   const token = auth.replace(/^Bearer\s+/i, "");
   if (!verifyToken(token, secret)) {
-    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: CORS });
+    return new Response(JSON.stringify({ error: "Unauthorized" }), { status: 401, headers: HEADERS });
   }
 
   const id = new URL(req.url).searchParams.get("id");
@@ -76,20 +76,22 @@ export default async (req) => {
       const body = await req.text();
       sbRes = await fetch(base, { method: "POST", headers: { ...sbHeaders, Prefer: "return=representation" }, body });
     } else if (req.method === "PATCH") {
-      if (!id) return new Response(JSON.stringify({ error: "Missing id" }), { status: 400, headers: CORS });
+      if (!id) return new Response(JSON.stringify({ error: "Missing id" }), { status: 400, headers: HEADERS });
       const body = await req.text();
       sbRes = await fetch(`${base}?id=eq.${encodeURIComponent(id)}`, { method: "PATCH", headers: { ...sbHeaders, Prefer: "return=representation" }, body });
     } else if (req.method === "DELETE") {
-      if (!id) return new Response(JSON.stringify({ error: "Missing id" }), { status: 400, headers: CORS });
+      if (!id) return new Response(JSON.stringify({ error: "Missing id" }), { status: 400, headers: HEADERS });
       sbRes = await fetch(`${base}?id=eq.${encodeURIComponent(id)}`, { method: "DELETE", headers: sbHeaders });
     } else {
-      return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: CORS });
+      return new Response(JSON.stringify({ error: "Method not allowed" }), { status: 405, headers: HEADERS });
     }
 
+    if (sbRes.status === 204) return new Response(null, { status: 204, headers: HEADERS });
+    if (!sbRes.ok) return new Response(JSON.stringify({ error: "Ad request failed." }), { status: sbRes.status, headers: HEADERS });
     const text = await sbRes.text();
-    return new Response(text || "[]", { status: sbRes.status, headers: CORS });
-  } catch (err) {
-    return new Response(JSON.stringify({ error: String(err?.message || err) }), { status: 502, headers: CORS });
+    return new Response(text || "[]", { status: sbRes.status, headers: HEADERS });
+  } catch {
+    return new Response(JSON.stringify({ error: "Ad service unavailable." }), { status: 502, headers: HEADERS });
   }
 };
 

@@ -7,10 +7,7 @@ import crypto from "node:crypto";
 //
 // POST /api/admin-auth   body: { "password": "..." }  ->  { ok, token }
 
-const CORS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type",
+const HEADERS = {
   "Content-Type": "application/json",
   "Cache-Control": "no-store",
 };
@@ -31,18 +28,21 @@ function issueToken(secret) {
   return payload + "." + sig;
 }
 
-export default async (req) => {
-  if (req.method === "OPTIONS") return new Response("", { headers: CORS });
+export default async (req, context) => {
+  const allowedIPs = process.env.ADMIN_ALLOWED_IPS;
+  if (allowedIPs && !allowedIPs.split(",").some(ip => ip.trim() === context?.ip)) {
+    return new Response(null, { status: 404, headers: HEADERS });
+  }
   if (req.method !== "POST") {
-    return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), { status: 405, headers: CORS });
+    return new Response(JSON.stringify({ ok: false, error: "Method not allowed" }), { status: 405, headers: HEADERS });
   }
 
   const expected = process.env.ADMIN_PASSWORD;
   const secret = process.env.ADMIN_SESSION_SECRET;
   if (!expected || !secret) {
     return new Response(
-      JSON.stringify({ ok: false, error: "Admin auth not fully configured (need ADMIN_PASSWORD + ADMIN_SESSION_SECRET in Netlify env)." }),
-      { status: 503, headers: CORS }
+      JSON.stringify({ ok: false, error: "Admin service unavailable." }),
+      { status: 503, headers: HEADERS }
     );
   }
 
@@ -53,10 +53,13 @@ export default async (req) => {
   } catch { /* bad body -> wrong password */ }
 
   if (!safeEqual(password, expected)) {
-    return new Response(JSON.stringify({ ok: false }), { status: 401, headers: CORS });
+    return new Response(JSON.stringify({ ok: false }), { status: 401, headers: HEADERS });
   }
 
-  return new Response(JSON.stringify({ ok: true, token: issueToken(secret) }), { status: 200, headers: CORS });
+  return new Response(JSON.stringify({ ok: true, token: issueToken(secret) }), { status: 200, headers: HEADERS });
 };
 
-export const config = { path: "/api/admin-auth" };
+export const config = {
+  path: "/api/admin-auth",
+  rateLimit: { windowLimit: 8, windowSize: 60, aggregateBy: ["ip", "domain"] },
+};

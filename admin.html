@@ -1020,6 +1020,20 @@
             });
         }
         
+        function escapeHTML(value) {
+            const entities = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
+            return String(value ?? '').replace(/[&<>"']/g, character => entities[character]);
+        }
+
+        function previewURL(value) {
+            try {
+                const url = new URL(value);
+                return url.protocol === 'https:' ? url.href : '';
+            } catch {
+                return '';
+            }
+        }
+
         // Media type change handler
         function updateMediaType() {
             const mediaType = document.getElementById('ad-media-type').value;
@@ -1072,7 +1086,7 @@
                 videoPreview.style.display = 'none';
                 
                 if (url) {
-                    imagePreview.innerHTML = `<img src="${url}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
+                    imagePreview.innerHTML = `<img src="${escapeHTML(previewURL(url))}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
                 } else {
                     imagePreview.innerHTML = '<span class="placeholder">Preview</span>';
                 }
@@ -1127,16 +1141,16 @@
                         videoID = url.split('embed/')[1].split('?')[0].split('&')[0];
                     }
                     
-                    if (videoID) {
+                    if (/^[A-Za-z0-9_-]{11}$/.test(videoID)) {
                         const embedURL = `https://www.youtube.com/embed/${videoID}?autoplay=0&loop=1&playlist=${videoID}&mute=1&controls=0&modestbranding=1`;
                         videoPreview.innerHTML = `<iframe src="${embedURL}" style="width: 100%; height: 100%; border-radius: 8px; border: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                     } else {
                         videoPreview.innerHTML = '<span class="placeholder" style="color: var(--danger);">Invalid URL</span>';
                     }
                 } else if (mediaType === 'gif') {
-                    videoPreview.innerHTML = `<img src="${url}" alt="GIF" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
+                    videoPreview.innerHTML = `<img src="${escapeHTML(previewURL(url))}" alt="GIF" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
                 } else {
-                    videoPreview.innerHTML = `<video src="${url}" autoplay loop muted style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'"></video>`;
+                    videoPreview.innerHTML = `<video src="${escapeHTML(previewURL(url))}" autoplay loop muted style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'"></video>`;
                 }
             } else {
                 // No video URL, show image preview if we have image type or URL
@@ -1306,7 +1320,7 @@
                 imagePreview.style.display = 'flex';
                 videoPreview.style.display = 'none';
                 if (url) {
-                    imagePreview.innerHTML = `<img src="${url}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
+                    imagePreview.innerHTML = `<img src="${escapeHTML(previewURL(url))}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
                 } else {
                     imagePreview.innerHTML = '<span class="placeholder">Preview</span>';
                 }
@@ -1340,16 +1354,16 @@
                     else if (url.includes('youtu.be/')) videoID = url.split('youtu.be/')[1].split('?')[0].split('&')[0];
                     else if (url.includes('watch?v=')) videoID = url.split('watch?v=')[1].split('&')[0].split('#')[0];
                     else if (url.includes('embed/')) videoID = url.split('embed/')[1].split('?')[0].split('&')[0];
-                    if (videoID) {
+                    if (/^[A-Za-z0-9_-]{11}$/.test(videoID)) {
                         const embedURL = `https://www.youtube.com/embed/${videoID}?autoplay=0&loop=1&playlist=${videoID}&mute=1&controls=0&modestbranding=1`;
                         videoPreview.innerHTML = `<iframe src="${embedURL}" style="width: 100%; height: 100%; border-radius: 8px; border: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
                     } else {
                         videoPreview.innerHTML = '<span class="placeholder" style="color: var(--danger);">Invalid URL</span>';
                     }
                 } else if (mediaType === 'gif') {
-                    videoPreview.innerHTML = `<img src="${url}" alt="GIF" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
+                    videoPreview.innerHTML = `<img src="${escapeHTML(previewURL(url))}" alt="GIF" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
                 } else {
-                    videoPreview.innerHTML = `<video src="${url}" autoplay loop muted style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'"></video>`;
+                    videoPreview.innerHTML = `<video src="${escapeHTML(previewURL(url))}" autoplay loop muted style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'"></video>`;
                 }
             } else {
                 videoPreview.style.display = 'none';
@@ -1487,22 +1501,22 @@
                     return;
                 }
                 
-                grid.innerHTML = allAds.map(ad => `
+                grid.innerHTML = allAds.filter(ad => /^[0-9a-f]{8}(?:-[0-9a-f]{4}){3}-[0-9a-f]{12}$/i.test(ad.id)).map(ad => `
                     <div class="ad-card ${ad.is_enforced ? 'enforced' : ''}">
                         <div class="ad-card-image">
-                            <img src="${ad.image_url}" alt="${ad.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22><rect fill=%22%23333%22 width=%22100%%22 height=%22100%%22/><text x=%2250%%22 y=%2250%%22 fill=%22%23666%22 text-anchor=%22middle%22 dy=%22.3em%22>No Image</text></svg>'">
-                            <span class="ad-card-format">${ad.format || ad.slot}</span>
+                            <img src="${escapeHTML(previewURL(ad.image_url))}" alt="${escapeHTML(ad.name)}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%2260%22><rect fill=%22%23333%22 width=%22100%%22 height=%22100%%22/><text x=%2250%%22 y=%2250%%22 fill=%22%23666%22 text-anchor=%22middle%22 dy=%22.3em%22>No Image</text></svg>'">
+                            <span class="ad-card-format">${escapeHTML(ad.format || ad.slot)}</span>
                             ${ad.video_url ? `<span class="ad-card-badge" style="background: var(--primary);">${ad.media_type === 'gif' ? '🎬 GIF' : '🎥 Video'}</span>` : ''}
                             ${ad.is_enforced ? '<span class="ad-card-badge badge-enforced">📌 Enforced</span>' : 
                               ad.is_active ? '<span class="ad-card-badge badge-active">Active</span>' : 
                               '<span class="ad-card-badge badge-inactive">Inactive</span>'}
                         </div>
                         <div class="ad-card-body">
-                            <h4>${ad.name}</h4>
-                            <p>${ad.click_url ? ad.click_url.substring(0, 40) + '...' : 'No URL'}</p>
+                            <h4>${escapeHTML(ad.name)}</h4>
+                            <p>${ad.click_url ? escapeHTML(ad.click_url.substring(0, 40)) + '...' : 'No URL'}</p>
                             <div class="ad-card-stats">
-                                <span>👁 ${ad.impressions || 0} views</span>
-                                <span>👆 ${ad.clicks || 0} clicks</span>
+                                <span>👁 ${Number(ad.impressions) || 0} views</span>
+                                <span>👆 ${Number(ad.clicks) || 0} clicks</span>
                             </div>
                             <div class="ad-card-actions">
                                 ${ad.is_enforced ? 
@@ -1559,12 +1573,18 @@
             if (!el) return;
             
             if (ad) {
-                const hasImage = ad.image_url && ad.image_url.trim().length > 0;
+                const imageURL = previewURL(ad.image_url);
                 const kind = ad.media_type === 'gif' ? '🎬 GIF' : (ad.video_url ? '🎥 Video' : 'Ad');
-                const safeName = (ad.name || '').replace(/</g, '&lt;');
-                if (hasImage) {
+                const safeName = escapeHTML(ad.name);
+                if (imageURL) {
                     // Fall back to a labelled box (not a broken-image icon) if the URL fails.
-                    el.innerHTML = `<img src="${ad.image_url}" alt="${ad.name}" onerror="this.parentElement.innerHTML='<div class=\\'empty\\'>${kind}<br>${safeName}</div>'">`;
+                    const image = document.createElement('img');
+                    image.alt = ad.name || '';
+                    image.addEventListener('error', () => {
+                        el.innerHTML = `<div class="empty">${kind}<br>${safeName}</div>`;
+                    }, { once: true });
+                    image.src = imageURL;
+                    el.replaceChildren(image);
                 } else {
                     // Video/GIF ad with no static image — show kind + name so it's identifiable.
                     el.innerHTML = `<div class="empty">${kind}<br><span style="font-size:10px; opacity:0.75;">${safeName}</span></div>`;
@@ -1618,10 +1638,10 @@
                 <h4 style="margin: 24px 0 16px;">Top Performing Ads</h4>
                 ${allAds.sort((a, b) => (b.clicks || 0) - (a.clicks || 0)).slice(0, 5).map(ad => `
                     <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-input); border-radius: 8px; margin-bottom: 8px;">
-                        <img src="${ad.image_url}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;">
+                        <img src="${escapeHTML(previewURL(ad.image_url))}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;">
                         <div style="flex: 1;">
                             <strong>${ad.name}</strong>
-                            <div style="font-size: 12px; color: var(--text-muted);">${ad.impressions || 0} views • ${ad.clicks || 0} clicks</div>
+                            <div style="font-size: 12px; color: var(--text-muted);">${Number(ad.impressions) || 0} views • ${Number(ad.clicks) || 0} clicks</div>
                         </div>
                     </div>
                 `).join('')}
