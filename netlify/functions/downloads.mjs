@@ -39,12 +39,9 @@ export default async (req) => {
     }
 
     return new Response(JSON.stringify({ count }), { headers: CORS });
-  } catch (err) {
-    // Never break the page — fall back to the seed on any storage error.
-    return new Response(
-      JSON.stringify({ count: SEED, error: String(err?.message || err) }),
-      { headers: CORS, status: 200 }
-    );
+  } catch {
+    console.error('Download counter storage is unavailable');
+    return new Response(JSON.stringify({ count: SEED }), { headers: CORS });
   }
 };
 

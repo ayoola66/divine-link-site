@@ -1073,95 +1073,139 @@
             }
         }
         
-        // Image preview
-        function updateImagePreview() {
-            const url = document.getElementById('ad-image').value;
-            const imagePreview = document.getElementById('image-preview');
-            const videoPreview = document.getElementById('video-preview');
-            const mediaType = document.getElementById('ad-media-type').value;
-            
-            // For image type, show image preview
-            if (mediaType === 'image') {
-                imagePreview.style.display = 'flex';
-                videoPreview.style.display = 'none';
-                
-                if (url) {
-                    imagePreview.innerHTML = `<img src="${escapeHTML(previewURL(url))}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
-                } else {
-                    imagePreview.innerHTML = '<span class="placeholder">Preview</span>';
-                }
+        const youtubeHosts = new Set([
+            'youtube.com', 'www.youtube.com', 'm.youtube.com', 'music.youtube.com',
+            'youtu.be', 'www.youtu.be'
+        ]);
+
+        function youtubeEmbedURL(url) {
+            const host = url.hostname;
+            let videoId = null;
+
+            if (host === 'youtu.be' || host === 'www.youtu.be') {
+                videoId = url.pathname.match(/^\/([A-Za-z0-9_-]{11})\/?$/)?.[1];
+            } else if (url.pathname === '/watch') {
+                const ids = url.searchParams.getAll('v');
+                if (ids.length === 1) videoId = ids[0];
+            } else {
+                videoId = url.pathname.match(/^\/(?:shorts|embed)\/([A-Za-z0-9_-]{11})\/?$/)?.[1];
             }
+
+            if (!videoId || !/^[A-Za-z0-9_-]{11}$/.test(videoId)) return null;
+            const embed = new URL('https://www.youtube.com');
+            embed.pathname = '/embed/' + videoId;
+            embed.search = new URLSearchParams({
+                autoplay: '0', loop: '1', playlist: videoId, mute: '1',
+                controls: '0', modestbranding: '1'
+            });
+            return embed.href;
         }
-        
-        // Video/GIF/YouTube preview
-        function updateVideoPreview() {
-            const url = document.getElementById('ad-video').value.trim();
-            const imagePreview = document.getElementById('image-preview');
-            const videoPreview = document.getElementById('video-preview');
-            const mediaType = document.getElementById('ad-media-type').value;
-            const imageGroup = document.getElementById('image-url-group');
-            const imageRequiredIndicator = document.getElementById('image-required-indicator');
-            const imageHelpText = document.getElementById('image-help-text');
-            
-            // Show/hide image URL field based on video URL presence
-            if (url && (mediaType === 'video' || mediaType === 'gif')) {
-                imageGroup.style.display = 'none';
-            } else if (mediaType === 'video' || mediaType === 'gif') {
-                imageGroup.style.display = 'block';
+
+        function showPreviewPlaceholder(preview, text, hasError = false) {
+            const placeholder = document.createElement('span');
+            placeholder.className = 'placeholder';
+            placeholder.textContent = text;
+            if (hasError) placeholder.style.color = 'var(--danger)';
+            preview.replaceChildren(placeholder);
+        }
+
+        function renderMediaPreview(preview, value, mediaType) {
+            const safeURL = previewURL(value);
+            if (!safeURL) {
+                showPreviewPlaceholder(preview, 'Invalid URL', true);
+                return;
+            }
+
+            const url = new URL(safeURL);
+            if (url.username || url.password) {
+                showPreviewPlaceholder(preview, 'Invalid URL', true);
+                return;
+            }
+
+            let media;
+            let source = safeURL;
+            if (mediaType !== 'image' && youtubeHosts.has(url.hostname)) {
+                source = url.port ? null : youtubeEmbedURL(url);
+                if (!source) {
+                    showPreviewPlaceholder(preview, 'Invalid URL', true);
+                    return;
+                }
+                media = document.createElement('iframe');
+                media.title = 'YouTube video preview';
+                media.allow = 'autoplay; encrypted-media';
+                media.allowFullscreen = true;
+                media.style.border = 'none';
+            } else if (mediaType === 'video') {
+                media = document.createElement('video');
+                media.autoplay = true;
+                media.loop = true;
+                media.muted = true;
+            } else {
+                media = document.createElement('img');
+                media.alt = mediaType === 'gif' ? 'GIF' : 'Preview';
+            }
+
+            Object.assign(media.style, {
+                width: '100%', height: '100%', objectFit: 'cover', borderRadius: '8px'
+            });
+            media.addEventListener('error', () => {
+                if (media.parentNode === preview) showPreviewPlaceholder(preview, 'Failed', true);
+            }, { once: true });
+            media.src = source;
+            preview.replaceChildren(media);
+        }
+
+        function updateImagePreviewFor(prefix) {
+            if (document.getElementById(prefix + 'ad-media-type').value !== 'image') return;
+
+            const url = document.getElementById(prefix + 'ad-image').value.trim();
+            const imagePreview = document.getElementById(prefix + 'image-preview');
+            const videoPreview = document.getElementById(prefix + 'video-preview');
+            imagePreview.style.display = 'flex';
+            videoPreview.style.display = 'none';
+            videoPreview.replaceChildren();
+
+            if (url) renderMediaPreview(imagePreview, url, 'image');
+            else showPreviewPlaceholder(imagePreview, 'Preview');
+        }
+
+        function updateImagePreview() {
+            updateImagePreviewFor('');
+        }
+
+        function updateVideoPreviewFor(prefix) {
+            const url = document.getElementById(prefix + 'ad-video').value.trim();
+            const imagePreview = document.getElementById(prefix + 'image-preview');
+            const videoPreview = document.getElementById(prefix + 'video-preview');
+            const mediaType = document.getElementById(prefix + 'ad-media-type').value;
+            if (mediaType !== 'video' && mediaType !== 'gif') return;
+
+            const imageGroup = document.getElementById(prefix + 'image-url-group');
+            const imageRequiredIndicator = document.getElementById(prefix + 'image-required-indicator');
+            const imageHelpText = document.getElementById(prefix + 'image-help-text');
+
+            imageGroup.style.display = url ? 'none' : 'block';
+            if (!url) {
                 imageRequiredIndicator.style.display = 'none';
                 imageHelpText.textContent = 'Optional fallback';
+                imagePreview.style.display = 'flex';
+                showPreviewPlaceholder(imagePreview, 'Video');
             }
-            
+
             if (url) {
-                // Show video preview, hide image preview
                 videoPreview.style.display = 'flex';
                 imagePreview.style.display = 'none';
-                
-                // Check if it's a YouTube URL (including Shorts)
-                const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
-                
-                if (isYouTube) {
-                    // Extract video ID for YouTube embed (including Shorts)
-                    let videoID = '';
-                    
-                    // Handle YouTube Shorts: youtube.com/shorts/VIDEO_ID
-                    if (url.includes('/shorts/')) {
-                        videoID = url.split('/shorts/')[1].split('?')[0].split('&')[0].split('#')[0];
-                    }
-                    // Handle youtu.be short links
-                    else if (url.includes('youtu.be/')) {
-                        videoID = url.split('youtu.be/')[1].split('?')[0].split('&')[0];
-                    }
-                    // Handle youtube.com/watch?v= links
-                    else if (url.includes('watch?v=')) {
-                        videoID = url.split('watch?v=')[1].split('&')[0].split('#')[0];
-                    }
-                    // Handle youtube.com/embed/ links
-                    else if (url.includes('embed/')) {
-                        videoID = url.split('embed/')[1].split('?')[0].split('&')[0];
-                    }
-                    
-                    if (/^[A-Za-z0-9_-]{11}$/.test(videoID)) {
-                        const embedURL = `https://www.youtube.com/embed/${videoID}?autoplay=0&loop=1&playlist=${videoID}&mute=1&controls=0&modestbranding=1`;
-                        videoPreview.innerHTML = `<iframe src="${embedURL}" style="width: 100%; height: 100%; border-radius: 8px; border: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-                    } else {
-                        videoPreview.innerHTML = '<span class="placeholder" style="color: var(--danger);">Invalid URL</span>';
-                    }
-                } else if (mediaType === 'gif') {
-                    videoPreview.innerHTML = `<img src="${escapeHTML(previewURL(url))}" alt="GIF" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
-                } else {
-                    videoPreview.innerHTML = `<video src="${escapeHTML(previewURL(url))}" autoplay loop muted style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'"></video>`;
-                }
+                renderMediaPreview(videoPreview, url, mediaType);
             } else {
-                // No video URL, show image preview if we have image type or URL
                 videoPreview.style.display = 'none';
-                if (mediaType === 'video' || mediaType === 'gif') {
-                    imagePreview.style.display = 'flex';
-                    imagePreview.innerHTML = '<span class="placeholder">Video</span>';
-                }
+                videoPreview.replaceChildren();
             }
         }
-        
+
+        function updateVideoPreview() {
+            updateVideoPreviewFor('');
+        }
+
         // Create ad
         async function createAd() {
             const name = document.getElementById('ad-name').value.trim();
@@ -1312,66 +1356,11 @@
         }
 
         function editUpdateImagePreview() {
-            const url = document.getElementById('edit-ad-image').value;
-            const imagePreview = document.getElementById('edit-image-preview');
-            const videoPreview = document.getElementById('edit-video-preview');
-            const mediaType = document.getElementById('edit-ad-media-type').value;
-            if (mediaType === 'image') {
-                imagePreview.style.display = 'flex';
-                videoPreview.style.display = 'none';
-                if (url) {
-                    imagePreview.innerHTML = `<img src="${escapeHTML(previewURL(url))}" alt="Preview" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
-                } else {
-                    imagePreview.innerHTML = '<span class="placeholder">Preview</span>';
-                }
-            }
+            updateImagePreviewFor('edit-');
         }
 
         function editUpdateVideoPreview() {
-            const url = document.getElementById('edit-ad-video').value.trim();
-            const imagePreview = document.getElementById('edit-image-preview');
-            const videoPreview = document.getElementById('edit-video-preview');
-            const mediaType = document.getElementById('edit-ad-media-type').value;
-            const imageGroup = document.getElementById('edit-image-url-group');
-            const imageRequiredIndicator = document.getElementById('edit-image-required-indicator');
-            const imageHelpText = document.getElementById('edit-image-help-text');
-
-            if (url && (mediaType === 'video' || mediaType === 'gif')) {
-                imageGroup.style.display = 'none';
-            } else if (mediaType === 'video' || mediaType === 'gif') {
-                imageGroup.style.display = 'block';
-                imageRequiredIndicator.style.display = 'none';
-                imageHelpText.textContent = 'Optional fallback';
-            }
-
-            if (url) {
-                videoPreview.style.display = 'flex';
-                imagePreview.style.display = 'none';
-                const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
-                if (isYouTube) {
-                    let videoID = '';
-                    if (url.includes('/shorts/')) videoID = url.split('/shorts/')[1].split('?')[0].split('&')[0].split('#')[0];
-                    else if (url.includes('youtu.be/')) videoID = url.split('youtu.be/')[1].split('?')[0].split('&')[0];
-                    else if (url.includes('watch?v=')) videoID = url.split('watch?v=')[1].split('&')[0].split('#')[0];
-                    else if (url.includes('embed/')) videoID = url.split('embed/')[1].split('?')[0].split('&')[0];
-                    if (/^[A-Za-z0-9_-]{11}$/.test(videoID)) {
-                        const embedURL = `https://www.youtube.com/embed/${videoID}?autoplay=0&loop=1&playlist=${videoID}&mute=1&controls=0&modestbranding=1`;
-                        videoPreview.innerHTML = `<iframe src="${embedURL}" style="width: 100%; height: 100%; border-radius: 8px; border: none;" allow="autoplay; encrypted-media" allowfullscreen></iframe>`;
-                    } else {
-                        videoPreview.innerHTML = '<span class="placeholder" style="color: var(--danger);">Invalid URL</span>';
-                    }
-                } else if (mediaType === 'gif') {
-                    videoPreview.innerHTML = `<img src="${escapeHTML(previewURL(url))}" alt="GIF" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'">`;
-                } else {
-                    videoPreview.innerHTML = `<video src="${escapeHTML(previewURL(url))}" autoplay loop muted style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;" onerror="this.parentElement.innerHTML='<span class=\\'placeholder\\'>Failed</span>'"></video>`;
-                }
-            } else {
-                videoPreview.style.display = 'none';
-                if (mediaType === 'video' || mediaType === 'gif') {
-                    imagePreview.style.display = 'flex';
-                    imagePreview.innerHTML = '<span class="placeholder">Video</span>';
-                }
-            }
+            updateVideoPreviewFor('edit-');
         }
 
         // Open the Edit tab pre-filled with an ad's data (called by the ✏️ pencil).
@@ -1485,7 +1474,7 @@
                 document.getElementById('stat-total').textContent = allAds.length;
                 document.getElementById('stat-active').textContent = allAds.filter(a => a.is_active).length;
                 document.getElementById('stat-enforced').textContent = allAds.filter(a => a.is_enforced).length;
-                document.getElementById('stat-clicks').textContent = allAds.reduce((sum, a) => sum + (a.clicks || 0), 0);
+                document.getElementById('stat-clicks').textContent = allAds.reduce((sum, a) => sum + (Number(a.clicks) || 0), 0);
                 
                 // Update preview
                 updateAppPreview();
@@ -1615,8 +1604,8 @@
         // Update stats detail
         function updateStatsDetail() {
             const statsEl = document.getElementById('stats-detail');
-            const totalImpressions = allAds.reduce((sum, a) => sum + (a.impressions || 0), 0);
-            const totalClicks = allAds.reduce((sum, a) => sum + (a.clicks || 0), 0);
+            const totalImpressions = allAds.reduce((sum, a) => sum + (Number(a.impressions) || 0), 0);
+            const totalClicks = allAds.reduce((sum, a) => sum + (Number(a.clicks) || 0), 0);
             const ctr = totalImpressions > 0 ? ((totalClicks / totalImpressions) * 100).toFixed(2) : 0;
             
             statsEl.innerHTML = `
@@ -1640,7 +1629,7 @@
                     <div style="display: flex; align-items: center; gap: 12px; padding: 12px; background: var(--bg-input); border-radius: 8px; margin-bottom: 8px;">
                         <img src="${escapeHTML(previewURL(ad.image_url))}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 6px;">
                         <div style="flex: 1;">
-                            <strong>${ad.name}</strong>
+                            <strong>${escapeHTML(ad.name)}</strong>
                             <div style="font-size: 12px; color: var(--text-muted);">${Number(ad.impressions) || 0} views • ${Number(ad.clicks) || 0} clicks</div>
                         </div>
                     </div>
